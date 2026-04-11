@@ -1322,7 +1322,7 @@ async function interpretMarker(markerDef, value) {
   const age = profile?.age || 'unknown';
 
   try {
-    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
+    const resp = await fetch('https://vitlo-proxy.vercel.app/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1406,7 +1406,7 @@ Create a JSON protocol with this exact structure (no markdown):
 Make every recommendation specific to their actual data. Maximum 3 items per section. Be direct and actionable.`;
 
   try {
-    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
+    const resp = await fetch('https://vitlo-proxy.vercel.app/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1538,7 +1538,7 @@ async function analyseDescription() {
   resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Looking up nutrition facts...</div><div class="ai-result-text">Calculating based on your description...</div></div>`;
 
   try {
-    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
+    const resp = await fetch('https://vitlo-proxy.vercel.app/api/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1635,7 +1635,7 @@ async function handlePhoto(event) {
     resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Analysing meal...</div><div class="ai-result-text">AI is estimating calories...</div></div>`;
 
     try {
-      const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
+      const resp = await fetch('https://vitlo-proxy.vercel.app/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
