@@ -557,7 +557,7 @@
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Log a Meal</div>
-    <div class="modal-sub">Take a photo or enter manually</div>
+    <div class="modal-sub">Describe it, photograph it, or enter manually</div>
 
     <div class="meal-type-grid">
       <div class="meal-type-opt selected" onclick="selMealType(this,'Breakfast')">🌅 Breakfast</div>
@@ -566,18 +566,39 @@
       <div class="meal-type-opt" onclick="selMealType(this,'Snack')">🍎 Snack</div>
     </div>
 
-    <div class="photo-area" id="photoArea" onclick="triggerCamera()">
-      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
-      <div class="photo-area-icon">📷</div>
-      <div class="photo-area-text">Take a photo</div>
-      <div class="photo-area-sub">AI will estimate calories automatically</div>
+    <!-- Input method tabs -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+      <div id="tabDesc" onclick="switchFoodTab('desc')" style="padding:10px;background:var(--green);border:1px solid var(--green);border-radius:10px;font-size:13px;font-weight:700;color:var(--cream);text-align:center;cursor:pointer">✍️ Describe</div>
+      <div id="tabPhoto" onclick="switchFoodTab('photo')" style="padding:10px;background:var(--cream);border:1px solid var(--cream3);border-radius:10px;font-size:13px;font-weight:600;color:var(--text-dim);text-align:center;cursor:pointer">📷 Photo</div>
+    </div>
+
+    <!-- DESCRIBE TAB -->
+    <div id="descTab">
+      <div class="form-field">
+        <label class="form-label">Describe what you ate</label>
+        <textarea class="form-input" id="foodDesc" placeholder="e.g. 3 boiled eggs and a cappuccino from my Tassimo machine..." style="min-height:80px;resize:none;line-height:1.5" rows="3"></textarea>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Be as specific as possible — quantities, brands, cooking method</div>
+      </div>
+      <button onclick="analyseDescription()" id="analyseBtn" style="width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(26,61,43,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green);cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">
+        🤖 Analyse with AI
+      </button>
+    </div>
+
+    <!-- PHOTO TAB -->
+    <div id="photoTab" style="display:none">
+      <div class="photo-area" id="photoArea" onclick="triggerCamera()">
+        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
+        <div class="photo-area-icon">📷</div>
+        <div class="photo-area-text">Take a photo</div>
+        <div class="photo-area-sub">AI will estimate calories automatically</div>
+      </div>
     </div>
 
     <div id="aiResultBox" style="display:none"></div>
 
     <div class="form-field">
-      <label class="form-label">Meal Description</label>
-      <input class="form-input" type="text" id="foodName" placeholder="e.g. Chicken and rice, Scrambled eggs...">
+      <label class="form-label">Meal Name</label>
+      <input class="form-input" type="text" id="foodName" placeholder="e.g. Boiled eggs and cappuccino...">
     </div>
     <div class="form-field">
       <label class="form-label">Calories (kcal)</label>
@@ -1491,6 +1512,105 @@ function getBadges() {
 }
 
 // ===== FOOD LOGGING =====
+function switchFoodTab(tab) {
+  const isDesc = tab === 'desc';
+  document.getElementById('descTab').style.display = isDesc ? 'block' : 'none';
+  document.getElementById('photoTab').style.display = isDesc ? 'none' : 'block';
+  document.getElementById('tabDesc').style.background = isDesc ? 'var(--green)' : 'var(--cream)';
+  document.getElementById('tabDesc').style.color = isDesc ? 'var(--cream)' : 'var(--text-dim)';
+  document.getElementById('tabDesc').style.borderColor = isDesc ? 'var(--green)' : 'var(--cream3)';
+  document.getElementById('tabPhoto').style.background = isDesc ? 'var(--cream)' : 'var(--green)';
+  document.getElementById('tabPhoto').style.color = isDesc ? 'var(--text-dim)' : 'var(--cream)';
+  document.getElementById('tabPhoto').style.borderColor = isDesc ? 'var(--cream3)' : 'var(--green)';
+}
+
+async function analyseDescription() {
+  const desc = document.getElementById('foodDesc').value.trim();
+  if (!desc) { showToast('Please describe what you ate'); return; }
+
+  const btn = document.getElementById('analyseBtn');
+  btn.textContent = '🤖 Analysing...';
+  btn.style.opacity = '0.6';
+  btn.onclick = null;
+
+  const resultBox = document.getElementById('aiResultBox');
+  resultBox.style.display = 'block';
+  resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Looking up nutrition facts...</div><div class="ai-result-text">Calculating based on your description...</div></div>`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: `A person ate: "${desc}"
+
+Use your nutritional knowledge to calculate the exact calories and macros for everything described. Be specific to quantities mentioned. For branded products like Tassimo capsules use accurate product data.
+
+Respond ONLY with this JSON (no markdown):
+{
+  "meal_name": "short readable name of everything eaten",
+  "calories": total_number,
+  "protein_g": number,
+  "carbs_g": number,
+  "fat_g": number,
+  "breakdown": "list each item with its calories, e.g. 3 boiled eggs: 210 kcal, Tassimo cappuccino: 90 kcal",
+  "notes": "any relevant nutritional notes about this meal"
+}`
+        }]
+      })
+    });
+
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text||'').join('') || '';
+    const clean = text.replace(/```json|```/g,'').trim();
+    const jsonMatch = clean.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('No JSON');
+    const meal = JSON.parse(jsonMatch[0]);
+
+    document.getElementById('foodName').value = meal.meal_name || desc;
+    document.getElementById('foodCals').value = meal.calories || '';
+    document.getElementById('foodProtein').value = meal.protein_g || '';
+    document.getElementById('foodCarbs').value = meal.carbs_g || '';
+    document.getElementById('foodFat').value = meal.fat_g || '';
+
+    resultBox.innerHTML = `
+      <div class="ai-result">
+        <div class="ai-result-title">✓ Nutrition Facts Found</div>
+        <div class="ai-result-text" style="margin-bottom:8px">${meal.breakdown}</div>
+        ${meal.notes ? `<div style="font-size:11px;color:var(--green);font-weight:600;margin-top:4px">${meal.notes}</div>` : ''}
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center">
+          <div style="background:var(--white);border-radius:8px;padding:8px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--green)">${meal.calories}</div>
+            <div style="font-size:10px;color:var(--text-dim);font-weight:600">KCAL</div>
+          </div>
+          <div style="background:var(--white);border-radius:8px;padding:8px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">${meal.protein_g}g</div>
+            <div style="font-size:10px;color:var(--text-dim);font-weight:600">PROTEIN</div>
+          </div>
+          <div style="background:var(--white);border-radius:8px;padding:8px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">${meal.carbs_g}g</div>
+            <div style="font-size:10px;color:var(--text-dim);font-weight:600">CARBS</div>
+          </div>
+          <div style="background:var(--white);border-radius:8px;padding:8px">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">${meal.fat_g}g</div>
+            <div style="font-size:10px;color:var(--text-dim);font-weight:600">FAT</div>
+          </div>
+        </div>
+      </div>`;
+
+  } catch(e) {
+    resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">⚠ Could not analyse</div><div class="ai-result-text">Enter nutrition values manually below.</div></div>`;
+  }
+
+  btn.textContent = '🤖 Analyse with AI';
+  btn.style.opacity = '1';
+  btn.onclick = analyseDescription;
+}
+
 function triggerCamera() { document.getElementById('photoInput').click(); }
 
 function selMealType(el, type) {
