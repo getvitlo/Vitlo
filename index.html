@@ -98,10 +98,10 @@
   /* BOTTOM NAV */
   .bottom-nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:var(--surface); border-top:1px solid var(--border); padding:8px 0 24px; display:flex; z-index:50; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; cursor:pointer; transition:all 0.2s; }
-  .nav-icon { font-size:19px; transition:transform 0.2s; }
+  .nav-icon { width:22px; height:22px; transition:transform 0.2s; color:var(--text-dim); display:flex; align-items:center; justify-content:center; }
   .nav-label { font-size:9px; font-weight:600; color:var(--text-dim); letter-spacing:0.3px; }
   .nav-item.active .nav-label { color:var(--green-vivid); }
-  .nav-item.active .nav-icon { transform:translateY(-2px); }
+  .nav-item.active .nav-icon { transform:translateY(-2px); color:var(--green-vivid); }
   .nav-dot { width:4px; height:4px; border-radius:50%; background:var(--green-vivid); margin-top:1px; display:none; }
   .nav-item.active .nav-dot { display:block; }
 
@@ -653,19 +653,34 @@
 <!-- BOTTOM NAV -->
 <div class="bottom-nav" id="bottomNav" style="display:none">
   <div class="nav-item active" onclick="switchNav(this,'homeScreen')">
-    <span class="nav-icon">🏠</span><span class="nav-label">Home</span><div class="nav-dot"></div>
+    <span class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </span>
+    <span class="nav-label">Home</span><div class="nav-dot"></div>
   </div>
   <div class="nav-item" onclick="switchNav(this,'bodyScreen')">
-    <span class="nav-icon">💪</span><span class="nav-label">Body</span><div class="nav-dot"></div>
+    <span class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v6M9 10h6M9 17l-2 4M15 17l2 4M10 13l-1 4M14 13l1 4"/></svg>
+    </span>
+    <span class="nav-label">Body</span><div class="nav-dot"></div>
   </div>
   <div class="nav-item" onclick="switchNav(this,'nutritionScreen')">
-    <span class="nav-icon">🥗</span><span class="nav-label">Nutrition</span><div class="nav-dot"></div>
+    <span class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+    </span>
+    <span class="nav-label">Nutrition</span><div class="nav-dot"></div>
   </div>
   <div class="nav-item" onclick="switchNav(this,'protocolScreen')">
-    <span class="nav-icon">⚡</span><span class="nav-label">Protocol</span><div class="nav-dot"></div>
+    <span class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+    </span>
+    <span class="nav-label">Protocol</span><div class="nav-dot"></div>
   </div>
   <div class="nav-item" onclick="switchNav(this,'statsScreen')">
-    <span class="nav-icon">📈</span><span class="nav-label">Stats</span><div class="nav-dot"></div>
+    <span class="nav-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </span>
+    <span class="nav-label">Stats</span><div class="nav-dot"></div>
   </div>
 </div>
 
@@ -1126,15 +1141,16 @@ function calcSmartCalTarget() {
   const actMult = actMults[profile?.activity_level || 'moderate'];
 
   let tdee;
+  const renphoMBR = parseFloat(bm?.bmr_kcal) || 0;
 
-  if (bm?.bmr_kcal) {
-    // Use real BMR from Renpho scan — most accurate
-    tdee = bm.bmr_kcal * actMult;
+  if (renphoMBR > 1000 && renphoMBR < 4000) {
+    // Real BMR from Renpho — most accurate
+    tdee = renphoMBR * actMult;
   } else {
-    // Fall back to Mifflin-St Jeor estimate
-    const w = bm?.weight_kg || profile?.weight_kg || 75;
-    const h = profile?.height_cm || 175;
-    const a = profile?.age || 25;
+    // Mifflin-St Jeor fallback using actual weight from scan if available
+    const w = parseFloat(bm?.weight_kg) || parseFloat(profile?.weight_kg) || 75;
+    const h = parseFloat(profile?.height_cm) || 175;
+    const a = parseInt(profile?.age) || 25;
     const s = profile?.sex || 'male';
     const bmr = s === 'male'
       ? 10 * w + 6.25 * h - 5 * a + 5
@@ -1142,14 +1158,8 @@ function calcSmartCalTarget() {
     tdee = bmr * actMult;
   }
 
-  // Apply goal-based adjustment
-  if (goals.includes('fat_loss')) {
-    // 500 kcal deficit = ~0.5kg/week fat loss, but never below 1400 kcal
-    tdee = Math.max(1400, tdee - 500);
-  } else if (goals.includes('muscle')) {
-    // 200-300 kcal surplus for lean gains
-    tdee = tdee + 250;
-  }
+  if (goals.includes('fat_loss')) tdee = Math.max(1500, tdee - 500);
+  else if (goals.includes('muscle')) tdee = tdee + 250;
 
   return Math.round(tdee);
 }
@@ -1246,11 +1256,21 @@ function renderCalHero() {
     ? (isDeficit ? 'kcal left in deficit' : 'kcal left today')
     : 'kcal over target';
 
-  // Source label
+  // Source label — explain the deficit clearly
   const bm = latestBodyMetrics;
-  document.getElementById('calSource').textContent = bm?.bmr_kcal
-    ? `Renpho BMR ${bm.bmr_kcal} kcal · tap for full breakdown`
-    : 'Tap for full breakdown';
+  const goals = profile?.goals || [];
+  const renphoMBR = parseFloat(bm?.bmr_kcal) || 0;
+  const actMults = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, extra:1.9 };
+  const actMult = actMults[profile?.activity_level || 'moderate'];
+  let sourceText = '';
+  if (renphoMBR > 1000) {
+    const tdee = Math.round(renphoMBR * actMult);
+    const deficit = goals.includes('fat_loss') ? 500 : goals.includes('muscle') ? -250 : 0;
+    sourceText = `BMR ${renphoMBR} × ${actMult} activity = ${tdee} TDEE${deficit>0?' − 500 deficit':deficit<0?' + 250 surplus':''} = ${target} kcal target`;
+  } else {
+    sourceText = `Estimated target: ${target} kcal · Scan Renpho for precise BMR`;
+  }
+  document.getElementById('calSource').textContent = sourceText;
 }
 
 function renderMacros() {
@@ -1298,8 +1318,8 @@ function renderFoodSuggestions() {
 function renderMealsList() {
   const list=document.getElementById('mealsList');
   if(foodLogs.length===0){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🍽️</div><div class="empty-state-text">No food logged yet.</div></div>`;return;}
-  const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'};
-  list.innerHTML=foodLogs.map(f=>`<div class="meal-item"><div class="meal-thumb">${f.photo_url?`<img src="${f.photo_url}">`:emoji[f.meal_type]||'🍽️'}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('');
+  const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'}; const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
+  list.innerHTML=foodLogs.map(f=>`<div class="meal-item"><div class="meal-thumb">${f.photo_url?`<img src="${f.photo_url}">`:svgFork}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('');
 }
 
 function calcHealthScore() {
@@ -1325,12 +1345,12 @@ async function renderBody() {
   const bm = latestBodyMetrics;
   const goals = profile?.goals || [];
 
-  // Body fat — try multiple field names in case of mapping differences
-  const currentBF = parseFloat(
-    bm.body_fat_pct ||
-    (bm.body_fat_kg && bm.weight_kg ? ((bm.body_fat_kg / bm.weight_kg) * 100).toFixed(1) : 0) ||
-    0
-  );
+  // Body fat — aggressive fallbacks across all possible field names
+  const rawBF = parseFloat(bm.body_fat_pct) || 0;
+  const calcBF = (bm.body_fat_kg && bm.weight_kg && bm.weight_kg > 0)
+    ? parseFloat((bm.body_fat_kg / bm.weight_kg * 100).toFixed(1))
+    : 0;
+  const currentBF = rawBF > 0 ? rawBF : calcBF > 0 ? calcBF : 0;
 
   const bfGoal = goals.includes('fat_loss') ? 14 : goals.includes('muscle') ? 12 : 18;
   const bfDiff = (currentBF - bfGoal).toFixed(1);
@@ -1353,36 +1373,52 @@ async function renderBody() {
 
   document.getElementById('bodySubHeader').textContent = `Last scanned: ${bm.date || 'Unknown'} · ${bm.source || 'Renpho'}`;
 
-  content.innerHTML = `
+  const rescanBanner = currentBF === 0 ? `
+    <div style="background:var(--amber-dim);border:1px solid rgba(212,146,10,0.25);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start">
+      <div style="font-size:16px">⚠️</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:2px">Body fat % missing</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.5">Your last scan didn't capture this. Tap Scan above and upload both Renpho screenshots — include the one showing Body Fat %.</div>
+      </div>
+    </div>` : '';
+
+  content.innerHTML = rescanBanner + `
     <!-- GOAL PROGRESS SECTION -->
     <div class="goal-progress-section">
-      <div class="goal-progress-title">Goal Progress</div>
+      <div class="goal-progress-title">Goal Progress <span style="font-size:10px;color:var(--text-dim);font-weight:400;text-transform:none;letter-spacing:0">Tap any metric for tips</span></div>
 
       <!-- Body Fat Goal -->
-      <div class="goal-metric">
+      <div class="goal-metric" onclick="toggleGoalTip('bfTip')" style="cursor:pointer">
         <div class="goal-metric-header">
           <div class="goal-metric-name">🔥 Body Fat %</div>
           <div class="goal-metric-status" style="background:${currentBF<=bfGoal?'var(--green-dim)':currentBF<=bfGoal+5?'var(--amber-dim)':'var(--red-dim)'};color:${currentBF<=bfGoal?'var(--green-vivid)':currentBF<=bfGoal+5?'var(--amber)':'var(--red)'}">
-            ${currentBF<=bfGoal?'Goal Reached ✓':parseFloat(bfDiff)+'% to go'}
+            ${currentBF<=bfGoal?'Goal ✓':currentBF>0?parseFloat(bfDiff).toFixed(1)+'% to go':'Rescan ↗'}
           </div>
         </div>
         <div class="goal-metric-track">
-          <div class="goal-metric-fill" style="width:${Math.min(100,(currentBF/40)*100)}%;background:${bfColor}"></div>
+          <div class="goal-metric-fill" style="width:${currentBF>0?Math.min(100,(currentBF/40)*100):0}%;background:${bfColor}"></div>
           <div style="position:absolute;top:-3px;left:${(bfGoal/40)*100}%;width:2px;height:14px;background:rgba(255,255,255,0.5);border-radius:1px"></div>
         </div>
         <div class="goal-metric-labels">
-          <span style="font-weight:700;color:var(--text)">${currentBF}% now</span>
+          <span style="font-weight:700;color:var(--text)">${currentBF>0?currentBF+'% now':'No data yet'}</span>
           <span style="color:var(--text-dim)">Goal: ${bfGoal}%${weeksToGoal>0?' · ~'+weeksToGoal+' weeks':''}</span>
         </div>
       </div>
+      <div id="bfTip" style="display:none;background:var(--surface3);border-radius:10px;padding:12px;margin:-4px 0 10px;font-size:12px;color:var(--text-mid);line-height:1.8;border:1px solid var(--border)">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">How to reduce body fat</strong>
+        Stay in a 500 kcal daily deficit — your current target is calculated at ${calcSmartCalTarget()} kcal.<br>
+        Hit your protein target to preserve muscle while losing fat.<br>
+        3-4 resistance sessions per week — muscle tissue burns more calories at rest.<br>
+        Prioritise 7-9 hours sleep — cortisol from poor sleep directly promotes fat storage.<br>
+        Avoid ultra-processed foods and liquid calories.
+      </div>
 
       ${currentMusclePct>0?`
-      <!-- Muscle % Goal -->
-      <div class="goal-metric">
+      <div class="goal-metric" onclick="toggleGoalTip('muscleTip')" style="cursor:pointer">
         <div class="goal-metric-header">
           <div class="goal-metric-name">💪 Skeletal Muscle %</div>
           <div class="goal-metric-status" style="background:${currentMusclePct>=muscleGoalPct?'var(--green-dim)':'var(--blue-dim)'};color:${currentMusclePct>=muscleGoalPct?'var(--green-vivid)':'var(--blue)'}">
-            ${currentMusclePct>=muscleGoalPct?'Target Met ✓':(muscleGoalPct-currentMusclePct).toFixed(1)+'% to go'}
+            ${currentMusclePct>=muscleGoalPct?'Target ✓':(muscleGoalPct-currentMusclePct).toFixed(1)+'% to go'}
           </div>
         </div>
         <div class="goal-metric-track">
@@ -1393,15 +1429,21 @@ async function renderBody() {
           <span style="font-weight:700;color:var(--text)">${currentMusclePct}% now</span>
           <span style="color:var(--text-dim)">Goal: ${muscleGoalPct}%+</span>
         </div>
+      </div>
+      <div id="muscleTip" style="display:none;background:var(--surface3);border-radius:10px;padding:12px;margin:-4px 0 10px;font-size:12px;color:var(--text-mid);line-height:1.8;border:1px solid var(--border)">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">How to build skeletal muscle</strong>
+        Lift heavy compounds — squats, deadlifts, bench, rows. 3-5 sets of 4-6 reps drives hypertrophy more effectively than high-rep light weight.<br>
+        Progressive overload every week — add weight or reps. The muscle only grows when forced to adapt.<br>
+        Eat ${getMacroTargets().protein}g+ protein daily across 3-4 meals — leucine threshold triggers muscle protein synthesis.<br>
+        Allow 48-72 hours recovery per muscle group.
       </div>`:''}
 
       ${markers?.testosterone_total?`
-      <!-- Testosterone Goal -->
-      <div class="goal-metric">
+      <div class="goal-metric" onclick="toggleGoalTip('testTip')" style="cursor:pointer">
         <div class="goal-metric-header">
           <div class="goal-metric-name">⚡ Testosterone</div>
           <div class="goal-metric-status" style="background:${markers.testosterone_total>=18?'var(--green-dim)':markers.testosterone_total>=12?'var(--amber-dim)':'var(--red-dim)'};color:${markers.testosterone_total>=18?'var(--green-vivid)':markers.testosterone_total>=12?'var(--amber)':'var(--red)'}">
-            ${markers.testosterone_total>=18?'Optimal':'Below Optimal'}
+            ${markers.testosterone_total>=18?'Optimal':markers.testosterone_total>=12?'Sub-optimal':'Low'}
           </div>
         </div>
         <div class="goal-metric-track">
@@ -1410,42 +1452,111 @@ async function renderBody() {
         </div>
         <div class="goal-metric-labels">
           <span style="font-weight:700;color:var(--text)">${markers.testosterone_total} nmol/L</span>
-          <span style="color:var(--text-dim)">Optimal: 18+ nmol/L</span>
+          <span style="color:var(--text-dim)">Optimal: 18-30 nmol/L</span>
         </div>
+      </div>
+      <div id="testTip" style="display:none;background:var(--surface3);border-radius:10px;padding:12px;margin:-4px 0 10px;font-size:12px;color:var(--text-mid);line-height:1.8;border:1px solid var(--border)">
+        <strong style="color:var(--text);display:block;margin-bottom:4px">How to raise testosterone naturally</strong>
+        Heavy compound lifts — deadlifts and squats produce the strongest testosterone response.<br>
+        Optimise sleep — testosterone production peaks during deep sleep. Under 6 hours drops T by 15%.<br>
+        Zinc, magnesium, and Vitamin D directly support testosterone synthesis. Check your blood markers.<br>
+        Reduce body fat — fat cells convert testosterone to oestrogen via aromatase.<br>
+        Manage cortisol — chronic stress directly suppresses testosterone production.
       </div>`:''}
     </div>
 
-    <!-- BF RING + STATS -->
+    <!-- BODY COMPOSITION RINGS -->
     <div class="body-goal-card">
       <div class="card-title">Body Composition <span class="card-link" onclick="openModal('scanModal')">Update</span></div>
-      <div style="display:flex;align-items:center;gap:20px">
-        <div class="bf-ring-wrap">
-          <svg width="120" height="120" viewBox="0 0 120 120">
-            <circle class="bf-ring-track" cx="60" cy="60" r="52"/>
-            <circle class="bf-ring-fill" cx="60" cy="60" r="52" stroke="${bfColor}" style="stroke-dashoffset:${offset}"/>
-          </svg>
-          <div class="bf-center">
-            <div class="bf-pct" style="color:${bfColor}">${currentBF>0?currentBF+'%':'—'}</div>
-            <div class="bf-label">Body Fat</div>
-          </div>
-        </div>
-        <div style="flex:1">
-          ${bm.weight_kg?`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text-dim)">Weight</div><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)">${bm.weight_kg}kg</div></div>`:''}
-          ${bm.skeletal_muscle_kg||bm.muscle_mass_kg?`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text-dim)">Muscle Mass</div><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)">${bm.skeletal_muscle_kg||bm.muscle_mass_kg}kg</div>${muscleChange?`<div style="font-size:11px;color:${parseFloat(muscleChange)>0?'var(--green-vivid)':'var(--red)'}">${parseFloat(muscleChange)>0?'↑ +':'↓ '}${muscleChange}kg</div>`:''}</div>`:''}
-          ${bfChange?`<div style="font-size:12px;color:var(--text-dim)">BF change: <strong style="color:${parseFloat(bfChange)<0?'var(--green-vivid)':'var(--red)'}">${parseFloat(bfChange)<0?bfChange:'+'+bfChange}%</strong></div>`:''}
-        </div>
-      </div>
-    </div>
 
-    <div class="body-stats-grid">
-      ${bm.visceral_fat?`<div class="body-stat"><div class="body-stat-val" style="color:${bm.visceral_fat<=9?'var(--green-vivid)':bm.visceral_fat<=14?'var(--amber)':'var(--red)'}">${bm.visceral_fat}</div><div class="body-stat-label">Visceral Fat</div><div class="body-stat-change ${bm.visceral_fat<=9?'pos':'neg'}">${bm.visceral_fat<=9?'Healthy':bm.visceral_fat<=14?'Moderate':'High'}</div></div>`:''}
-      ${bm.bmi?`<div class="body-stat"><div class="body-stat-val">${bm.bmi}</div><div class="body-stat-label">BMI</div><div class="body-stat-change ${bm.bmi<25?'pos':'neg'}">${bm.bmi<18.5?'Underweight':bm.bmi<25?'Healthy':bm.bmi<30?'Overweight':'Obese'}</div></div>`:''}
-      ${bm.metabolic_age?`<div class="body-stat"><div class="body-stat-val" style="color:${bm.metabolic_age<=(profile?.age||30)?'var(--green-vivid)':'var(--amber)'}">${bm.metabolic_age}</div><div class="body-stat-label">Metabolic Age</div><div class="body-stat-change ${bm.metabolic_age<=(profile?.age||30)?'pos':'neg'}">${bm.metabolic_age<=(profile?.age||30)?'Good':'High'}</div></div>`:''}
-      ${bm.body_water_pct?`<div class="body-stat"><div class="body-stat-val">${bm.body_water_pct}%</div><div class="body-stat-label">Body Water</div></div>`:''}
-      ${bm.bmr_kcal?`<div class="body-stat"><div class="body-stat-val">${bm.bmr_kcal}</div><div class="body-stat-label">BMR kcal</div></div>`:''}
-      ${bm.bone_mass_kg?`<div class="body-stat"><div class="body-stat-val">${bm.bone_mass_kg}kg</div><div class="body-stat-label">Bone Mass</div></div>`:''}
-      ${bm.subcutaneous_fat_pct?`<div class="body-stat"><div class="body-stat-val">${bm.subcutaneous_fat_pct}%</div><div class="body-stat-label">Subcut. Fat</div></div>`:''}
-      ${bm.protein_pct?`<div class="body-stat"><div class="body-stat-val">${bm.protein_pct}%</div><div class="body-stat-label">Protein %</div></div>`:''}
+      <!-- Three rings row: BF%, Muscle%, BMR -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+
+        <!-- Body Fat Ring -->
+        <div style="text-align:center">
+          <div style="position:relative;width:80px;height:80px;margin:0 auto 6px">
+            <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg)">
+              <circle cx="40" cy="40" r="32" fill="none" stroke="var(--surface3)" stroke-width="8"/>
+              <circle cx="40" cy="40" r="32" fill="none" stroke="${bfColor}" stroke-width="8"
+                stroke-linecap="round" stroke-dasharray="201"
+                stroke-dashoffset="${currentBF>0?201-(201*Math.min(1,currentBF/40)):201}"/>
+            </svg>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:${bfColor};line-height:1">${currentBF>0?currentBF+'%':'—'}</div>
+            </div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px">Body Fat</div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:1px">Goal: ${bfGoal}%</div>
+        </div>
+
+        <!-- Muscle % Ring -->
+        ${(()=>{
+          const musclePct = parseFloat(bm.skeletal_muscle_pct||bm.muscle_mass_pct||0);
+          const muscleColor = musclePct>=49?'var(--blue)':musclePct>=44?'var(--amber)':'var(--red)';
+          const mGoal = 52;
+          return musclePct>0?`
+          <div style="text-align:center">
+            <div style="position:relative;width:80px;height:80px;margin:0 auto 6px">
+              <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg)">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--surface3)" stroke-width="8"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="${muscleColor}" stroke-width="8"
+                  stroke-linecap="round" stroke-dasharray="201"
+                  stroke-dashoffset="${201-(201*Math.min(1,musclePct/65))}"/>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:700;color:${muscleColor};line-height:1">${musclePct}%</div>
+              </div>
+            </div>
+            <div style="font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px">Muscle</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:1px">Goal: ${mGoal}%+</div>
+          </div>`:
+          `<div style="text-align:center;opacity:0.3">
+            <div style="width:80px;height:80px;margin:0 auto 6px;border-radius:50%;border:4px dashed var(--border)"></div>
+            <div style="font-size:10px;color:var(--text-dim)">Muscle</div>
+            <div style="font-size:9px;color:var(--text-dim)">No data</div>
+          </div>`;
+        })()}
+
+        <!-- BMR Ring -->
+        ${(()=>{
+          const bmr = parseFloat(bm.bmr_kcal||0);
+          const bmrTarget = 1800;
+          const bmrColor = bmr>=1700?'var(--green-vivid)':bmr>=1500?'var(--amber)':'var(--red)';
+          return bmr>0?`
+          <div style="text-align:center">
+            <div style="position:relative;width:80px;height:80px;margin:0 auto 6px">
+              <svg width="80" height="80" viewBox="0 0 80 80" style="transform:rotate(-90deg)">
+                <circle cx="40" cy="40" r="32" fill="none" stroke="var(--surface3)" stroke-width="8"/>
+                <circle cx="40" cy="40" r="32" fill="none" stroke="${bmrColor}" stroke-width="8"
+                  stroke-linecap="round" stroke-dasharray="201"
+                  stroke-dashoffset="${201-(201*Math.min(1,bmr/2500))}"/>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:700;color:${bmrColor};line-height:1">${bmr}</div>
+              </div>
+            </div>
+            <div style="font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px">BMR kcal</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:1px">Metabolic age: ${bm.metabolic_age||'?'}</div>
+          </div>`:
+          `<div style="text-align:center;opacity:0.3">
+            <div style="width:80px;height:80px;margin:0 auto 6px;border-radius:50%;border:4px dashed var(--border)"></div>
+            <div style="font-size:10px;color:var(--text-dim)">BMR</div>
+            <div style="font-size:9px;color:var(--text-dim)">Rescan needed</div>
+          </div>`;
+        })()}
+      </div>
+
+      <!-- Stats grid below rings -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px">
+        ${bm.weight_kg?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text)">${bm.weight_kg}</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">kg</div>${prev?.weight_kg?`<div style="font-size:10px;color:${bm.weight_kg<prev.weight_kg?'var(--green-vivid)':'var(--red)'};margin-top:2px">${bm.weight_kg<prev.weight_kg?'↓':'↑'}${Math.abs(bm.weight_kg-prev.weight_kg).toFixed(1)}</div>`:''}  </div>`:''}
+        ${bm.visceral_fat?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:${bm.visceral_fat<=9?'var(--green-vivid)':bm.visceral_fat<=14?'var(--amber)':'var(--red)'}">${bm.visceral_fat}</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">Visceral Fat</div><div style="font-size:10px;margin-top:2px;color:${bm.visceral_fat<=9?'var(--green-vivid)':bm.visceral_fat<=14?'var(--amber)':'var(--red)'}">${bm.visceral_fat<=9?'Healthy':bm.visceral_fat<=14?'Avg':'High'}</div></div>`:''}
+        ${bm.bmi?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:${bm.bmi<25?'var(--green-vivid)':bm.bmi<30?'var(--amber)':'var(--red)'}">${bm.bmi}</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">BMI</div><div style="font-size:10px;margin-top:2px;color:${bm.bmi<25?'var(--green-vivid)':bm.bmi<30?'var(--amber)':'var(--red)'}">${bm.bmi<18.5?'Low':bm.bmi<25?'Healthy':bm.bmi<30?'High':'Obese'}</div></div>`:''}
+        ${bm.body_water_pct?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--blue)">${bm.body_water_pct}%</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">Body Water</div></div>`:''}
+        ${bm.bone_mass_kg?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text)">${bm.bone_mass_kg}</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">kg Bone</div></div>`:''}
+        ${bm.protein_pct?`<div style="background:var(--surface3);border-radius:10px;padding:10px;text-align:center"><div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text)">${bm.protein_pct}%</div><div style="font-size:10px;color:var(--text-dim);margin-top:1px">Protein %</div></div>`:''}
+      </div>
+
+      ${bfChange?`<div style="font-size:12px;color:var(--text-dim);margin-top:10px;text-align:center">Body fat change since last scan: <strong style="color:${parseFloat(bfChange)<0?'var(--green-vivid)':'var(--red)'}">${parseFloat(bfChange)<0?bfChange:'+'+bfChange}%</strong></div>`:''}
     </div>
 
     <div class="daily-plan-card" id="dailyPlanCard">
@@ -1462,6 +1573,11 @@ async function renderBody() {
   `;
 
   generateDailyPlan(bm);
+}
+
+function toggleGoalTip(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 async function generateDailyPlan(bm) {
@@ -1481,33 +1597,20 @@ async function generateDailyPlan(bm) {
         max_tokens: 2000,
         messages: [{
           role: 'user',
-          content: `You are a precision health coach. Create a specific, actionable daily plan for this person.
+          content: `Health coach. Give this person their ACTUAL plan for today based on their data. No fluff. No generic advice. Everything must reference their real numbers.
 
-Profile: ${profile?.age}yo ${profile?.sex}, ${profile?.activity_level} activity
-Goals: ${goals.join(', ')}
-Body Fat: ${bm.body_fat_pct}% → Target: ${bfGoal}% (${bfDiff > 0 ? `${weeksToGoal} weeks at current deficit` : 'Goal reached'})
-Weight: ${bm.weight_kg}kg | Muscle: ${bm.skeletal_muscle_kg || bm.muscle_mass_kg}kg | Visceral Fat: ${bm.visceral_fat} | Metabolic Age: ${bm.metabolic_age}
-Calorie Target: ${target} kcal | Protein Target: ${mt.protein}g | Carbs: ${mt.carbs}g | Fat: ${mt.fat}g
-BMR: ${bm.bmr_kcal || 'unknown'} kcal
-Blood Markers: ${markers ? `Testosterone: ${markers.testosterone_total || 'N/A'} nmol/L, Vitamin D: ${markers.vitamin_d || 'N/A'} nmol/L, Ferritin: ${markers.ferritin || 'N/A'}` : 'Not tested yet'}
-Supplements: ${profile?.current_supplements || 'none'}
+${profile?.age}yo ${profile?.sex} | ${profile?.activity_level} | Goals: ${goals.join(', ')}
+Body Fat: ${bm.body_fat_pct||currentBF}% (target ${bfGoal}%) | Weight: ${bm.weight_kg}kg | Skeletal Muscle: ${bm.skeletal_muscle_kg||bm.muscle_mass_kg||'?'}kg (${bm.skeletal_muscle_pct||'?'}%)
+Visceral Fat: ${bm.visceral_fat} | Metabolic Age: ${bm.metabolic_age} | BMR: ${bm.bmr_kcal||'?'} kcal
+Calories: eat ${target} kcal today | Protein: hit ${mt.protein}g
+Blood: Testosterone ${markers?.testosterone_total||'not tested'} nmol/L | Vit D: ${markers?.vitamin_d||'not tested'} | Ferritin: ${markers?.ferritin||'not tested'}
+Supplements taking: ${profile?.current_supplements||'none'}
 
-Return JSON only. Each item must feel like advice from a knowledgeable coach — specific, confident, and directly tied to their numbers.
+Return JSON. Exactly 5 items. Each one is a concrete action for TODAY. No repeats. No vague advice.
 
-{
-  "items": [
-    {
-      "category": "Nutrition|Training|Supplements|Sleep|Hydration|Lifestyle",
-      "icon": "emoji",
-      "title": "short punchy title — max 6 words",
-      "preview": "one line summary shown collapsed — max 10 words",
-      "detail": "2-3 sentences of specific, actionable guidance. Reference their actual numbers. Tell them exactly what to do, when, and how much.",
-      "why": "one sentence explaining why this matters specifically for their data"
-    }
-  ]
-}
-
-Create exactly 7 items. Cover: calorie target, protein split across meals, training recommendation, supplement priority, sleep target, hydration, and one specific action based on their body composition that most people miss. Make every item feel personal to THEIR numbers.`
+{"items":[
+  {"category":"Nutrition|Training|Supplements|Sleep|Lifestyle","icon":"emoji","title":"6 words max","preview":"what to do — one line","detail":"Exactly what to do, when, and how much. Reference their actual numbers. 2 sentences max.","why":"one sentence — why this specifically for them"}
+]}`
         }]
       })
     });
@@ -1773,11 +1876,11 @@ async function renderNutrition() {
       ${dates.map(date=>{
         const meals=byDate[date];
         const totalCals=meals.reduce((s,f)=>s+(parseInt(f.calories)||0),0);
-        const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'};
+        const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'}; const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
         return `
           <div class="meal-history-day">
             <div class="meal-history-date">${formatDate(date)} · ${totalCals} kcal</div>
-            ${meals.map(f=>`<div class="meal-item"><div class="meal-thumb">${emoji[f.meal_type]||'🍽️'}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('')}
+            ${meals.map(f=>`<div class="meal-item"><div class="meal-thumb">${svgFork}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('')}
           </div>`;
       }).join('')}
     </div>
@@ -2070,53 +2173,85 @@ function openCalDetail() {
 
 // ===== NUTRITION FACTS MODAL =====
 function openNutritionModal() {
-  if (foodLogs.length === 0) {
-    document.getElementById('nutritionContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🥗</div><div class="empty-state-text">No food logged today. Add a meal to see nutrition facts.</div></div>`;
-    openModal('nutritionModal');
-    return;
-  }
-
-  // Aggregate all macros and estimate micros using AI
-  const totals = {
-    calories: foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0),
-    protein: foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0).toFixed(1),
-    carbs: foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0).toFixed(1),
-    fat: foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0).toFixed(1),
-  };
-
   const mt = getMacroTargets();
-  const mealList = foodLogs.map(f => f.meal_name).join(', ');
+  const p = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0));
+  const c = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0));
+  const f = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0));
+  const totalCals = foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0);
+
+  // Pie chart — proportion of kcal from each macro
+  const pCals = p * 4;
+  const cCals = c * 4;
+  const fCals = f * 9;
+  const totalMacroCals = pCals + cCals + fCals || 1;
+
+  const pPct = pCals / totalMacroCals;
+  const cPct = cCals / totalMacroCals;
+  const fPct = fCals / totalMacroCals;
+
+  // SVG donut — build segments
+  const circumference = 282; // 2π×45
+  const pDash = circumference * pPct;
+  const cDash = circumference * cPct;
+  const fDash = circumference * fPct;
+  const cOffset = -(pDash);
+  const fOffset = -(pDash + cDash);
 
   document.getElementById('nutritionContent').innerHTML = `
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
-      <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Today's Meals</div>
-      <div style="font-size:13px;color:var(--text-mid);line-height:1.6">${foodLogs.map(f=>`<span style="color:var(--text)">${f.meal_name}</span> (${f.calories} kcal)`).join(' · ')}</div>
+    <!-- MACRO PIE -->
+    <div style="display:flex;align-items:center;gap:20px;margin-bottom:16px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px">
+      <div style="position:relative;width:110px;height:110px;flex-shrink:0">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <g transform="rotate(-90 55 55)">
+            <circle cx="55" cy="55" r="45" fill="none" stroke="var(--surface3)" stroke-width="18"/>
+            <!-- Protein -->
+            <circle cx="55" cy="55" r="45" fill="none" stroke="#4a9eff" stroke-width="18"
+              stroke-dasharray="${pDash} ${circumference - pDash}" stroke-dashoffset="0"/>
+            <!-- Carbs -->
+            <circle cx="55" cy="55" r="45" fill="none" stroke="var(--amber)" stroke-width="18"
+              stroke-dasharray="${cDash} ${circumference - cDash}" stroke-dashoffset="${cOffset}"/>
+            <!-- Fat -->
+            <circle cx="55" cy="55" r="45" fill="none" stroke="var(--purple)" stroke-width="18"
+              stroke-dasharray="${fDash} ${circumference - fDash}" stroke-dashoffset="${fOffset}"/>
+          </g>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--text);line-height:1">${totalCals}</div>
+          <div style="font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.3px">kcal</div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+        ${[['Protein',p,mt.protein,pPct,'#4a9eff',pCals],['Carbs',c,mt.carbs,cPct,'var(--amber)',cCals],['Fat',f,mt.fat,fPct,'var(--purple)',fCals]].map(([name,val,tgt,pct,col,kcal])=>`
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+              <div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></div>
+              <div style="font-size:12px;font-weight:600;color:var(--text);flex:1">${name}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text)">${val}g</div>
+            </div>
+            <div style="height:4px;background:var(--surface3);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${Math.min(100,(val/tgt)*100)}%;background:${col};border-radius:2px;transition:width 0.8s ease"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px">${val}g / ${tgt}g target · ${Math.round(pct*100)}% of cals</div>
+          </div>`).join('')}
+      </div>
     </div>
 
-    <div class="nutrition-section-head">Macronutrients</div>
-    ${[
-      ['Calories','kcal',totals.calories,null,'var(--text)'],
-      ['Protein','g',totals.protein,mt.protein,'#4a9eff'],
-      ['Carbohydrates','g',totals.carbs,mt.carbs,'var(--amber)'],
-      ['Fat','g',totals.fat,mt.fat,'var(--purple)'],
-    ].map(([name,unit,val,tgt,col]) => `
-      <div class="nutrition-fact-row">
-        <div class="nutrition-fact-name">${name}</div>
-        ${tgt?`<div class="nutrition-fact-bar-wrap"><div class="nutrition-fact-bar" style="width:${Math.min(100,(val/tgt)*100)}%;background:${col}"></div></div>`:'<div class="nutrition-fact-bar-wrap"></div>'}
-        <div class="nutrition-fact-val" style="color:${col}">${val} ${unit}</div>
-      </div>`).join('')}
-
-    <div class="nutrition-section-head">Estimated Micronutrients</div>
-    <div id="micronutrientContent" style="text-align:center;padding:20px">
-      <div class="loading-ring" style="margin:0 auto 10px"></div>
-      <div style="font-size:12px;color:var(--text-dim)">Calculating from your meals...</div>
+    <!-- MICRONUTRIENTS -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:10px">Estimated Micronutrients</div>
+    <div id="micronutrientContent">
+      <div style="text-align:center;padding:20px">
+        <div class="loading-ring" style="margin:0 auto 10px"></div>
+        <div style="font-size:12px;color:var(--text-dim)">Estimating from your meals...</div>
+      </div>
     </div>
   `;
 
   openModal('nutritionModal');
-
-  // Get AI to estimate micronutrients from meals
-  estimateMicronutrients(mealList, totals);
+  if (foodLogs.length > 0) {
+    estimateMicronutrients(foodLogs.map(f => f.meal_name).join(', '), { protein: p, carbs: c, fat: f, calories: totalCals });
+  } else {
+    document.getElementById('micronutrientContent').innerHTML = `<div style="font-size:13px;color:var(--text-dim);text-align:center;padding:16px">Log some meals first to see your micronutrient breakdown.</div>`;
+  }
 }
 
 async function estimateMicronutrients(mealList, totals) {
@@ -2130,25 +2265,23 @@ async function estimateMicronutrients(mealList, totals) {
         messages: [{
           role: 'user',
           content: `Based on these meals: ${mealList}
-Total macros: ${totals.protein}g protein, ${totals.carbs}g carbs, ${totals.fat}g fat, ${totals.calories} kcal
+Total: ${totals.protein}g protein, ${totals.carbs}g carbs, ${totals.fat}g fat, ${totals.calories} kcal
 
-Estimate the micronutrient content and return JSON only:
-{
-  "micros": [
-    {"name": "Vitamin B12", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Iron", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Vitamin D", "amount": "X", "unit": "IU", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Calcium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Magnesium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Zinc", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Potassium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Vitamin C", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Fibre", "amount": "X", "unit": "g", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Omega-3", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Vitamin A", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"},
-    {"name": "Folate", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"}
-  ]
-}`
+Estimate micronutrient content. Return JSON only:
+{"micros":[
+  {"name":"Vitamin B12","amount":"X.X","unit":"mcg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Iron","amount":"X.X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Vitamin D","amount":"X","unit":"IU","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Calcium","amount":"X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Magnesium","amount":"X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Zinc","amount":"X.X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Potassium","amount":"X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Vitamin C","amount":"X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Fibre","amount":"X.X","unit":"g","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Omega-3","amount":"X","unit":"mg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Vitamin A","amount":"X","unit":"mcg","rda_pct":number,"status":"good/adequate/low"},
+  {"name":"Folate","amount":"X","unit":"mcg","rda_pct":number,"status":"good/adequate/low"}
+]}`
         }]
       })
     });
@@ -2159,16 +2292,29 @@ Estimate the micronutrient content and return JSON only:
     const result = JSON.parse(match[0]);
     const el = document.getElementById('micronutrientContent');
     if (!el) return;
-    const statusColor = { good: 'var(--green-vivid)', adequate: 'var(--amber)', low: 'var(--red)' };
-    el.innerHTML = result.micros.map(m => `
-      <div class="nutrition-fact-row">
-        <div class="nutrition-fact-name">${m.name}</div>
-        <div class="nutrition-fact-bar-wrap"><div class="nutrition-fact-bar" style="width:${Math.min(100,m.rda_pct)}%;background:${statusColor[m.status]||'var(--text-dim)'}"></div></div>
-        <div class="nutrition-fact-val" style="color:${statusColor[m.status]||'var(--text)'}">${m.amount}${m.unit}</div>
-      </div>`).join('') + `<div style="font-size:10px;color:var(--text-dim);margin-top:12px;line-height:1.5">Estimates based on typical nutritional content of logged foods. Add more meals for accuracy.</div>`;
+
+    const statusColor = { good:'var(--green-vivid)', adequate:'var(--amber)', low:'var(--red)' };
+    const statusLabel = { good:'Good', adequate:'OK', low:'Low' };
+
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        ${result.micros.map(m => `
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <div style="font-size:12px;font-weight:600;color:var(--text)">${m.name}</div>
+              <div style="font-size:10px;font-weight:700;padding:2px 6px;border-radius:100px;background:${statusColor[m.status]}22;color:${statusColor[m.status]}">${statusLabel[m.status]||m.status}</div>
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px">${m.amount}<span style="font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-dim);font-weight:400"> ${m.unit}</span></div>
+            <div style="height:3px;background:var(--surface3);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${Math.min(100,m.rda_pct)}%;background:${statusColor[m.status]};border-radius:2px"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:3px">${m.rda_pct}% of daily intake</div>
+          </div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:12px;text-align:center;line-height:1.5">Estimates based on typical nutritional content. Log more meals for accuracy.</div>`;
   } catch(e) {
     const el = document.getElementById('micronutrientContent');
-    if (el) el.innerHTML = `<div style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px">Unable to estimate micronutrients. Check connection.</div>`;
+    if (el) el.innerHTML = `<div style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px">Unable to estimate. Check connection.</div>`;
   }
 }
 
