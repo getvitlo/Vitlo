@@ -205,18 +205,56 @@
   .scan-btn { width:100%; padding:18px; background:var(--green-dim); border:1px dashed rgba(30,132,73,0.4); border-radius:16px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; color:var(--green-vivid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; }
 
   .daily-plan-card { background:var(--surface2); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:12px; }
-  .daily-plan-header { background:var(--green-bright); padding:16px 18px; }
-  .daily-plan-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:#fff; margin-bottom:2px; }
-  .daily-plan-sub { font-size:12px; color:rgba(255,255,255,0.7); }
-  .daily-plan-body { padding:16px 18px; }
-  .plan-item { display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .daily-plan-header { padding:18px 18px 14px; border-bottom:1px solid var(--border); }
+  .daily-plan-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:700; color:var(--text); margin-bottom:2px; }
+  .daily-plan-sub { font-size:12px; color:var(--text-dim); }
+  .daily-plan-body { padding:4px 0; }
+
+  .plan-item {
+    display:flex; align-items:center; gap:14px;
+    padding:14px 18px; cursor:pointer;
+    border-bottom:1px solid var(--border);
+    transition:background 0.15s;
+    position:relative;
+  }
   .plan-item:last-child { border-bottom:none; }
-  .plan-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
-  .plan-text { flex:1; }
-  .plan-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:2px; }
-  .plan-desc { font-size:12px; color:var(--text-dim); line-height:1.5; }
-  .plan-loading { text-align:center; padding:24px; }
-  .plan-ring { width:28px; height:28px; border:2px solid var(--surface3); border-top-color:var(--green-vivid); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 10px; }
+  .plan-item:active { background:var(--surface3); }
+  .plan-item.expanded { background:var(--surface3); }
+
+  .plan-item-left {
+    width:40px; height:40px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; flex-shrink:0;
+    background:var(--surface3);
+  }
+
+  .plan-item-main { flex:1; min-width:0; }
+  .plan-item-category { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:2px; }
+  .plan-item-title { font-size:14px; font-weight:700; color:var(--text); line-height:1.3; }
+  .plan-item-preview { font-size:12px; color:var(--text-dim); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .plan-item-arrow { font-size:14px; color:var(--text-dim); flex-shrink:0; transition:transform 0.2s; }
+  .plan-item.expanded .plan-item-arrow { transform:rotate(90deg); }
+
+  .plan-item-detail {
+    display:none; padding:0 18px 14px 72px;
+    background:var(--surface3);
+    border-bottom:1px solid var(--border);
+  }
+  .plan-item-detail.open { display:block; }
+  .plan-item-detail-text { font-size:13px; color:var(--text-mid); line-height:1.7; }
+  .plan-item-detail-why { font-size:11px; color:var(--green-vivid); font-weight:600; margin-top:6px; }
+
+  .plan-category-colors { }
+  .plan-cat-nutrition { background:rgba(212,146,10,0.12); }
+  .plan-cat-training { background:rgba(74,158,255,0.12); }
+  .plan-cat-sleep { background:rgba(155,89,182,0.12); }
+  .plan-cat-supplements { background:rgba(30,132,73,0.15); }
+  .plan-cat-hydration { background:rgba(74,158,255,0.1); }
+  .plan-cat-lifestyle { background:var(--surface3); }
+
+  .plan-loading { text-align:center; padding:32px 24px; }
+  .plan-ring { width:28px; height:28px; border:2px solid var(--surface3); border-top-color:var(--green-vivid); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 12px; }
 
   /* SCAN PHOTO AREA */
   .scan-area { width:100%; min-height:200px; background:var(--surface2); border:1px dashed var(--border2); border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; margin-bottom:14px; overflow:hidden; position:relative; }
@@ -538,14 +576,35 @@
 <div class="modal-overlay" id="scanModal" onclick="closeModalOut(event,'scanModal')">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div class="modal-title">Scan Health Report</div>
-    <div class="modal-sub">Photo your Renpho, Withings, InBody or any health app screen. AI reads every metric automatically.</div>
-    <div class="scan-area" id="scanArea" onclick="triggerScan()">
-      <input type="file" id="scanInput" accept="image/*" style="display:none" onchange="handleScan(event)">
-      <div class="scan-area-icon">📷</div>
-      <div class="scan-area-text">Tap to photograph your report</div>
-      <div class="scan-area-sub">Works with Renpho, Withings, InBody, Garmin Connect, Apple Health screenshots</div>
+    <div class="modal-title">Scan Body Report</div>
+    <div class="modal-sub">Photograph each screen of your Renpho or health app report. Add up to 3 photos — AI combines all metrics automatically.</div>
+
+    <input type="file" id="scanInput" accept="image/*" style="display:none" onchange="handleScan(event)">
+
+    <!-- Photo slots -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div id="scanSlot0" onclick="triggerScan(0)" style="height:90px;background:var(--surface2);border:1px dashed var(--border2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;position:relative">
+        <span style="font-size:22px">📷</span>
+        <span style="font-size:10px;font-weight:600;color:var(--text-dim)">Screen 1</span>
+      </div>
+      <div id="scanSlot1" onclick="triggerScan(1)" style="height:90px;background:var(--surface2);border:1px dashed var(--border2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;position:relative;opacity:0.5">
+        <span style="font-size:22px">📷</span>
+        <span style="font-size:10px;font-weight:600;color:var(--text-dim)">Screen 2</span>
+      </div>
+      <div id="scanSlot2" onclick="triggerScan(2)" style="height:90px;background:var(--surface2);border:1px dashed var(--border2);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;overflow:hidden;position:relative;opacity:0.5">
+        <span style="font-size:22px">📷</span>
+        <span style="font-size:10px;font-weight:600;color:var(--text-dim)">Screen 3</span>
+      </div>
     </div>
+
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:14px;line-height:1.5">
+      Renpho shows results across multiple screens. Photograph each one for the most complete data.
+    </div>
+
+    <button id="analyseScansBtn" onclick="analyseAllScans()" style="display:none;width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green-vivid);cursor:pointer;margin-bottom:14px;display:none;align-items:center;justify-content:center;gap:8px">
+      🤖 Read All Photos
+    </button>
+
     <div id="scanResultBox" style="display:none"></div>
     <button class="form-btn" id="saveScanBtn" onclick="saveScan()" style="display:none">Save Body Data</button>
     <button class="form-btn-secondary" onclick="closeModal('scanModal')">Cancel</button>
@@ -1045,11 +1104,11 @@ async function renderBody() {
 
     <div class="daily-plan-card" id="dailyPlanCard">
       <div class="daily-plan-header">
-        <div class="daily-plan-title">Your Daily Plan</div>
-        <div class="daily-plan-sub">Personalised to reach ${bfGoal}% body fat${goals.includes('testosterone')?' and optimise testosterone':''}</div>
+        <div class="daily-plan-title">Today's Plan</div>
+        <div class="daily-plan-sub">Tap any item to see exactly what to do · Goal: ${bfGoal}% body fat${goals.includes('testosterone') ? ' · Optimise testosterone' : ''}</div>
       </div>
       <div class="daily-plan-body" id="dailyPlanBody">
-        <div class="plan-loading"><div class="plan-ring"></div><div style="font-size:13px;color:var(--text-dim)">Generating your daily plan...</div></div>
+        <div class="plan-loading"><div class="plan-ring"></div><div style="font-size:13px;color:var(--text-dim)">Building your plan from body scan data...</div></div>
       </div>
     </div>
 
@@ -1060,96 +1119,263 @@ async function renderBody() {
 }
 
 async function generateDailyPlan(bm) {
-  const goals=profile?.goals||[];
-  const mt=getMacroTargets();
-  const {target}=getCalData();
-  const bfGoal=goals.includes('fat_loss')?14:goals.includes('muscle')?12:18;
+  const goals = profile?.goals || [];
+  const mt = getMacroTargets();
+  const { target } = getCalData();
+  const bfGoal = goals.includes('fat_loss') ? 14 : goals.includes('muscle') ? 12 : 18;
+  const bfDiff = (bm.body_fat_pct || 0) - bfGoal;
+  const weeksToGoal = bfDiff > 0 ? Math.round(bfDiff * 10) : 0;
+
   try {
-    const resp=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,messages:[{role:'user',content:`You are a precision health coach. Create a specific daily action plan based on this person's body composition data and goals.
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 2000,
+        messages: [{
+          role: 'user',
+          content: `You are a precision health coach. Create a specific, actionable daily plan for this person.
 
 Profile: ${profile?.age}yo ${profile?.sex}, ${profile?.activity_level} activity
 Goals: ${goals.join(', ')}
-Body Fat Target: ${bfGoal}%
+Body Fat: ${bm.body_fat_pct}% → Target: ${bfGoal}% (${bfDiff > 0 ? `${weeksToGoal} weeks at current deficit` : 'Goal reached'})
+Weight: ${bm.weight_kg}kg | Muscle: ${bm.skeletal_muscle_kg || bm.muscle_mass_kg}kg | Visceral Fat: ${bm.visceral_fat} | Metabolic Age: ${bm.metabolic_age}
+Calorie Target: ${target} kcal | Protein Target: ${mt.protein}g | Carbs: ${mt.carbs}g | Fat: ${mt.fat}g
+BMR: ${bm.bmr_kcal || 'unknown'} kcal
+Blood Markers: ${markers ? `Testosterone: ${markers.testosterone_total || 'N/A'} nmol/L, Vitamin D: ${markers.vitamin_d || 'N/A'} nmol/L, Ferritin: ${markers.ferritin || 'N/A'}` : 'Not tested yet'}
+Supplements: ${profile?.current_supplements || 'none'}
 
-Current Body Metrics:
-- Weight: ${bm.weight_kg}kg
-- Body Fat: ${bm.body_fat_pct}%
-- Muscle Mass: ${bm.muscle_mass_kg}kg
-- Lean Mass: ${bm.lean_mass_kg}kg  
-- Visceral Fat: ${bm.visceral_fat}
-- Metabolic Age: ${bm.metabolic_age}
-- Body Water: ${bm.body_water_pct}%
+Return JSON only. Each item must feel like advice from a knowledgeable coach — specific, confident, and directly tied to their numbers.
 
-Calorie Target: ${target} kcal/day
-Protein Target: ${mt.protein}g/day
-Blood Markers: ${markers?`Testosterone: ${markers.testosterone_total}, Vitamin D: ${markers.vitamin_d}, Ferritin: ${markers.ferritin}`:'Not available'}
-
-Return JSON only:
-{"plan":[
-  {"icon":"emoji","title":"specific daily action","desc":"exactly how to implement this today — specific numbers, timing, amounts","priority":"high/medium"}
-]}
-
-Include 6-8 plan items covering: calorie target with specific foods, protein timing, training recommendation, sleep, hydration, and any supplement priorities. Be specific to THEIR numbers. Reference their actual body fat % and goal.`}]})});
-    const data=await resp.json();
-    const text=data.content?.map(c=>c.text||'').join('')||'';
-    const match=text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
-    if(!match)throw new Error();
-    const result=JSON.parse(match[0]);
-    const body=document.getElementById('dailyPlanBody');
-    if(body) body.innerHTML=result.plan.map(p=>`<div class="plan-item"><div class="plan-icon">${p.icon}</div><div class="plan-text"><div class="plan-title">${p.title}</div><div class="plan-desc">${p.desc}</div></div></div>`).join('');
-  } catch(e) {
-    const body=document.getElementById('dailyPlanBody');
-    if(body) body.innerHTML=`<div class="plan-item"><div class="plan-icon">⚠️</div><div class="plan-text"><div class="plan-desc">Failed to generate plan. Check connection.</div></div></div>`;
-  }
+{
+  "items": [
+    {
+      "category": "Nutrition|Training|Supplements|Sleep|Hydration|Lifestyle",
+      "icon": "emoji",
+      "title": "short punchy title — max 6 words",
+      "preview": "one line summary shown collapsed — max 10 words",
+      "detail": "2-3 sentences of specific, actionable guidance. Reference their actual numbers. Tell them exactly what to do, when, and how much.",
+      "why": "one sentence explaining why this matters specifically for their data"
+    }
+  ]
 }
 
-// ===== RENPHO SCAN =====
-function triggerScan() { document.getElementById('scanInput').click(); }
+Create exactly 7 items. Cover: calorie target, protein split across meals, training recommendation, supplement priority, sleep target, hydration, and one specific action based on their body composition that most people miss. Make every item feel personal to THEIR numbers.`
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const match = text.replace(/```json|```/g, '').trim().match(/\{[\s\S]*\}/);
+    if (!match) throw new Error();
+    const result = JSON.parse(match[0]);
+
+    const catColors = {
+      'Nutrition': 'plan-cat-nutrition',
+      'Training': 'plan-cat-training',
+      'Sleep': 'plan-cat-sleep',
+      'Supplements': 'plan-cat-supplements',
+      'Hydration': 'plan-cat-hydration',
+      'Lifestyle': 'plan-cat-lifestyle'
+    };
+
+    const body = document.getElementById('dailyPlanBody');
+    if (!body) return;
+
+    body.innerHTML = result.items.map((item, i) => `
+      <div class="plan-item" id="planItem${i}" onclick="togglePlanItem(${i})">
+        <div class="plan-item-left ${catColors[item.category] || ''}">${item.icon}</div>
+        <div class="plan-item-main">
+          <div class="plan-item-category">${item.category}</div>
+          <div class="plan-item-title">${item.title}</div>
+          <div class="plan-item-preview">${item.preview}</div>
+        </div>
+        <div class="plan-item-arrow">›</div>
+      </div>
+      <div class="plan-item-detail" id="planDetail${i}">
+        <div class="plan-item-detail-text">${item.detail}</div>
+        <div class="plan-item-detail-why">↑ ${item.why}</div>
+      </div>
+    `).join('');
+
+  } catch (e) {
+    const body = document.getElementById('dailyPlanBody');
+    if (body) body.innerHTML = `<div style="padding:20px;text-align:center"><div style="font-size:13px;color:var(--text-dim)">Failed to generate plan. Check your connection.</div><button onclick="generateDailyPlan(window._lastBm)" style="margin-top:12px;padding:8px 16px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--green-vivid);cursor:pointer">Try Again</button></div>`;
+  }
+  window._lastBm = bm;
+}
+
+function togglePlanItem(i) {
+  const item = document.getElementById(`planItem${i}`);
+  const detail = document.getElementById(`planDetail${i}`);
+  if (!item || !detail) return;
+  const isOpen = detail.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.plan-item-detail').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.plan-item').forEach(p => p.classList.remove('expanded'));
+  // Open this one if it was closed
+  if (!isOpen) { detail.classList.add('open'); item.classList.add('expanded'); }
+}
+
+// ===== RENPHO MULTI-PHOTO SCAN =====
+let scanSlots = [null, null, null]; // base64 strings for each slot
+let currentScanSlot = 0;
+
+function triggerScan(slot) {
+  currentScanSlot = slot;
+  document.getElementById('scanInput').click();
+}
 
 async function handleScan(event) {
-  const file=event.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=async(e)=>{
-    const base64=e.target.result;
-    scanBase64=base64.split(',')[1];
-    const scanArea=document.getElementById('scanArea');
-    scanArea.innerHTML=`<img src="${base64}" style="width:100%;height:100%;object-fit:contain">`;
-    const resultBox=document.getElementById('scanResultBox');
-    resultBox.style.display='block';
-    resultBox.innerHTML=`<div class="ai-result"><div class="ai-result-title">🤖 Reading your health data...</div><div class="ai-result-text">AI is extracting all metrics from your report...</div></div>`;
-    try {
-      const resp=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:file.type,data:scanBase64}},{type:'text',text:`This is a health/body composition report screenshot (from Renpho, Withings, InBody, Garmin, or similar). Extract ALL visible metrics and return as JSON only:
-{"weight_kg":number_or_null,"body_fat_pct":number_or_null,"muscle_mass_kg":number_or_null,"lean_mass_kg":number_or_null,"bone_mass_kg":number_or_null,"visceral_fat":number_or_null,"body_water_pct":number_or_null,"bmi":number_or_null,"metabolic_age":number_or_null,"subcutaneous_fat_pct":number_or_null,"protein_pct":number_or_null,"skeletal_muscle_pct":number_or_null,"source":"Renpho/Withings/InBody/etc","summary":"one sentence describing what you read"}
-Only include metrics that are clearly visible. Use null for anything not present.`}]}]})});
-      const data=await resp.json();
-      const text=data.content?.map(c=>c.text||'').join('')||'';
-      const match=text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
-      if(!match)throw new Error();
-      scannedBodyData=JSON.parse(match[0]);
-      const metrics=Object.entries(scannedBodyData).filter(([k,v])=>!['source','summary'].includes(k)&&v!==null);
-      resultBox.innerHTML=`<div class="ai-result"><div class="ai-result-title">✓ ${metrics.length} Metrics Read — ${scannedBodyData.source||'Health Report'}</div><div class="ai-result-text">${scannedBodyData.summary||''}<br><br>${metrics.map(([k,v])=>`<strong>${k.replace(/_/g,' ')}:</strong> ${v}`).join(' · ')}</div></div>`;
-      document.getElementById('saveScanBtn').style.display='block';
-    } catch(e) {
-      resultBox.innerHTML=`<div class="ai-result"><div class="ai-result-title">⚠ Could not read report</div><div class="ai-result-text">Try a clearer photo with better lighting.</div></div>`;
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = ''; // reset so same file can be re-selected
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const base64full = e.target.result;
+    const base64 = base64full.split(',')[1];
+    scanSlots[currentScanSlot] = { base64, mediaType: file.type, preview: base64full };
+
+    // Update slot preview
+    const slot = document.getElementById(`scanSlot${currentScanSlot}`);
+    slot.innerHTML = `<img src="${base64full}" style="width:100%;height:100%;object-fit:cover;border-radius:12px"><div style="position:absolute;bottom:4px;right:4px;background:var(--green-vivid);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:10px">✓</div>`;
+    slot.style.opacity = '1';
+
+    // Unlock next slot
+    const filledCount = scanSlots.filter(Boolean).length;
+    if (filledCount < 3) {
+      const nextSlot = document.getElementById(`scanSlot${filledCount}`);
+      if (nextSlot) nextSlot.style.opacity = '1';
     }
+
+    // Show analyse button
+    const analyseBtn = document.getElementById('analyseScansBtn');
+    analyseBtn.style.display = 'flex';
+    document.getElementById('scanResultBox').style.display = 'none';
+    document.getElementById('saveScanBtn').style.display = 'none';
+    scannedBodyData = null;
   };
   reader.readAsDataURL(file);
 }
 
+async function analyseAllScans() {
+  const filled = scanSlots.filter(Boolean);
+  if (filled.length === 0) { showToast('Add at least one photo first'); return; }
+
+  const btn = document.getElementById('analyseScansBtn');
+  btn.innerHTML = '🤖 Analysing...'; btn.style.opacity = '0.6';
+
+  const resultBox = document.getElementById('scanResultBox');
+  resultBox.style.display = 'block';
+  resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Reading ${filled.length} photo${filled.length > 1 ? 's' : ''}...</div><div class="ai-result-text">Extracting and combining all metrics...</div></div>`;
+
+  try {
+    // Build message content with all photos
+    const content = [];
+    filled.forEach((slot, i) => {
+      content.push({ type: 'image', source: { type: 'base64', media_type: slot.mediaType, data: slot.base64 } });
+      content.push({ type: 'text', text: `Image ${i + 1} of ${filled.length} from a Renpho body composition report.` });
+    });
+
+    content.push({ type: 'text', text: `These are screenshots from a Renpho (or similar) body composition app showing body metrics. Extract ALL visible metrics across all images and combine into one result. If the same metric appears in multiple images use the most precise value.
+
+Return JSON only — use exactly these field names, null for anything not visible:
+{
+  "weight_kg": number,
+  "bmi": number,
+  "body_fat_pct": number,
+  "body_fat_kg": number,
+  "fat_free_mass_kg": number,
+  "skeletal_muscle_kg": number,
+  "skeletal_muscle_pct": number,
+  "muscle_mass_kg": number,
+  "muscle_mass_pct": number,
+  "subcutaneous_fat_pct": number,
+  "visceral_fat": number,
+  "body_water_kg": number,
+  "body_water_pct": number,
+  "bone_mass_kg": number,
+  "bone_mass_pct": number,
+  "protein_kg": number,
+  "protein_pct": number,
+  "bmr_kcal": number,
+  "metabolic_age": number,
+  "lean_mass_kg": number,
+  "source": "Renpho",
+  "summary": "one sentence summary of key findings"
+}` });
+
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content }] })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const match = text.replace(/```json|```/g, '').trim().match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('No JSON returned');
+    scannedBodyData = JSON.parse(match[0]);
+
+    // Build readable summary
+    const fieldLabels = {
+      weight_kg: 'Weight', bmi: 'BMI', body_fat_pct: 'Body Fat %', body_fat_kg: 'Body Fat',
+      fat_free_mass_kg: 'Fat-Free Mass', skeletal_muscle_kg: 'Skeletal Muscle', skeletal_muscle_pct: 'Skeletal Muscle %',
+      muscle_mass_kg: 'Muscle Mass', muscle_mass_pct: 'Muscle Mass %', subcutaneous_fat_pct: 'Subcutaneous Fat %',
+      visceral_fat: 'Visceral Fat', body_water_pct: 'Body Water %', body_water_kg: 'Body Water',
+      bone_mass_kg: 'Bone Mass', protein_kg: 'Protein', protein_pct: 'Protein %',
+      bmr_kcal: 'BMR', metabolic_age: 'Metabolic Age', lean_mass_kg: 'Lean Mass'
+    };
+    const found = Object.entries(scannedBodyData).filter(([k, v]) => fieldLabels[k] && v !== null);
+
+    resultBox.innerHTML = `
+      <div class="ai-result">
+        <div class="ai-result-title">✓ ${found.length} Metrics Read from ${filled.length} Photo${filled.length > 1 ? 's' : ''}</div>
+        <div class="ai-result-text" style="margin-bottom:10px">${scannedBodyData.summary || ''}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          ${found.map(([k, v]) => `<div style="background:var(--surface3);border-radius:8px;padding:6px 10px"><div style="font-size:10px;color:var(--text-dim);margin-bottom:1px">${fieldLabels[k]}</div><div style="font-size:13px;font-weight:700;color:var(--text)">${v}${k.includes('pct') ? '' : k === 'bmi' || k === 'visceral_fat' || k === 'metabolic_age' ? '' : k === 'bmr_kcal' ? ' kcal' : 'kg'}</div></div>`).join('')}
+        </div>
+      </div>`;
+
+    document.getElementById('saveScanBtn').style.display = 'block';
+  } catch (e) {
+    resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">⚠ Could not read report</div><div class="ai-result-text">Try clearer photos with better lighting. Make sure all text is visible.</div></div>`;
+  }
+
+  btn.innerHTML = '🤖 Read All Photos'; btn.style.opacity = '1';
+}
+
 async function saveScan() {
-  if(!scannedBodyData)return;
-  const btn=document.getElementById('saveScanBtn');
-  btn.disabled=true; btn.textContent='Saving...';
-  const { error }=await sb.from('body_metrics').insert({user_id:user.id,date:new Date().toISOString().split('T')[0],...scannedBodyData});
-  if(error){showToast('Failed to save');btn.disabled=false;btn.textContent='Save Body Data';return;}
+  if (!scannedBodyData) return;
+  const btn = document.getElementById('saveScanBtn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  // Only save columns that exist in the table — strip anything unknown
+  const allowedCols = ['weight_kg','bmi','body_fat_pct','body_fat_kg','fat_free_mass_kg','skeletal_muscle_kg','skeletal_muscle_pct','muscle_mass_kg','muscle_mass_pct','subcutaneous_fat_pct','visceral_fat','body_water_kg','body_water_pct','bone_mass_kg','bone_mass_pct','protein_kg','protein_pct','bmr_kcal','metabolic_age','lean_mass_kg','source','summary'];
+  const clean = { user_id: user.id, date: new Date().toISOString().split('T')[0] };
+  allowedCols.forEach(col => { if (scannedBodyData[col] !== undefined && scannedBodyData[col] !== null) clean[col] = scannedBodyData[col]; });
+
+  const { error } = await sb.from('body_metrics').insert(clean);
+  if (error) { showToast('Failed to save — ' + error.message); btn.disabled = false; btn.textContent = 'Save Body Data'; return; }
+
   closeModal('scanModal');
   showToast('✓ Body data saved');
+  // Reset slots
+  scanSlots = [null, null, null];
+  scannedBodyData = null;
+  for (let i = 0; i < 3; i++) {
+    const slot = document.getElementById(`scanSlot${i}`);
+    if (slot) { slot.innerHTML = `<span style="font-size:22px">📷</span><span style="font-size:10px;font-weight:600;color:var(--text-dim)">Screen ${i + 1}</span>`; slot.style.opacity = i === 0 ? '1' : '0.5'; }
+  }
+  document.getElementById('analyseScansBtn').style.display = 'none';
+  document.getElementById('scanResultBox').style.display = 'none';
+  document.getElementById('saveScanBtn').style.display = 'none';
+
   await loadBodyMetrics();
   renderBody();
   renderHome();
-  scannedBodyData=null; scanBase64=null;
-  btn.disabled=false; btn.textContent='Save Body Data';
+  btn.disabled = false; btn.textContent = 'Save Body Data';
 }
 
 // ===== NUTRITION SCREEN =====
