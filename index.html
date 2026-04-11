@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vitlo — Health Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
@@ -36,7 +36,7 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     max-width: 430px;
@@ -60,10 +60,10 @@
   .auth-tagline { font-size:12px; color:var(--text-dim); margin-bottom:48px; letter-spacing:1.5px; text-transform:uppercase; }
   .auth-card { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:28px; margin-bottom:16px; }
   .auth-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--text); margin-bottom:20px; text-align:left; }
-  .auth-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; font-family:'DM Sans',sans-serif; font-size:15px; color:var(--text); outline:none; margin-bottom:12px; transition:border-color 0.2s; }
+  .auth-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:var(--text); outline:none; margin-bottom:12px; transition:border-color 0.2s; }
   .auth-input::placeholder { color:var(--text-dim); }
   .auth-input:focus { border-color:var(--green-vivid); }
-  .auth-btn { width:100%; padding:15px; background:var(--green-bright); color:#fff; border:none; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:4px; }
+  .auth-btn { width:100%; padding:15px; background:var(--green-bright); color:#fff; border:none; border-radius:12px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:4px; }
   .auth-btn:disabled { opacity:0.5; cursor:not-allowed; }
   .auth-switch { font-size:13px; color:var(--text-dim); cursor:pointer; margin-top:16px; }
   .auth-switch span { color:var(--green-vivid); font-weight:600; }
@@ -77,13 +77,13 @@
   .ob-progress { height:2px; background:var(--surface3); margin-top:20px; border-radius:1px; overflow:hidden; }
   .ob-progress-fill { height:100%; background:var(--green-vivid); border-radius:1px; transition:width 0.4s ease; }
   .ob-body { padding:24px 20px 100px; flex:1; overflow-y:auto; }
-  .ob-btn { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 40px); max-width:390px; padding:16px; background:var(--green-bright); color:#fff; border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:700; cursor:pointer; z-index:10; }
+  .ob-btn { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 40px); max-width:390px; padding:16px; background:var(--green-bright); color:#fff; border:none; border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:16px; font-weight:700; cursor:pointer; z-index:10; }
   .ob-btn:disabled { opacity:0.4; cursor:not-allowed; }
 
   /* SHARED FORM */
   .field-group { margin-bottom:18px; }
   .field-label { font-size:11px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; display:block; }
-  .field-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:13px 16px; font-family:'DM Sans',sans-serif; font-size:15px; color:var(--text); outline:none; transition:border-color 0.2s; appearance:none; }
+  .field-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:13px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:var(--text); outline:none; transition:border-color 0.2s; appearance:none; }
   .field-input:focus { border-color:var(--green-vivid); }
   .field-input::placeholder { color:var(--text-dim); }
   .field-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -109,7 +109,7 @@
   .screen-header { background:var(--surface); border-bottom:1px solid var(--border); padding:52px 24px 20px; }
   .screen-header-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.5px; }
   .screen-header-sub { font-size:13px; color:var(--text-dim); margin-top:2px; }
-  .back-btn { background:var(--surface2); border:1px solid var(--border); border-radius:10px; width:36px; height:36px; color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-family:'DM Sans',sans-serif; }
+  .back-btn { background:var(--surface2); border:1px solid var(--border); border-radius:10px; width:36px; height:36px; color:var(--text); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-family:'Plus Jakarta Sans',sans-serif; }
 
   /* CARDS */
   .card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; }
@@ -124,7 +124,7 @@
   .score-pill { display:flex; align-items:center; gap:8px; background:var(--surface2); border:1px solid var(--border); border-radius:100px; padding:8px 14px; cursor:pointer; }
   .score-pill-num { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; line-height:1; }
   .score-pill-label { font-size:10px; color:var(--text-dim); font-weight:500; }
-  .logout-btn { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:6px 12px; font-size:11px; font-weight:600; color:var(--text-dim); cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .logout-btn { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:6px 12px; font-size:11px; font-weight:600; color:var(--text-dim); cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
 
   /* CALORIE HERO */
   .cal-hero { background:var(--surface2); border:1px solid var(--border); border-radius:16px; padding:20px; margin-bottom:12px; }
@@ -202,7 +202,7 @@
   .body-stat-change.pos { color:var(--green-vivid); }
   .body-stat-change.neg { color:var(--red); }
 
-  .scan-btn { width:100%; padding:18px; background:var(--green-dim); border:1px dashed rgba(30,132,73,0.4); border-radius:16px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; color:var(--green-vivid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; }
+  .scan-btn { width:100%; padding:18px; background:var(--green-dim); border:1px dashed rgba(30,132,73,0.4); border-radius:16px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; color:var(--green-vivid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; }
 
   .daily-plan-card { background:var(--surface2); border:1px solid var(--border); border-radius:16px; overflow:hidden; margin-bottom:12px; }
   .daily-plan-header { padding:18px 18px 14px; border-bottom:1px solid var(--border); }
@@ -289,7 +289,7 @@
   .marker-status.unknown { background:var(--surface3); color:var(--text-dim); }
   .marker-insight { font-size:12px; color:var(--text-mid); line-height:1.5; margin-top:8px; }
   .marker-insight.loading { color:var(--green-vivid); font-style:italic; }
-  .add-marker-btn { width:100%; padding:14px; background:var(--green-dim); border:1px dashed rgba(30,132,73,0.3); border-radius:14px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; color:var(--green-vivid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
+  .add-marker-btn { width:100%; padding:14px; background:var(--green-dim); border:1px dashed rgba(30,132,73,0.3); border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:600; color:var(--green-vivid); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
   .no-data { text-align:center; padding:40px 20px; }
   .no-data-icon { font-size:40px; margin-bottom:12px; opacity:0.3; }
   .no-data-text { font-size:14px; color:var(--text-dim); line-height:1.6; margin-bottom:20px; }
@@ -330,11 +330,11 @@
   .modal-sub { font-size:13px; color:var(--text-dim); margin-bottom:20px; }
   .form-field { margin-bottom:14px; }
   .form-label { font-size:11px; font-weight:600; color:var(--text-mid); margin-bottom:6px; display:block; letter-spacing:0.3px; text-transform:uppercase; }
-  .form-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:12px 14px; font-family:'DM Sans',sans-serif; font-size:15px; color:var(--text); outline:none; transition:border-color 0.2s; appearance:none; }
+  .form-input { width:100%; background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:12px 14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; color:var(--text); outline:none; transition:border-color 0.2s; appearance:none; }
   .form-input:focus { border-color:var(--green-vivid); }
-  .form-btn { width:100%; padding:15px; background:var(--green-bright); color:#fff; border:none; border-radius:14px; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; }
+  .form-btn { width:100%; padding:15px; background:var(--green-bright); color:#fff; border:none; border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; margin-top:8px; }
   .form-btn:disabled { opacity:0.5; cursor:not-allowed; }
-  .form-btn-secondary { width:100%; padding:13px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:14px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; margin-top:8px; }
+  .form-btn-secondary { width:100%; padding:13px; background:transparent; color:var(--text-dim); border:1px solid var(--border); border-radius:14px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; margin-top:8px; }
   .type-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
   .type-opt { padding:10px 4px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; font-size:11px; font-weight:600; color:var(--text-dim); text-align:center; cursor:pointer; transition:all 0.2s; }
   .type-opt.selected { background:var(--green-dim); border-color:var(--green-vivid); color:var(--green-vivid); }
@@ -366,6 +366,70 @@
   .empty-state { text-align:center; padding:32px 20px; }
   .empty-state-icon { font-size:32px; margin-bottom:10px; opacity:0.3; }
   .empty-state-text { font-size:13px; color:var(--text-dim); line-height:1.6; }
+
+  /* CAL DONUT CHART */
+  .cal-donut-wrap { position:relative; width:130px; height:130px; flex-shrink:0; cursor:pointer; }
+  .cal-donut-wrap svg { transform:rotate(-90deg); }
+  .donut-track { fill:none; stroke:var(--surface3); stroke-width:14; }
+  .donut-eaten { fill:none; stroke:var(--green-vivid); stroke-width:14; stroke-linecap:butt; transition:stroke-dashoffset 1s ease; }
+  .donut-burned { fill:none; stroke:var(--blue); stroke-width:14; stroke-linecap:butt; }
+  .donut-over { fill:none; stroke:var(--red); stroke-width:14; stroke-linecap:butt; }
+  .cal-donut-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; pointer-events:none; }
+  .cal-donut-num { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:700; color:var(--text); line-height:1; }
+  .cal-donut-label { font-size:9px; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+  .cal-hero-right { flex:1; display:flex; flex-direction:column; gap:8px; }
+  .cal-legend-row { display:flex; align-items:center; gap:6px; }
+  .cal-legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .cal-legend-label { font-size:11px; color:var(--text-dim); flex:1; }
+  .cal-legend-val { font-size:13px; font-weight:700; color:var(--text); }
+  .cal-remaining-row { background:var(--surface3); border-radius:10px; padding:10px 12px; margin-top:4px; }
+  .cal-remaining-num { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:700; line-height:1; }
+  .cal-remaining-label { font-size:10px; color:var(--text-dim); font-weight:500; margin-top:1px; }
+
+  /* NUTRITION MODAL */
+  .nutrition-fact-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); }
+  .nutrition-fact-row:last-child { border-bottom:none; }
+  .nutrition-fact-name { font-size:13px; color:var(--text-mid); flex:1; }
+  .nutrition-fact-bar-wrap { width:50px; height:3px; background:var(--surface3); border-radius:2px; overflow:hidden; margin:0 10px; }
+  .nutrition-fact-bar { height:100%; border-radius:2px; }
+  .nutrition-fact-val { font-size:13px; font-weight:700; color:var(--text); min-width:40px; text-align:right; }
+  .nutrition-section-head { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); padding:14px 0 4px; }
+
+  /* WHOOP CARD */
+  .whoop-card { background:var(--surface2); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; }
+  .whoop-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+  .whoop-stat { text-align:center; background:var(--surface3); border-radius:10px; padding:10px 4px; }
+  .whoop-stat-val { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:700; color:var(--text); line-height:1; margin-bottom:2px; }
+  .whoop-stat-label { font-size:9px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.3px; }
+  .sleep-stages { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .sleep-stage { background:var(--surface3); border-radius:10px; padding:10px 12px; }
+  .sleep-stage-val { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:var(--text); }
+  .sleep-stage-label { font-size:10px; color:var(--text-dim); font-weight:500; margin-top:1px; }
+  .sleep-scan-area { width:100%; min-height:140px; background:var(--surface2); border:1px dashed var(--border2); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer; overflow:hidden; position:relative; margin-bottom:14px; }
+  .sleep-scan-area img { width:100%; height:100%; object-fit:contain; position:absolute; inset:0; }
+
+  /* GOAL PROGRESS ON BODY SCREEN */
+  .goal-progress-section { background:var(--surface2); border:1px solid var(--border); border-radius:16px; padding:18px; margin-bottom:12px; }
+  .goal-progress-title { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px; }
+  .goal-metric { margin-bottom:16px; }
+  .goal-metric:last-child { margin-bottom:0; }
+  .goal-metric-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+  .goal-metric-name { font-size:13px; font-weight:600; color:var(--text); }
+  .goal-metric-status { font-size:11px; font-weight:600; padding:2px 8px; border-radius:100px; }
+  .goal-metric-track { height:8px; background:var(--surface3); border-radius:4px; overflow:visible; position:relative; margin-bottom:4px; }
+  .goal-metric-fill { height:100%; border-radius:4px; transition:width 1.2s ease; position:relative; }
+  .goal-marker { position:absolute; top:-3px; width:2px; height:14px; background:rgba(255,255,255,0.5); border-radius:1px; }
+  .goal-metric-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--text-dim); }
+
+  /* GOALS AI INPUT */
+  .goals-modal-inner { padding-bottom:10px; }
+  .ai-goals-result { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px; margin-top:14px; }
+  .ai-goals-result-title { font-size:11px; font-weight:700; color:var(--green-vivid); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px; }
+  .ai-goal-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .ai-goal-item:last-child { border-bottom:none; }
+  .ai-goal-icon { font-size:16px; flex-shrink:0; }
+  .ai-goal-text { font-size:12px; color:var(--text-mid); line-height:1.5; }
+  .ai-goal-text strong { color:var(--text); }
 </style>
 </head>
 <body>
@@ -422,30 +486,49 @@
       </div>
     </div>
 
-    <div class="cal-hero">
+    <div class="cal-hero" onclick="openCalDetail()" style="cursor:pointer">
       <div class="cal-hero-top">
-        <div class="cal-hero-label">Net Calories</div>
+        <div class="cal-hero-label">Today's Calories</div>
         <div class="cal-goal-pill" id="calGoalPill">—</div>
       </div>
-      <div class="cal-main-row">
-        <div>
-          <div class="cal-net" id="calNet">0</div>
-          <div style="font-size:12px;color:var(--text-dim);margin-top:2px" id="calNetLabel">kcal remaining</div>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div class="cal-donut-wrap" id="calDonutWrap">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle class="donut-track" cx="65" cy="65" r="52"/>
+            <circle class="donut-eaten" id="donutEaten" cx="65" cy="65" r="52" stroke-dasharray="327" stroke-dashoffset="327"/>
+            <circle class="donut-burned" id="donutBurned" cx="65" cy="65" r="52" stroke-dasharray="327" stroke-dashoffset="327"/>
+          </svg>
+          <div class="cal-donut-center">
+            <div class="cal-donut-num" id="calDonutNum">0</div>
+            <div class="cal-donut-label" id="calDonutLabel">eaten</div>
+          </div>
         </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:var(--text-dim);margin-bottom:2px">Eaten</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)" id="calConsumed">0</div>
-          <div style="font-size:11px;color:var(--text-dim);margin-top:2px" id="calBurned">+0 burned</div>
+        <div class="cal-hero-right">
+          <div class="cal-legend-row">
+            <div class="cal-legend-dot" style="background:var(--green-vivid)"></div>
+            <div class="cal-legend-label">Eaten</div>
+            <div class="cal-legend-val" id="calLegendEaten">0 kcal</div>
+          </div>
+          <div class="cal-legend-row">
+            <div class="cal-legend-dot" style="background:var(--blue)"></div>
+            <div class="cal-legend-label">Burned</div>
+            <div class="cal-legend-val" id="calLegendBurned">0 kcal</div>
+          </div>
+          <div class="cal-legend-row">
+            <div class="cal-legend-dot" style="background:var(--surface3);border:1px solid var(--border2)"></div>
+            <div class="cal-legend-label">Target</div>
+            <div class="cal-legend-val" id="calLegendTarget">0 kcal</div>
+          </div>
+          <div class="cal-remaining-row">
+            <div class="cal-remaining-num" id="calRemainingNum" style="color:var(--green-vivid)">0</div>
+            <div class="cal-remaining-label" id="calRemainingLabel">kcal remaining</div>
+          </div>
         </div>
       </div>
-      <div class="cal-bar-track"><div class="cal-bar-fill" id="calBar" style="width:0%;background:var(--green-vivid)"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);margin-top:6px">
-        <span id="calFooterLeft">0 from food</span>
-        <span id="calFooterRight">Target: 0 kcal</span>
-      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;text-align:center" id="calSource">Tap for full breakdown</div>
     </div>
 
-    <div class="macro-row">
+    <div class="macro-row" onclick="openNutritionModal()" style="cursor:pointer">
       <div class="macro-card">
         <div class="macro-val" id="macroP">0g</div>
         <div class="macro-label">Protein</div>
@@ -478,6 +561,17 @@
       </div>
     </div>
 
+    <!-- WHOOP CARD -->
+    <div class="whoop-card" id="whoopCard">
+      <div class="card-title">Whoop / Recovery <span class="card-link" onclick="openModal('whoopModal')">+ Log</span></div>
+      <div id="whoopContent">
+        <div class="workout-empty">
+          <div class="workout-empty-icon" style="font-size:20px;opacity:0.3">⌚</div>
+          <div class="workout-empty-text">Log your Whoop data or upload a sleep screenshot for recovery insights.</div>
+        </div>
+      </div>
+    </div>
+
     <div class="food-sug-card" id="foodSugCard" style="display:none">
       <div class="card-title">Eat This Next <span style="font-size:11px;color:var(--text-dim);font-weight:400;letter-spacing:0" id="foodSugSub"></span></div>
       <div id="foodSugItems"></div>
@@ -498,7 +592,10 @@
   <div class="screen-header">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <div class="screen-header-title">Body</div>
-      <button onclick="openModal('scanModal')" style="background:var(--green-bright);border:none;border-radius:10px;padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer">📷 Scan</button>
+      <div style="display:flex;gap:8px">
+        <button onclick="openModal('goalsModal')" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:var(--text-dim);cursor:pointer">🎯 Goals</button>
+        <button onclick="openModal('scanModal')" style="background:var(--green-bright);border:none;border-radius:10px;padding:8px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer">📷 Scan</button>
+      </div>
     </div>
     <div class="screen-header-sub" id="bodySubHeader">Scan your Renpho or health app report</div>
   </div>
@@ -601,7 +698,7 @@
       Renpho shows results across multiple screens. Photograph each one for the most complete data.
     </div>
 
-    <button id="analyseScansBtn" onclick="analyseAllScans()" style="display:none;width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green-vivid);cursor:pointer;margin-bottom:14px;display:none;align-items:center;justify-content:center;gap:8px">
+    <button id="analyseScansBtn" onclick="analyseAllScans()" style="display:none;width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green-vivid);cursor:pointer;margin-bottom:14px;display:none;align-items:center;justify-content:center;gap:8px">
       🤖 Read All Photos
     </button>
 
@@ -632,7 +729,7 @@
         <label class="form-label">Describe what you ate</label>
         <textarea class="form-input" id="foodDesc" placeholder="e.g. 200g chicken breast with spinach and sweet potato..." style="min-height:80px;resize:none;line-height:1.5" rows="3"></textarea>
       </div>
-      <button onclick="analyseDescription()" id="analyseBtn" style="width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green-vivid);cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">🤖 Analyse with AI</button>
+      <button onclick="analyseDescription()" id="analyseBtn" style="width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green-vivid);cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">🤖 Analyse with AI</button>
     </div>
     <div id="photoTab" style="display:none">
       <div class="photo-area" id="photoArea" onclick="triggerCamera()">
@@ -744,6 +841,97 @@
   </div>
 </div>
 
+<!-- CALORIE DETAIL MODAL -->
+<div class="modal-overlay" id="calDetailModal" onclick="closeModalOut(event,'calDetailModal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Calorie Breakdown</div>
+    <div class="modal-sub" id="calDetailSub">Today's full picture</div>
+    <div id="calDetailContent"></div>
+    <button class="form-btn-secondary" onclick="closeModal('calDetailModal')">Close</button>
+  </div>
+</div>
+
+<!-- NUTRITION FACTS MODAL -->
+<div class="modal-overlay" id="nutritionModal" onclick="closeModalOut(event,'nutritionModal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nutrition Facts</div>
+    <div class="modal-sub">Everything you've consumed today</div>
+    <div id="nutritionContent"></div>
+    <button class="form-btn-secondary" onclick="closeModal('nutritionModal')">Close</button>
+  </div>
+</div>
+
+<!-- WHOOP MODAL -->
+<div class="modal-overlay" id="whoopModal" onclick="closeModalOut(event,'whoopModal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Log Whoop Data</div>
+    <div class="modal-sub">Enter manually or upload a screenshot of your sleep summary</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+      <div id="whoopTabManual" onclick="switchWhoopTab('manual')" style="padding:10px;background:var(--green-bright);border:1px solid var(--green-bright);border-radius:10px;font-size:13px;font-weight:700;color:#fff;text-align:center;cursor:pointer">📝 Manual</div>
+      <div id="whoopTabSleep" onclick="switchWhoopTab('sleep')" style="padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;color:var(--text-dim);text-align:center;cursor:pointer">📸 Sleep SS</div>
+    </div>
+
+    <div id="whoopManualTab">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+        <div class="form-field" style="margin:0"><label class="form-label">Recovery Score (%)</label><input class="form-input" type="number" id="whoopRecovery" placeholder="e.g. 74" min="0" max="100"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">HRV (ms)</label><input class="form-input" type="number" id="whoopHrv" placeholder="e.g. 62"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Resting HR (bpm)</label><input class="form-input" type="number" id="whoopRhr" placeholder="e.g. 52"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Strain Score</label><input class="form-input" type="number" id="whoopStrain" placeholder="e.g. 12.4" step="0.1"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Steps</label><input class="form-input" type="number" id="whoopSteps" placeholder="e.g. 8500"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Active Calories</label><input class="form-input" type="number" id="whoopActiveCals" placeholder="e.g. 420"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Total Sleep (hrs)</label><input class="form-input" type="number" id="whoopSleep" placeholder="e.g. 7.5" step="0.25"></div>
+        <div class="form-field" style="margin:0"><label class="form-label">Restorative (hrs)</label><input class="form-input" type="number" id="whoopRestorative" placeholder="e.g. 4.2" step="0.1"></div>
+      </div>
+      <button class="form-btn" onclick="saveWhoopManual()">Save Whoop Data</button>
+    </div>
+
+    <div id="whoopSleepTab" style="display:none">
+      <div class="sleep-scan-area" id="sleepScanArea" onclick="triggerSleepScan()">
+        <input type="file" id="sleepScanInput" accept="image/*" style="display:none" onchange="handleSleepScan(event)">
+        <div style="font-size:32px">📸</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-dim)">Upload Whoop sleep screenshot</div>
+        <div style="font-size:11px;color:var(--text-dim);opacity:0.6;text-align:center;padding:0 20px">Shows total sleep, REM, deep, light, and awake times</div>
+      </div>
+      <div id="sleepScanResult" style="display:none"></div>
+      <button class="form-btn" id="saveSleepScanBtn" onclick="saveSleepScan()" style="display:none">Save Sleep Data</button>
+    </div>
+
+    <button class="form-btn-secondary" onclick="closeModal('whoopModal')">Cancel</button>
+  </div>
+</div>
+
+<!-- GOALS AI MODAL -->
+<div class="modal-overlay" id="goalsModal" onclick="closeModalOut(event,'goalsModal')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Set Your Goals</div>
+    <div class="modal-sub">Tell Vitlo what you want to achieve in your own words. The more specific the better.</div>
+
+    <div class="form-field">
+      <label class="form-label">What are you trying to achieve?</label>
+      <textarea class="form-input" id="goalsInput" placeholder="e.g. I want to get my body fat down to 14%, build more muscle especially in my upper body, and naturally increase my testosterone levels. I train 4 days a week and work a desk job." style="min-height:100px;resize:none;line-height:1.6" rows="4"></textarea>
+    </div>
+
+    <div class="form-field">
+      <label class="form-label">Timeline</label>
+      <select class="form-input" id="goalsTimeline">
+        <option value="3 months">3 months</option>
+        <option value="6 months" selected>6 months</option>
+        <option value="12 months">12 months</option>
+        <option value="ongoing">Ongoing — no deadline</option>
+      </select>
+    </div>
+
+    <button onclick="analyseGoals()" id="analyseGoalsBtn" class="form-btn" style="background:var(--green-dim);color:var(--green-vivid);border:1px solid rgba(30,132,73,0.3)">🤖 Build My Plan</button>
+    <div id="goalsResult" style="display:none"></div>
+    <button class="form-btn-secondary" onclick="closeModal('goalsModal')">Close</button>
+  </div>
+</div>
+
 <script>
 const SUPA_URL = 'https://tvhkxsnmfcnwaxeadxeg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio';
@@ -752,11 +940,11 @@ const { createClient } = supabase;
 const sb = createClient(SUPA_URL, SUPA_KEY);
 
 let user=null, profile=null, markers=null, latestBodyMetrics=null;
-let checkins=[], foodLogs=[], allFoodLogs=[], workoutLog=null;
+let checkins=[], foodLogs=[], allFoodLogs=[], workoutLog=null, whoopData=null;
 let streak=0, authMode='signin', obStep=1;
 let selectedMealType='Breakfast', selectedGoals=[], selectedSex='';
 let selectedWorkoutType='Weights', selectedWorkoutIcon='🏋️';
-let photoBase64=null, scanBase64=null, scannedBodyData=null;
+let photoBase64=null, scanBase64=null, scannedBodyData=null, scannedSleepData=null;
 let protocolGenerated=false;
 
 // ===== INIT =====
@@ -1009,36 +1197,60 @@ function renderHome() {
   const scoreEl=document.getElementById('scorePillNum');
   scoreEl.textContent=score;
   scoreEl.style.color=score>=75?'var(--green-vivid)':score>=50?'var(--amber)':'var(--red)';
-  renderCalHero(); renderMacros(); renderWorkoutCard(); renderFoodSuggestions(); renderMealsList();
+  renderCalHero(); renderMacros(); renderWorkoutCard(); renderWhoopCard(); renderFoodSuggestions(); renderMealsList();
 }
 
 function renderCalHero() {
-  const {target,consumed,burned,remaining,isDeficit,isSurplus}=getCalData();
-  const pct=Math.min(100,(consumed/target)*100);
-  const pillEl=document.getElementById('calGoalPill');
+  const {target,consumed,burned,remaining,isDeficit,isSurplus} = getCalData();
+  const circumference = 327;
+
+  // Goal pill
+  const pillEl = document.getElementById('calGoalPill');
   if(isDeficit){pillEl.textContent='🔥 Fat Loss';pillEl.className='cal-goal-pill deficit';}
   else if(isSurplus){pillEl.textContent='💪 Muscle Gain';pillEl.className='cal-goal-pill surplus';}
   else{pillEl.textContent='⚖️ Maintain';pillEl.className='cal-goal-pill maintain';}
-  const netEl=document.getElementById('calNet');
-  netEl.textContent=Math.abs(remaining);
-  netEl.className='cal-net '+(remaining>=0?'under':'over');
 
-  // Show context — how the target was calculated
-  const bm=latestBodyMetrics;
-  let targetSource='';
-  if(bm?.bmr_kcal) targetSource=`Based on your Renpho BMR (${bm.bmr_kcal} kcal)`;
-  else targetSource='Estimated from your stats';
+  // Donut segments — eaten then burned on top
+  const eatenPct = Math.min(1, consumed / target);
+  const burnedPct = Math.min(1 - eatenPct, burned / target);
+  const eatenDash = circumference * eatenPct;
+  const burnedDash = circumference * burnedPct;
+  const burnedOffset = circumference - eatenDash;
 
-  document.getElementById('calNetLabel').textContent=remaining>=0
-    ?(isDeficit?'kcal remaining in your deficit':'kcal remaining today')
-    :'kcal over target today';
-  document.getElementById('calConsumed').textContent=consumed;
-  document.getElementById('calBurned').textContent=burned>0?`+${burned} burned`:'No workout yet';
-  const bar=document.getElementById('calBar');
-  bar.style.width=pct+'%';
-  bar.style.background=remaining>=0?'var(--green-vivid)':'var(--red)';
-  document.getElementById('calFooterLeft').textContent=`${consumed} kcal eaten${burned>0?' · '+burned+' burned':''}`;
-  document.getElementById('calFooterRight').textContent=`Target: ${target} kcal`;
+  const eatenEl = document.getElementById('donutEaten');
+  const burnedEl = document.getElementById('donutBurned');
+  if (eatenEl) {
+    eatenEl.style.strokeDasharray = `${eatenDash} ${circumference - eatenDash}`;
+    eatenEl.style.strokeDashoffset = '0';
+    eatenEl.style.stroke = consumed > target ? 'var(--red)' : 'var(--green-vivid)';
+  }
+  if (burnedEl) {
+    burnedEl.style.strokeDasharray = `${burnedDash} ${circumference - burnedDash}`;
+    burnedEl.style.strokeDashoffset = -burnedOffset;
+  }
+
+  // Center label — show remaining
+  document.getElementById('calDonutNum').textContent = Math.abs(remaining);
+  document.getElementById('calDonutLabel').textContent = remaining >= 0 ? 'remaining' : 'over';
+
+  // Legend values
+  document.getElementById('calLegendEaten').textContent = consumed + ' kcal';
+  document.getElementById('calLegendBurned').textContent = burned > 0 ? burned + ' kcal' : '—';
+  document.getElementById('calLegendTarget').textContent = target + ' kcal';
+
+  // Remaining pill
+  const remEl = document.getElementById('calRemainingNum');
+  remEl.textContent = Math.abs(remaining);
+  remEl.style.color = remaining >= 0 ? 'var(--green-vivid)' : 'var(--red)';
+  document.getElementById('calRemainingLabel').textContent = remaining >= 0
+    ? (isDeficit ? 'kcal left in deficit' : 'kcal left today')
+    : 'kcal over target';
+
+  // Source label
+  const bm = latestBodyMetrics;
+  document.getElementById('calSource').textContent = bm?.bmr_kcal
+    ? `Renpho BMR ${bm.bmr_kcal} kcal · tap for full breakdown`
+    : 'Tap for full breakdown';
 }
 
 function renderMacros() {
@@ -1104,32 +1316,108 @@ function calcHealthScore() {
 
 // ===== BODY SCREEN =====
 async function renderBody() {
-  const content=document.getElementById('bodyContent');
-  const allMetrics=await loadBodyMetrics();
-  if(!latestBodyMetrics){
-    content.innerHTML=`<div class="no-data"><div class="no-data-icon">📊</div><div class="no-data-text">No body data yet.<br>Tap Scan to photograph your Renpho or health app report.</div><button class="scan-btn" onclick="openModal('scanModal')">📷 Scan Health Report</button></div>`;
+  const content = document.getElementById('bodyContent');
+  const allMetrics = await loadBodyMetrics();
+  if (!latestBodyMetrics) {
+    content.innerHTML = `<div class="no-data"><div class="no-data-icon">📊</div><div class="no-data-text">No body data yet.<br>Tap Scan to photograph your Renpho report.</div><button class="scan-btn" onclick="openModal('scanModal')">📷 Scan Health Report</button></div>`;
     return;
   }
-  const bm=latestBodyMetrics;
-  const goals=profile?.goals||[];
-  const bfGoal=goals.includes('fat_loss')?14:goals.includes('muscle')?12:18;
-  const currentBF=bm.body_fat_pct||0;
-  const bfDiff=currentBF-bfGoal;
-  const circumference=326;
-  const bfPct=Math.min(100,currentBF/40*100);
-  const offset=circumference-(bfPct/100)*circumference;
-  const bfColor=currentBF<=bfGoal?'var(--green-vivid)':currentBF<=bfGoal+5?'var(--amber)':'var(--red)';
+  const bm = latestBodyMetrics;
+  const goals = profile?.goals || [];
 
-  // Previous metrics for change
-  const prev=allMetrics.length>1?allMetrics[1]:null;
-  const bfChange=prev&&bm.body_fat_pct&&prev.body_fat_pct?(bm.body_fat_pct-prev.body_fat_pct).toFixed(1):null;
-  const muscleChange=prev&&bm.muscle_mass_kg&&prev.muscle_mass_kg?(bm.muscle_mass_kg-prev.muscle_mass_kg).toFixed(1):null;
+  // Body fat — try multiple field names in case of mapping differences
+  const currentBF = parseFloat(
+    bm.body_fat_pct ||
+    (bm.body_fat_kg && bm.weight_kg ? ((bm.body_fat_kg / bm.weight_kg) * 100).toFixed(1) : 0) ||
+    0
+  );
 
-  document.getElementById('bodySubHeader').textContent=`Last scanned: ${bm.date||'Unknown'} · Source: ${bm.source||'Scan'}`;
+  const bfGoal = goals.includes('fat_loss') ? 14 : goals.includes('muscle') ? 12 : 18;
+  const bfDiff = (currentBF - bfGoal).toFixed(1);
+  const weeksToGoal = parseFloat(bfDiff) > 0 ? Math.round(parseFloat(bfDiff) * 10) : 0;
 
-  content.innerHTML=`
+  // Muscle goal
+  const currentMuscle = parseFloat(bm.skeletal_muscle_kg || bm.muscle_mass_kg || 0);
+  const muscleGoalPct = goals.includes('muscle') ? 52 : 49; // target skeletal muscle %
+  const currentMusclePct = parseFloat(bm.skeletal_muscle_pct || bm.muscle_mass_pct || 0);
+
+  // BF ring
+  const circumference = 326;
+  const bfRingPct = currentBF > 0 ? Math.min(100, currentBF / 40 * 100) : 0;
+  const offset = circumference - (bfRingPct / 100) * circumference;
+  const bfColor = currentBF <= bfGoal ? 'var(--green-vivid)' : currentBF <= bfGoal + 5 ? 'var(--amber)' : 'var(--red)';
+
+  const prev = allMetrics.length > 1 ? allMetrics[1] : null;
+  const bfChange = prev && currentBF && prev.body_fat_pct ? (currentBF - prev.body_fat_pct).toFixed(1) : null;
+  const muscleChange = prev && bm.muscle_mass_kg && prev.muscle_mass_kg ? (bm.muscle_mass_kg - prev.muscle_mass_kg).toFixed(1) : null;
+
+  document.getElementById('bodySubHeader').textContent = `Last scanned: ${bm.date || 'Unknown'} · ${bm.source || 'Renpho'}`;
+
+  content.innerHTML = `
+    <!-- GOAL PROGRESS SECTION -->
+    <div class="goal-progress-section">
+      <div class="goal-progress-title">Goal Progress</div>
+
+      <!-- Body Fat Goal -->
+      <div class="goal-metric">
+        <div class="goal-metric-header">
+          <div class="goal-metric-name">🔥 Body Fat %</div>
+          <div class="goal-metric-status" style="background:${currentBF<=bfGoal?'var(--green-dim)':currentBF<=bfGoal+5?'var(--amber-dim)':'var(--red-dim)'};color:${currentBF<=bfGoal?'var(--green-vivid)':currentBF<=bfGoal+5?'var(--amber)':'var(--red)'}">
+            ${currentBF<=bfGoal?'Goal Reached ✓':parseFloat(bfDiff)+'% to go'}
+          </div>
+        </div>
+        <div class="goal-metric-track">
+          <div class="goal-metric-fill" style="width:${Math.min(100,(currentBF/40)*100)}%;background:${bfColor}"></div>
+          <div style="position:absolute;top:-3px;left:${(bfGoal/40)*100}%;width:2px;height:14px;background:rgba(255,255,255,0.5);border-radius:1px"></div>
+        </div>
+        <div class="goal-metric-labels">
+          <span style="font-weight:700;color:var(--text)">${currentBF}% now</span>
+          <span style="color:var(--text-dim)">Goal: ${bfGoal}%${weeksToGoal>0?' · ~'+weeksToGoal+' weeks':''}</span>
+        </div>
+      </div>
+
+      ${currentMusclePct>0?`
+      <!-- Muscle % Goal -->
+      <div class="goal-metric">
+        <div class="goal-metric-header">
+          <div class="goal-metric-name">💪 Skeletal Muscle %</div>
+          <div class="goal-metric-status" style="background:${currentMusclePct>=muscleGoalPct?'var(--green-dim)':'var(--blue-dim)'};color:${currentMusclePct>=muscleGoalPct?'var(--green-vivid)':'var(--blue)'}">
+            ${currentMusclePct>=muscleGoalPct?'Target Met ✓':(muscleGoalPct-currentMusclePct).toFixed(1)+'% to go'}
+          </div>
+        </div>
+        <div class="goal-metric-track">
+          <div class="goal-metric-fill" style="width:${Math.min(100,(currentMusclePct/60)*100)}%;background:var(--blue)"></div>
+          <div style="position:absolute;top:-3px;left:${(muscleGoalPct/60)*100}%;width:2px;height:14px;background:rgba(255,255,255,0.5);border-radius:1px"></div>
+        </div>
+        <div class="goal-metric-labels">
+          <span style="font-weight:700;color:var(--text)">${currentMusclePct}% now</span>
+          <span style="color:var(--text-dim)">Goal: ${muscleGoalPct}%+</span>
+        </div>
+      </div>`:''}
+
+      ${markers?.testosterone_total?`
+      <!-- Testosterone Goal -->
+      <div class="goal-metric">
+        <div class="goal-metric-header">
+          <div class="goal-metric-name">⚡ Testosterone</div>
+          <div class="goal-metric-status" style="background:${markers.testosterone_total>=18?'var(--green-dim)':markers.testosterone_total>=12?'var(--amber-dim)':'var(--red-dim)'};color:${markers.testosterone_total>=18?'var(--green-vivid)':markers.testosterone_total>=12?'var(--amber)':'var(--red)'}">
+            ${markers.testosterone_total>=18?'Optimal':'Below Optimal'}
+          </div>
+        </div>
+        <div class="goal-metric-track">
+          <div class="goal-metric-fill" style="width:${Math.min(100,(markers.testosterone_total/35)*100)}%;background:var(--amber)"></div>
+          <div style="position:absolute;top:-3px;left:${(18/35)*100}%;width:2px;height:14px;background:rgba(255,255,255,0.5);border-radius:1px"></div>
+        </div>
+        <div class="goal-metric-labels">
+          <span style="font-weight:700;color:var(--text)">${markers.testosterone_total} nmol/L</span>
+          <span style="color:var(--text-dim)">Optimal: 18+ nmol/L</span>
+        </div>
+      </div>`:''}
+    </div>
+
+    <!-- BF RING + STATS -->
     <div class="body-goal-card">
-      <div class="card-title">Body Fat % <span class="card-link" onclick="openModal('scanModal')">Update Scan</span></div>
+      <div class="card-title">Body Composition <span class="card-link" onclick="openModal('scanModal')">Update</span></div>
       <div style="display:flex;align-items:center;gap:20px">
         <div class="bf-ring-wrap">
           <svg width="120" height="120" viewBox="0 0 120 120">
@@ -1137,37 +1425,36 @@ async function renderBody() {
             <circle class="bf-ring-fill" cx="60" cy="60" r="52" stroke="${bfColor}" style="stroke-dashoffset:${offset}"/>
           </svg>
           <div class="bf-center">
-            <div class="bf-pct" style="color:${bfColor}">${currentBF}%</div>
+            <div class="bf-pct" style="color:${bfColor}">${currentBF>0?currentBF+'%':'—'}</div>
             <div class="bf-label">Body Fat</div>
           </div>
         </div>
         <div style="flex:1">
-          <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">Goal: <strong style="color:var(--text)">${bfGoal}%</strong></div>
-          <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">To lose: <strong style="color:${bfDiff>0?'var(--amber)':'var(--green-vivid)'}">${bfDiff>0?bfDiff.toFixed(1)+'%':'Goal reached! 🎯'}</strong></div>
-          ${bfChange!==null?`<div style="font-size:12px;color:var(--text-dim)">Change: <strong style="color:${parseFloat(bfChange)<0?'var(--green-vivid)':'var(--red)'}">${parseFloat(bfChange)<0?bfChange:'+'+bfChange}%</strong> vs last scan</div>`:''}
-          ${bfDiff>0?`<div style="font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.5">At your current deficit,<br>~${Math.round(bfDiff*10)} weeks to goal</div>`:''}
+          ${bm.weight_kg?`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text-dim)">Weight</div><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)">${bm.weight_kg}kg</div></div>`:''}
+          ${bm.skeletal_muscle_kg||bm.muscle_mass_kg?`<div style="margin-bottom:8px"><div style="font-size:11px;color:var(--text-dim)">Muscle Mass</div><div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)">${bm.skeletal_muscle_kg||bm.muscle_mass_kg}kg</div>${muscleChange?`<div style="font-size:11px;color:${parseFloat(muscleChange)>0?'var(--green-vivid)':'var(--red)'}">${parseFloat(muscleChange)>0?'↑ +':'↓ '}${muscleChange}kg</div>`:''}</div>`:''}
+          ${bfChange?`<div style="font-size:12px;color:var(--text-dim)">BF change: <strong style="color:${parseFloat(bfChange)<0?'var(--green-vivid)':'var(--red)'}">${parseFloat(bfChange)<0?bfChange:'+'+bfChange}%</strong></div>`:''}
         </div>
       </div>
     </div>
 
     <div class="body-stats-grid">
-      ${bm.weight_kg?`<div class="body-stat"><div class="body-stat-val">${bm.weight_kg}kg</div><div class="body-stat-label">Weight</div>${prev?.weight_kg?`<div class="body-stat-change ${bm.weight_kg<prev.weight_kg?'pos':'neg'}">${bm.weight_kg<prev.weight_kg?'↓':'↑'} ${Math.abs(bm.weight_kg-prev.weight_kg).toFixed(1)}kg</div>`:'</div>'}`:''}
-      ${bm.muscle_mass_kg?`<div class="body-stat"><div class="body-stat-val">${bm.muscle_mass_kg}kg</div><div class="body-stat-label">Muscle Mass</div>${muscleChange!==null?`<div class="body-stat-change ${parseFloat(muscleChange)>0?'pos':'neg'}">${parseFloat(muscleChange)>0?'↑ +':'↓ '}${muscleChange}kg</div>`:''}</div>`:''}
-      ${bm.lean_mass_kg?`<div class="body-stat"><div class="body-stat-val">${bm.lean_mass_kg}kg</div><div class="body-stat-label">Lean Mass</div></div>`:''}
       ${bm.visceral_fat?`<div class="body-stat"><div class="body-stat-val" style="color:${bm.visceral_fat<=9?'var(--green-vivid)':bm.visceral_fat<=14?'var(--amber)':'var(--red)'}">${bm.visceral_fat}</div><div class="body-stat-label">Visceral Fat</div><div class="body-stat-change ${bm.visceral_fat<=9?'pos':'neg'}">${bm.visceral_fat<=9?'Healthy':bm.visceral_fat<=14?'Moderate':'High'}</div></div>`:''}
-      ${bm.bmi?`<div class="body-stat"><div class="body-stat-val">${bm.bmi}</div><div class="body-stat-label">BMI</div></div>`:''}
+      ${bm.bmi?`<div class="body-stat"><div class="body-stat-val">${bm.bmi}</div><div class="body-stat-label">BMI</div><div class="body-stat-change ${bm.bmi<25?'pos':'neg'}">${bm.bmi<18.5?'Underweight':bm.bmi<25?'Healthy':bm.bmi<30?'Overweight':'Obese'}</div></div>`:''}
+      ${bm.metabolic_age?`<div class="body-stat"><div class="body-stat-val" style="color:${bm.metabolic_age<=(profile?.age||30)?'var(--green-vivid)':'var(--amber)'}">${bm.metabolic_age}</div><div class="body-stat-label">Metabolic Age</div><div class="body-stat-change ${bm.metabolic_age<=(profile?.age||30)?'pos':'neg'}">${bm.metabolic_age<=(profile?.age||30)?'Good':'High'}</div></div>`:''}
       ${bm.body_water_pct?`<div class="body-stat"><div class="body-stat-val">${bm.body_water_pct}%</div><div class="body-stat-label">Body Water</div></div>`:''}
-      ${bm.metabolic_age?`<div class="body-stat"><div class="body-stat-val" style="color:${bm.metabolic_age<=(profile?.age||30)?'var(--green-vivid)':'var(--amber)'}">${bm.metabolic_age}</div><div class="body-stat-label">Metabolic Age</div></div>`:''}
+      ${bm.bmr_kcal?`<div class="body-stat"><div class="body-stat-val">${bm.bmr_kcal}</div><div class="body-stat-label">BMR kcal</div></div>`:''}
       ${bm.bone_mass_kg?`<div class="body-stat"><div class="body-stat-val">${bm.bone_mass_kg}kg</div><div class="body-stat-label">Bone Mass</div></div>`:''}
+      ${bm.subcutaneous_fat_pct?`<div class="body-stat"><div class="body-stat-val">${bm.subcutaneous_fat_pct}%</div><div class="body-stat-label">Subcut. Fat</div></div>`:''}
+      ${bm.protein_pct?`<div class="body-stat"><div class="body-stat-val">${bm.protein_pct}%</div><div class="body-stat-label">Protein %</div></div>`:''}
     </div>
 
     <div class="daily-plan-card" id="dailyPlanCard">
       <div class="daily-plan-header">
         <div class="daily-plan-title">Today's Plan</div>
-        <div class="daily-plan-sub">Tap any item to see exactly what to do · Goal: ${bfGoal}% body fat${goals.includes('testosterone') ? ' · Optimise testosterone' : ''}</div>
+        <div class="daily-plan-sub">Tap any item · Goal: ${bfGoal}% body fat${goals.includes('testosterone')?' · Optimise testosterone':''}</div>
       </div>
       <div class="daily-plan-body" id="dailyPlanBody">
-        <div class="plan-loading"><div class="plan-ring"></div><div style="font-size:13px;color:var(--text-dim)">Building your plan from body scan data...</div></div>
+        <div class="plan-loading"><div class="plan-ring"></div><div style="font-size:13px;color:var(--text-dim)">Building your plan...</div></div>
       </div>
     </div>
 
@@ -1260,7 +1547,7 @@ Create exactly 7 items. Cover: calorie target, protein split across meals, train
 
   } catch (e) {
     const body = document.getElementById('dailyPlanBody');
-    if (body) body.innerHTML = `<div style="padding:20px;text-align:center"><div style="font-size:13px;color:var(--text-dim)">Failed to generate plan. Check your connection.</div><button onclick="generateDailyPlan(window._lastBm)" style="margin-top:12px;padding:8px 16px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--green-vivid);cursor:pointer">Try Again</button></div>`;
+    if (body) body.innerHTML = `<div style="padding:20px;text-align:center"><div style="font-size:13px;color:var(--text-dim)">Failed to generate plan. Check your connection.</div><button onclick="generateDailyPlan(window._lastBm)" style="margin-top:12px;padding:8px 16px;background:var(--green-dim);border:1px solid rgba(30,132,73,0.3);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:var(--green-vivid);cursor:pointer">Try Again</button></div>`;
   }
   window._lastBm = bm;
 }
@@ -1518,7 +1805,7 @@ async function renderMarkers() {
   const defs=[{key:'testosterone_total',label:'Testosterone Total',unit:'nmol/L',low:[0,12],opt:[12,35]},{key:'testosterone_free',label:'Free Testosterone',unit:'pmol/L',low:[0,30],opt:[30,100]},{key:'oestrogen',label:'Oestrogen',unit:'pmol/L',low:[0,40],opt:[40,180]},{key:'cortisol',label:'Cortisol',unit:'nmol/L',low:[0,170],opt:[170,650]},{key:'vitamin_d',label:'Vitamin D',unit:'nmol/L',low:[0,50],opt:[75,200]},{key:'vitamin_b12',label:'Vitamin B12',unit:'pmol/L',low:[0,150],opt:[200,600]},{key:'ferritin',label:'Ferritin',unit:'ug/L',low:[0,30],opt:[50,200]},{key:'iron',label:'Iron',unit:'umol/L',low:[0,10],opt:[10,30]},{key:'magnesium',label:'Magnesium',unit:'mmol/L',low:[0,0.7],opt:[0.75,1.0]},{key:'zinc',label:'Zinc',unit:'umol/L',low:[0,10],opt:[10,20]},{key:'tsh',label:'TSH',unit:'mU/L',low:[0,0.4],opt:[0.4,2.5]},{key:'t3',label:'Free T3',unit:'pmol/L',low:[0,3.5],opt:[4.0,6.5]},{key:'t4',label:'Free T4',unit:'pmol/L',low:[0,10],opt:[12,22]},{key:'hba1c',label:'HbA1c',unit:'%',low:[0,3],opt:[4,5.6]},{key:'cholesterol_total',label:'Total Cholesterol',unit:'mmol/L',low:[0,2],opt:[3,5]},{key:'cholesterol_hdl',label:'HDL',unit:'mmol/L',low:[0,1.0],opt:[1.0,3.0]},{key:'cholesterol_ldl',label:'LDL',unit:'mmol/L',low:[0,1],opt:[1,3]},{key:'crp',label:'CRP',unit:'mg/L',low:[0,0],opt:[0,1]},{key:'dhea',label:'DHEA-S',unit:'umol/L',low:[0,3],opt:[3,12]}];
   const active=defs.filter(m=>markers[m.key]!==null&&markers[m.key]!==undefined);
   if(active.length===0){content.innerHTML=`<div style="padding:16px"><div class="no-data"><div class="no-data-icon">🩸</div><div class="no-data-text">No values found.</div><button class="add-marker-btn" onclick="openModal('addMarkerModal')">+ Enter Results</button></div></div>`;return;}
-  content.innerHTML=`<div style="padding:16px 16px 0">${active.map(m=>{const val=markers[m.key];let status='unknown';if(val<=m.low[1])status='low';else if(val>=m.opt[0]&&val<=m.opt[1])status='optimal';else if(val>m.opt[1])status='high';else if(val>m.low[1]&&val<m.opt[0])status='low';return `<div class="marker-card" id="mc_${m.key}"><div class="marker-top"><div class="marker-name">${m.label}</div><div class="marker-value">${val} <span style="font-size:11px;color:var(--text-dim);font-family:'DM Sans',sans-serif">${m.unit}</span></div></div><span class="marker-status ${status}">${status==='optimal'?'✓ Optimal':status==='low'?'↓ Below Optimal':status==='high'?'↑ Above Optimal':'? Unknown'}</span><div class="marker-insight loading" id="mi_${m.key}">Analysing...</div></div>`;}).join('')}<button class="add-marker-btn" style="margin:8px 0 20px" onclick="openModal('addMarkerModal')">+ Update Results</button></div>`;
+  content.innerHTML=`<div style="padding:16px 16px 0">${active.map(m=>{const val=markers[m.key];let status='unknown';if(val<=m.low[1])status='low';else if(val>=m.opt[0]&&val<=m.opt[1])status='optimal';else if(val>m.opt[1])status='high';else if(val>m.low[1]&&val<m.opt[0])status='low';return `<div class="marker-card" id="mc_${m.key}"><div class="marker-top"><div class="marker-name">${m.label}</div><div class="marker-value">${val} <span style="font-size:11px;color:var(--text-dim);font-family:'Plus Jakarta Sans',sans-serif">${m.unit}</span></div></div><span class="marker-status ${status}">${status==='optimal'?'✓ Optimal':status==='low'?'↓ Below Optimal':status==='high'?'↑ Above Optimal':'? Unknown'}</span><div class="marker-insight loading" id="mi_${m.key}">Analysing...</div></div>`;}).join('')}<button class="add-marker-btn" style="margin:8px 0 20px" onclick="openModal('addMarkerModal')">+ Update Results</button></div>`;
   for(const m of active) interpretMarker(m,markers[m.key]);
 }
 
@@ -1730,6 +2017,386 @@ function formatDate(d) {
   const diff=Math.floor((today-date)/86400000);
   if(diff===0)return'Today';if(diff===1)return'Yesterday';
   return date.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+
+// ===== CALORIE DETAIL MODAL =====
+function openCalDetail() {
+  const { target, consumed, burned, remaining, isDeficit, isSurplus } = getCalData();
+  const mt = getMacroTargets();
+  const p = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0));
+  const c = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0));
+  const f = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0));
+  const bm = latestBodyMetrics;
+
+  document.getElementById('calDetailSub').textContent = isDeficit ? '500 kcal deficit for fat loss' : isSurplus ? '250 kcal surplus for muscle gain' : 'Maintenance calories';
+  document.getElementById('calDetailContent').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--green-vivid)">${consumed}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">kcal eaten</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--blue)">${burned}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">kcal burned</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--text)">${target}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">kcal target</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:${remaining>=0?'var(--green-vivid)':'var(--red)'}">${Math.abs(remaining)}</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:2px">${remaining>=0?'remaining':'over target'}</div>
+      </div>
+    </div>
+    ${bm?.bmr_kcal?`<div style="background:var(--green-dim);border:1px solid rgba(30,132,73,0.2);border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text-mid);line-height:1.6">
+      <strong style="color:var(--green-vivid)">How your target is calculated:</strong><br>
+      Renpho BMR: ${bm.bmr_kcal} kcal × ${({sedentary:1.2,light:1.375,moderate:1.55,active:1.725,extra:1.9}[profile?.activity_level]||1.55)} activity = <strong>${Math.round(bm.bmr_kcal*({sedentary:1.2,light:1.375,moderate:1.55,active:1.725,extra:1.9}[profile?.activity_level]||1.55))}</strong> TDEE
+      ${isDeficit?` − 500 deficit = <strong>${target} kcal</strong>`:isSurplus?` + 250 surplus = <strong>${target} kcal</strong>`:''}
+    </div>`:''}
+    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px">Macros Today</div>
+    ${[['Protein',p,mt.protein,'#4a9eff'],['Carbs',c,mt.carbs,'var(--amber)'],['Fat',f,mt.fat,'var(--purple)']].map(([name,val,tgt,col])=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="width:10px;height:10px;border-radius:50%;background:${col};flex-shrink:0"></div>
+        <div style="flex:1;font-size:13px;color:var(--text-mid)">${name}</div>
+        <div style="width:80px;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${Math.min(100,(val/tgt)*100)}%;background:${col};border-radius:2px"></div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);min-width:50px;text-align:right">${val}g / ${tgt}g</div>
+      </div>`).join('')}
+    <div style="margin-top:14px;font-size:11px;color:var(--text-dim)">Tap macros on the home screen for full nutrition facts including micronutrients.</div>
+  `;
+  openModal('calDetailModal');
+}
+
+// ===== NUTRITION FACTS MODAL =====
+function openNutritionModal() {
+  if (foodLogs.length === 0) {
+    document.getElementById('nutritionContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🥗</div><div class="empty-state-text">No food logged today. Add a meal to see nutrition facts.</div></div>`;
+    openModal('nutritionModal');
+    return;
+  }
+
+  // Aggregate all macros and estimate micros using AI
+  const totals = {
+    calories: foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0),
+    protein: foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0).toFixed(1),
+    carbs: foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0).toFixed(1),
+    fat: foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0).toFixed(1),
+  };
+
+  const mt = getMacroTargets();
+  const mealList = foodLogs.map(f => f.meal_name).join(', ');
+
+  document.getElementById('nutritionContent').innerHTML = `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Today's Meals</div>
+      <div style="font-size:13px;color:var(--text-mid);line-height:1.6">${foodLogs.map(f=>`<span style="color:var(--text)">${f.meal_name}</span> (${f.calories} kcal)`).join(' · ')}</div>
+    </div>
+
+    <div class="nutrition-section-head">Macronutrients</div>
+    ${[
+      ['Calories','kcal',totals.calories,null,'var(--text)'],
+      ['Protein','g',totals.protein,mt.protein,'#4a9eff'],
+      ['Carbohydrates','g',totals.carbs,mt.carbs,'var(--amber)'],
+      ['Fat','g',totals.fat,mt.fat,'var(--purple)'],
+    ].map(([name,unit,val,tgt,col]) => `
+      <div class="nutrition-fact-row">
+        <div class="nutrition-fact-name">${name}</div>
+        ${tgt?`<div class="nutrition-fact-bar-wrap"><div class="nutrition-fact-bar" style="width:${Math.min(100,(val/tgt)*100)}%;background:${col}"></div></div>`:'<div class="nutrition-fact-bar-wrap"></div>'}
+        <div class="nutrition-fact-val" style="color:${col}">${val} ${unit}</div>
+      </div>`).join('')}
+
+    <div class="nutrition-section-head">Estimated Micronutrients</div>
+    <div id="micronutrientContent" style="text-align:center;padding:20px">
+      <div class="loading-ring" style="margin:0 auto 10px"></div>
+      <div style="font-size:12px;color:var(--text-dim)">Calculating from your meals...</div>
+    </div>
+  `;
+
+  openModal('nutritionModal');
+
+  // Get AI to estimate micronutrients from meals
+  estimateMicronutrients(mealList, totals);
+}
+
+async function estimateMicronutrients(mealList, totals) {
+  try {
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: `Based on these meals: ${mealList}
+Total macros: ${totals.protein}g protein, ${totals.carbs}g carbs, ${totals.fat}g fat, ${totals.calories} kcal
+
+Estimate the micronutrient content and return JSON only:
+{
+  "micros": [
+    {"name": "Vitamin B12", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Iron", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Vitamin D", "amount": "X", "unit": "IU", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Calcium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Magnesium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Zinc", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Potassium", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Vitamin C", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Fibre", "amount": "X", "unit": "g", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Omega-3", "amount": "X", "unit": "mg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Vitamin A", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"},
+    {"name": "Folate", "amount": "X", "unit": "mcg", "rda_pct": number, "status": "good/low/adequate"}
+  ]
+}`
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text||'').join('') || '';
+    const match = text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+    if (!match) throw new Error();
+    const result = JSON.parse(match[0]);
+    const el = document.getElementById('micronutrientContent');
+    if (!el) return;
+    const statusColor = { good: 'var(--green-vivid)', adequate: 'var(--amber)', low: 'var(--red)' };
+    el.innerHTML = result.micros.map(m => `
+      <div class="nutrition-fact-row">
+        <div class="nutrition-fact-name">${m.name}</div>
+        <div class="nutrition-fact-bar-wrap"><div class="nutrition-fact-bar" style="width:${Math.min(100,m.rda_pct)}%;background:${statusColor[m.status]||'var(--text-dim)'}"></div></div>
+        <div class="nutrition-fact-val" style="color:${statusColor[m.status]||'var(--text)'}">${m.amount}${m.unit}</div>
+      </div>`).join('') + `<div style="font-size:10px;color:var(--text-dim);margin-top:12px;line-height:1.5">Estimates based on typical nutritional content of logged foods. Add more meals for accuracy.</div>`;
+  } catch(e) {
+    const el = document.getElementById('micronutrientContent');
+    if (el) el.innerHTML = `<div style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px">Unable to estimate micronutrients. Check connection.</div>`;
+  }
+}
+
+// ===== WHOOP FUNCTIONS =====
+let whoopLog = null;
+
+function switchWhoopTab(tab) {
+  const isManual = tab === 'manual';
+  document.getElementById('whoopManualTab').style.display = isManual ? 'block' : 'none';
+  document.getElementById('whoopSleepTab').style.display = isManual ? 'none' : 'block';
+  document.getElementById('whoopTabManual').style.background = isManual ? 'var(--green-bright)' : 'var(--surface2)';
+  document.getElementById('whoopTabManual').style.color = isManual ? '#fff' : 'var(--text-dim)';
+  document.getElementById('whoopTabManual').style.borderColor = isManual ? 'var(--green-bright)' : 'var(--border)';
+  document.getElementById('whoopTabSleep').style.background = isManual ? 'var(--surface2)' : 'var(--green-bright)';
+  document.getElementById('whoopTabSleep').style.color = isManual ? 'var(--text-dim)' : '#fff';
+  document.getElementById('whoopTabSleep').style.borderColor = isManual ? 'var(--border)' : 'var(--green-bright)';
+}
+
+async function saveWhoopManual() {
+  const data = {
+    recovery: parseInt(document.getElementById('whoopRecovery').value) || null,
+    hrv: parseInt(document.getElementById('whoopHrv').value) || null,
+    rhr: parseInt(document.getElementById('whoopRhr').value) || null,
+    strain: parseFloat(document.getElementById('whoopStrain').value) || null,
+    steps: parseInt(document.getElementById('whoopSteps').value) || null,
+    active_cals: parseInt(document.getElementById('whoopActiveCals').value) || null,
+    sleep_hrs: parseFloat(document.getElementById('whoopSleep').value) || null,
+    restorative_hrs: parseFloat(document.getElementById('whoopRestorative').value) || null,
+  };
+
+  const hasData = Object.values(data).some(v => v !== null);
+  if (!hasData) { showToast('Enter at least one value'); return; }
+
+  // Save to daily_checkins if sleep data present
+  if (data.sleep_hrs) {
+    await sb.from('daily_checkins').upsert({
+      user_id: user.id,
+      date: new Date().toISOString().split('T')[0],
+      sleep_hours: data.sleep_hrs,
+      energy_level: data.recovery ? Math.round(data.recovery / 10) : 7,
+      stress_level: data.strain ? Math.min(10, Math.round(data.strain / 2)) : 4,
+      water_litres: 1.5
+    }, { onConflict: 'user_id,date' });
+  }
+
+  // If active calories logged update workout for calorie budget
+  if (data.active_cals && !workoutLog) {
+    workoutLog = { workout_type: 'Whoop Activity', icon: '⌚', duration_minutes: 0, effort: 5, calories_burned: data.active_cals, notes: `Steps: ${data.steps||0}` };
+  }
+
+  whoopLog = data;
+  closeModal('whoopModal');
+  showToast('✓ Whoop data saved');
+  renderWhoopCard();
+  renderHome();
+}
+
+function renderWhoopCard() {
+  const el = document.getElementById('whoopContent');
+  if (!el) return;
+  if (!whoopLog) {
+    el.innerHTML = `<div class="workout-empty"><div class="workout-empty-icon" style="font-size:20px;opacity:0.3">⌚</div><div class="workout-empty-text">Log your Whoop data or upload a sleep screenshot for recovery insights.</div></div>`;
+    return;
+  }
+  const recoveryColor = !whoopLog.recovery ? 'var(--text-dim)' : whoopLog.recovery >= 67 ? 'var(--green-vivid)' : whoopLog.recovery >= 34 ? 'var(--amber)' : 'var(--red)';
+  el.innerHTML = `
+    <div class="whoop-stats-grid">
+      ${whoopLog.recovery!==null?`<div class="whoop-stat"><div class="whoop-stat-val" style="color:${recoveryColor}">${whoopLog.recovery}%</div><div class="whoop-stat-label">Recovery</div></div>`:''}
+      ${whoopLog.hrv!==null?`<div class="whoop-stat"><div class="whoop-stat-val">${whoopLog.hrv}</div><div class="whoop-stat-label">HRV ms</div></div>`:''}
+      ${whoopLog.strain!==null?`<div class="whoop-stat"><div class="whoop-stat-val">${whoopLog.strain}</div><div class="whoop-stat-label">Strain</div></div>`:''}
+      ${whoopLog.sleep_hrs!==null?`<div class="whoop-stat"><div class="whoop-stat-val">${whoopLog.sleep_hrs}</div><div class="whoop-stat-label">Sleep h</div></div>`:''}
+      ${whoopLog.steps!==null?`<div class="whoop-stat"><div class="whoop-stat-val">${(whoopLog.steps/1000).toFixed(1)}k</div><div class="whoop-stat-label">Steps</div></div>`:''}
+      ${whoopLog.active_cals!==null?`<div class="whoop-stat"><div class="whoop-stat-val">${whoopLog.active_cals}</div><div class="whoop-stat-label">Active cal</div></div>`:''}
+    </div>`;
+}
+
+// Sleep screenshot scan
+function triggerSleepScan() { document.getElementById('sleepScanInput').click(); }
+
+async function handleSleepScan(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const base64full = e.target.result;
+    const base64 = base64full.split(',')[1];
+    const area = document.getElementById('sleepScanArea');
+    area.innerHTML = `<img src="${base64full}">`;
+    const result = document.getElementById('sleepScanResult');
+    result.style.display = 'block';
+    result.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Reading sleep data...</div></div>`;
+    try {
+      const resp = await fetch(PROXY, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          messages: [{ role: 'user', content: [
+            { type: 'image', source: { type: 'base64', media_type: file.type, data: base64 } },
+            { type: 'text', text: `This is a Whoop or similar sleep tracker screenshot. Extract all sleep metrics and return JSON only:
+{"total_sleep_hrs": number, "rem_hrs": number, "deep_hrs": number, "light_hrs": number, "awake_hrs": number, "restorative_hrs": number, "sleep_performance_pct": number, "recovery_score": number, "hrv": number, "resting_hr": number, "source": "Whoop/Oura/etc", "summary": "one sentence"}
+Use null for any metric not visible.` }
+          ]}]
+        })
+      });
+      const data = await resp.json();
+      const text = data.content?.map(c => c.text||'').join('') || '';
+      const match = text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+      if (!match) throw new Error();
+      scannedSleepData = JSON.parse(match[0]);
+      const found = Object.entries(scannedSleepData).filter(([k,v]) => !['source','summary'].includes(k) && v !== null);
+      result.innerHTML = `<div class="ai-result"><div class="ai-result-title">✓ ${found.length} Sleep Metrics Read</div><div class="ai-result-text">${scannedSleepData.summary||''}<br><br>${found.map(([k,v])=>`<strong>${k.replace(/_/g,' ')}:</strong> ${v}`).join(' · ')}</div></div>`;
+      document.getElementById('saveSleepScanBtn').style.display = 'block';
+    } catch(e) {
+      result.innerHTML = `<div class="ai-result"><div class="ai-result-title">⚠ Could not read screenshot</div><div class="ai-result-text">Try a clearer photo.</div></div>`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function saveSleepScan() {
+  if (!scannedSleepData) return;
+  const btn = document.getElementById('saveSleepScanBtn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  // Save to daily checkins
+  await sb.from('daily_checkins').upsert({
+    user_id: user.id,
+    date: new Date().toISOString().split('T')[0],
+    sleep_hours: scannedSleepData.total_sleep_hrs || 7,
+    energy_level: scannedSleepData.recovery_score ? Math.round(scannedSleepData.recovery_score / 10) : 7,
+    stress_level: 4,
+    water_litres: 1.5
+  }, { onConflict: 'user_id,date' });
+
+  whoopLog = {
+    recovery: scannedSleepData.recovery_score,
+    hrv: scannedSleepData.hrv,
+    rhr: scannedSleepData.resting_hr,
+    sleep_hrs: scannedSleepData.total_sleep_hrs,
+    restorative_hrs: scannedSleepData.restorative_hrs,
+    rem_hrs: scannedSleepData.rem_hrs,
+    deep_hrs: scannedSleepData.deep_hrs,
+    strain: null, steps: null, active_cals: null
+  };
+
+  closeModal('whoopModal');
+  showToast('✓ Sleep data saved');
+  scannedSleepData = null;
+  await loadCheckins(); calcStreak();
+  renderWhoopCard(); renderHome();
+  btn.disabled = false; btn.textContent = 'Save Sleep Data';
+}
+
+// ===== GOALS AI =====
+async function analyseGoals() {
+  const input = document.getElementById('goalsInput').value.trim();
+  const timeline = document.getElementById('goalsTimeline').value;
+  if (!input) { showToast('Please describe your goals first'); return; }
+
+  const btn = document.getElementById('analyseGoalsBtn');
+  btn.textContent = '🤖 Analysing...'; btn.disabled = true;
+
+  const bm = latestBodyMetrics;
+  const bodyContext = bm ? `Current body: ${bm.weight_kg}kg, ${bm.body_fat_pct||'?'}% BF, ${bm.skeletal_muscle_kg||bm.muscle_mass_kg||'?'}kg muscle, BMR ${bm.bmr_kcal||'?'} kcal` : 'No body scan yet';
+  const markerContext = markers?.testosterone_total ? `Testosterone: ${markers.testosterone_total} nmol/L, Vitamin D: ${markers.vitamin_d||'?'}` : 'No blood markers yet';
+
+  try {
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1200,
+        messages: [{
+          role: 'user',
+          content: `You are a precision health coach. Analyse this person's goals and create a structured plan.
+
+Their goals: "${input}"
+Timeline: ${timeline}
+${bodyContext}
+${markerContext}
+Age: ${profile?.age}, Sex: ${profile?.sex}, Activity: ${profile?.activity_level}
+
+Return JSON only:
+{
+  "primary_goals": ["goal1", "goal2"],
+  "key_metrics": [{"metric": "Body Fat %", "current": "26.8%", "target": "14%", "realistic": "yes/achievable with X months of deficit"}],
+  "weekly_targets": [
+    {"icon": "emoji", "action": "specific weekly target", "why": "brief reason"}
+  ],
+  "what_to_track": ["what to measure and how often"],
+  "biggest_lever": "the single most impactful change they can make right now"
+}
+
+Be brutally honest and specific. Reference their actual numbers.`
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text||'').join('') || '';
+    const match = text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+    if (!match) throw new Error();
+    const result = JSON.parse(match[0]);
+
+    document.getElementById('goalsResult').style.display = 'block';
+    document.getElementById('goalsResult').innerHTML = `
+      <div class="ai-goals-result">
+        <div class="ai-goals-result-title">Your ${timeline} Plan</div>
+
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Biggest Lever</div>
+          <div style="background:var(--green-dim);border:1px solid rgba(30,132,73,0.2);border-radius:10px;padding:12px;font-size:13px;color:var(--text-mid);line-height:1.5">${result.biggest_lever}</div>
+        </div>
+
+        ${result.key_metrics?.length?`<div style="margin-bottom:12px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Key Targets</div>
+          ${result.key_metrics.map(m=>`<div class="ai-goal-item"><div class="ai-goal-icon">🎯</div><div class="ai-goal-text"><strong>${m.metric}</strong>: ${m.current} → ${m.target}<br>${m.realistic}</div></div>`).join('')}
+        </div>`:''}
+
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Weekly Actions</div>
+        ${result.weekly_targets?.map(t=>`<div class="ai-goal-item"><div class="ai-goal-icon">${t.icon}</div><div class="ai-goal-text"><strong>${t.action}</strong><br>${t.why}</div></div>`).join('')||''}
+      </div>`;
+  } catch(e) {
+    document.getElementById('goalsResult').innerHTML = `<div style="font-size:13px;color:var(--text-dim);text-align:center;padding:16px">Failed to analyse. Check connection.</div>`;
+    document.getElementById('goalsResult').style.display = 'block';
+  }
+  btn.textContent = '🤖 Build My Plan'; btn.disabled = false;
 }
 
 init();
