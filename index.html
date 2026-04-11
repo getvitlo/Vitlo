@@ -779,6 +779,7 @@
 <script>
 const SUPA_URL = 'https://tvhkxsnmfcnwaxeadxeg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio';
+// API calls go through Vercel proxy
 
 const { createClient } = supabase;
 const sb = createClient(SUPA_URL, SUPA_KEY);
@@ -1321,9 +1322,9 @@ async function interpretMarker(markerDef, value) {
   const age = profile?.age || 'unknown';
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 200,
@@ -1405,9 +1406,9 @@ Create a JSON protocol with this exact structure (no markdown):
 Make every recommendation specific to their actual data. Maximum 3 items per section. Be direct and actionable.`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
@@ -1537,9 +1538,9 @@ async function analyseDescription() {
   resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Looking up nutrition facts...</div><div class="ai-result-text">Calculating based on your description...</div></div>`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 800,
@@ -1634,9 +1635,9 @@ async function handlePhoto(event) {
     resultBox.innerHTML = `<div class="ai-result"><div class="ai-result-title">🤖 Analysing meal...</div><div class="ai-result-text">AI is estimating calories...</div></div>`;
 
     try {
-      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      const resp = await fetch('https://vitlo-proxy-cqacp17cz-venzualmorn-6481s-projects.vercel.app/api/claude', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 500,
