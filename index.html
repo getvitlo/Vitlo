@@ -576,7 +576,7 @@
     <div id="descTab">
       <div class="form-field">
         <label class="form-label">Describe what you ate</label>
-        <textarea class="form-input" id="foodDesc" placeholder="e.g. 3 boiled eggs and a cappuccino from my Tassimo machine..." style="min-height:80px;resize:none;line-height:1.5" rows="3"></textarea>
+        <textarea class="form-input" id="foodDesc" placeholder="e.g. 200g chicken breast with spinach and sweet potato..." style="min-height:80px;resize:none;line-height:1.5" rows="3"></textarea>
         <div style="font-size:11px;color:var(--text-dim);margin-top:4px">Be as specific as possible — quantities, brands, cooking method</div>
       </div>
       <button onclick="analyseDescription()" id="analyseBtn" style="width:100%;padding:13px;background:var(--green-dim);border:1px solid rgba(26,61,43,0.2);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--green);cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px">
@@ -779,7 +779,7 @@
 <script>
 const SUPA_URL = 'https://tvhkxsnmfcnwaxeadxeg.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio';
-const CLAUDE_KEY = 'anthropic_api_key_here';
+const CLAUDE_KEY = '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';
 
 const { createClient } = supabase;
 const sb = createClient(SUPA_URL, SUPA_KEY);
@@ -1324,7 +1324,7 @@ async function interpretMarker(markerDef, value) {
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 200,
@@ -1408,7 +1408,7 @@ Make every recommendation specific to their actual data. Maximum 3 items per sec
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 2000,
@@ -1540,7 +1540,7 @@ async function analyseDescription() {
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 800,
@@ -1637,7 +1637,7 @@ async function handlePhoto(event) {
     try {
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': CLAUDE_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-fetch-allowed': 'true' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
           max_tokens: 500,
