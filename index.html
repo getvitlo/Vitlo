@@ -930,26 +930,76 @@ async function nextOb() {
   }
 }
 
-// ===== HOME RENDER =====
+// ===== SMART CALORIE CALCULATION =====
+function calcSmartCalTarget() {
+  const goals = profile?.goals || [];
+  const bm = latestBodyMetrics;
+  const actMults = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, extra:1.9 };
+  const actMult = actMults[profile?.activity_level || 'moderate'];
+
+  let tdee;
+
+  if (bm?.bmr_kcal) {
+    // Use real BMR from Renpho scan — most accurate
+    tdee = bm.bmr_kcal * actMult;
+  } else {
+    // Fall back to Mifflin-St Jeor estimate
+    const w = bm?.weight_kg || profile?.weight_kg || 75;
+    const h = profile?.height_cm || 175;
+    const a = profile?.age || 25;
+    const s = profile?.sex || 'male';
+    const bmr = s === 'male'
+      ? 10 * w + 6.25 * h - 5 * a + 5
+      : 10 * w + 6.25 * h - 5 * a - 161;
+    tdee = bmr * actMult;
+  }
+
+  // Apply goal-based adjustment
+  if (goals.includes('fat_loss')) {
+    // 500 kcal deficit = ~0.5kg/week fat loss, but never below 1400 kcal
+    tdee = Math.max(1400, tdee - 500);
+  } else if (goals.includes('muscle')) {
+    // 200-300 kcal surplus for lean gains
+    tdee = tdee + 250;
+  }
+
+  return Math.round(tdee);
+}
+
 function getCalData() {
-  const target=profile?.daily_calorie_target||2000;
-  const consumed=foodLogs.reduce((s,f)=>s+(parseInt(f.calories)||0),0);
-  const burned=workoutLog?workoutLog.calories_burned||0:0;
-  const net=consumed-burned;
-  const goals=profile?.goals||[];
-  return {target,consumed,burned,net,remaining:target-net,isDeficit:goals.includes('fat_loss'),isSurplus:goals.includes('muscle')};
+  // Use smart target if body metrics available, otherwise fall back to profile setting
+  const target = latestBodyMetrics ? calcSmartCalTarget() : (profile?.daily_calorie_target || 2000);
+  const consumed = foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0);
+  const burned = workoutLog ? workoutLog.calories_burned || 0 : 0;
+  const net = consumed - burned;
+  const goals = profile?.goals || [];
+  return { target, consumed, burned, net, remaining: target - net, isDeficit: goals.includes('fat_loss'), isSurplus: goals.includes('muscle') };
 }
 
 function getMacroTargets() {
-  const target=profile?.daily_calorie_target||2000;
-  const goals=profile?.goals||[];
-  const w=latestBodyMetrics?.lean_mass_kg||profile?.weight_kg||75;
-  const protein=goals.includes('muscle')?Math.round(w*2.4):goals.includes('fat_loss')?Math.round(w*2.2):Math.round(w*1.8);
-  const fat=Math.round((target*0.25)/9);
-  const carbs=Math.round((target-(protein*4)-(fat*9))/4);
-  return {protein,carbs,fat};
+  const { target } = getCalData();
+  const goals = profile?.goals || [];
+  const bm = latestBodyMetrics;
+
+  // Use lean mass or skeletal muscle from scan if available — more accurate than total weight
+  const leanMass = bm?.lean_mass_kg || bm?.fat_free_mass_kg || null;
+  const muscleMass = bm?.skeletal_muscle_kg || bm?.muscle_mass_kg || null;
+  const refMass = leanMass || muscleMass || profile?.weight_kg || 75;
+
+  // Protein: 2.0-2.4g per kg lean mass depending on goal
+  const proteinMultiplier = goals.includes('muscle') ? 2.4 : goals.includes('fat_loss') ? 2.2 : 1.8;
+  const protein = Math.round(refMass * proteinMultiplier);
+
+  // Fat: 25% of calories
+  const fat = Math.round((target * 0.25) / 9);
+
+  // Carbs: remaining calories
+  const carbs = Math.max(50, Math.round((target - (protein * 4) - (fat * 9)) / 4));
+
+  return { protein, carbs, fat, source: leanMass ? 'lean mass' : muscleMass ? 'muscle mass' : 'weight' };
 }
 
+// ===== HOME RENDER =====
 function renderHome() {
   if(!profile)return;
   const hour=new Date().getHours();
@@ -966,19 +1016,28 @@ function renderCalHero() {
   const {target,consumed,burned,remaining,isDeficit,isSurplus}=getCalData();
   const pct=Math.min(100,(consumed/target)*100);
   const pillEl=document.getElementById('calGoalPill');
-  if(isDeficit){pillEl.textContent='🎯 Fat Loss';pillEl.className='cal-goal-pill deficit';}
+  if(isDeficit){pillEl.textContent='🔥 Fat Loss';pillEl.className='cal-goal-pill deficit';}
   else if(isSurplus){pillEl.textContent='💪 Muscle Gain';pillEl.className='cal-goal-pill surplus';}
   else{pillEl.textContent='⚖️ Maintain';pillEl.className='cal-goal-pill maintain';}
   const netEl=document.getElementById('calNet');
   netEl.textContent=Math.abs(remaining);
   netEl.className='cal-net '+(remaining>=0?'under':'over');
-  document.getElementById('calNetLabel').textContent=remaining>=0?(isDeficit?'kcal remaining for deficit':'kcal remaining today'):'kcal over target';
+
+  // Show context — how the target was calculated
+  const bm=latestBodyMetrics;
+  let targetSource='';
+  if(bm?.bmr_kcal) targetSource=`Based on your Renpho BMR (${bm.bmr_kcal} kcal)`;
+  else targetSource='Estimated from your stats';
+
+  document.getElementById('calNetLabel').textContent=remaining>=0
+    ?(isDeficit?'kcal remaining in your deficit':'kcal remaining today')
+    :'kcal over target today';
   document.getElementById('calConsumed').textContent=consumed;
   document.getElementById('calBurned').textContent=burned>0?`+${burned} burned`:'No workout yet';
   const bar=document.getElementById('calBar');
   bar.style.width=pct+'%';
   bar.style.background=remaining>=0?'var(--green-vivid)':'var(--red)';
-  document.getElementById('calFooterLeft').textContent=`${consumed} kcal from food`;
+  document.getElementById('calFooterLeft').textContent=`${consumed} kcal eaten${burned>0?' · '+burned+' burned':''}`;
   document.getElementById('calFooterRight').textContent=`Target: ${target} kcal`;
 }
 
