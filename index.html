@@ -1153,34 +1153,25 @@ function calcSmartCalTarget() {
   const bm = latestBodyMetrics;
   const actMults = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, extra:1.9 };
   const actMult = actMults[profile?.activity_level || 'moderate'];
-
-  let tdee;
   const renphoMBR = parseFloat(bm?.bmr_kcal) || 0;
-
+  let bmr, usingRenpho = false;
   if (renphoMBR > 1000 && renphoMBR < 4000) {
-    // Real BMR from Renpho — most accurate
-    tdee = renphoMBR * actMult;
+    bmr = renphoMBR; usingRenpho = true;
   } else {
-    // Mifflin-St Jeor fallback using actual weight from scan if available
     const w = parseFloat(bm?.weight_kg) || parseFloat(profile?.weight_kg) || 75;
     const h = parseFloat(profile?.height_cm) || 175;
     const a = parseInt(profile?.age) || 25;
     const s = profile?.sex || 'male';
-    const bmr = s === 'male'
-      ? 10 * w + 6.25 * h - 5 * a + 5
-      : 10 * w + 6.25 * h - 5 * a - 161;
-    tdee = bmr * actMult;
+    bmr = s === 'male' ? Math.round(10*w+6.25*h-5*a+5) : Math.round(10*w+6.25*h-5*a-161);
   }
-
-  if (goals.includes('fat_loss')) tdee = Math.max(1500, tdee - 500);
-  else if (goals.includes('muscle')) tdee = tdee + 250;
-
-  return Math.round(tdee);
+  const tdee = Math.round(bmr * actMult);
+  let target = goals.includes('fat_loss') ? Math.max(1500, tdee-500) : goals.includes('muscle') ? tdee+250 : tdee;
+  return { target: Math.round(target), tdee, bmr, usingRenpho };
 }
 
 function getCalData() {
   // Use smart target if body metrics available, otherwise fall back to profile setting
-  const target = latestBodyMetrics ? calcSmartCalTarget() : (profile?.daily_calorie_target || 2000);
+  const calResult = calcSmartCalTarget(); const target = calResult.target;
   const consumed = foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0);
   const burned = workoutLog ? workoutLog.calories_burned || 0 : 0;
   const net = consumed - burned;
@@ -1314,17 +1305,13 @@ function renderCalHero() {
     remRowEl.style.background = remaining >= 0 ? 'rgba(30,132,73,0.12)' : 'var(--red-dim)';
   }
 
-  // Source
-  const bm = latestBodyMetrics;
-  const actMults = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, extra:1.9 };
-  const actMult = actMults[profile?.activity_level || 'moderate'];
-  const renphoMBR = parseFloat(bm?.bmr_kcal) || 0;
-  let src = '';
-  if (renphoMBR > 1000) {
-    const tdee = Math.round(renphoMBR * actMult);
-    src = `BMR ${renphoMBR} × ${actMult} = ${tdee}${isDeficit?' − 500 deficit':isSurplus?' + 250 surplus':''} = ${target} kcal · tap for details`;
+  // Source — show clear calculation
+  const calResult = calcSmartCalTarget();
+  let src;
+  if (calResult.usingRenpho) {
+    src = `Renpho BMR ${calResult.bmr} × activity = ${calResult.tdee}${isDeficit?' − 500':isSurplus?' + 250':''} = ${target} kcal · tap`;
   } else {
-    src = `Estimated ${target} kcal · Scan Renpho to use your real BMR · tap for details`;
+    src = `Est. BMR ${calResult.bmr} × activity = ${calResult.tdee}${isDeficit?' − 500 = '+target+' kcal (fat loss)':isSurplus?' + 250 = '+target+' kcal (muscle)':' = '+target+' kcal'} · Scan Renpho for accuracy`;
   }
   document.getElementById('calSource').textContent = src;
 }
@@ -1373,9 +1360,22 @@ function renderFoodSuggestions() {
 
 function renderMealsList() {
   const list=document.getElementById('mealsList');
-  if(foodLogs.length===0){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🍽️</div><div class="empty-state-text">No food logged yet.</div></div>`;return;}
-  const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'}; const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
-  list.innerHTML=foodLogs.map(f=>`<div class="meal-item"><div class="meal-thumb">${f.photo_url?`<img src="${f.photo_url}">`:svgFork}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('');
+  if(foodLogs.length===0){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon" style="font-size:32px;opacity:0.3">🍽️</div><div class="empty-state-text">No food logged yet.</div></div>`;return;}
+  const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
+  list.innerHTML=foodLogs.map(f=>`
+    <div class="meal-item" id="meal_${f.id}">
+      <div class="meal-thumb">${f.photo_url?`<img src="${f.photo_url}">`:svgFork}</div>
+      <div class="meal-info">
+        <div class="meal-name">${f.meal_name}</div>
+        <div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="meal-cals">${f.calories}</div>
+        <button onclick="deleteFood('${f.id}')" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text-dim);font-size:16px;line-height:1;flex-shrink:0" title="Remove">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+        </button>
+      </div>
+    </div>`).join('');
 }
 
 function calcHealthScore() {
@@ -1884,6 +1884,19 @@ async function saveScan() {
 }
 
 // ===== NUTRITION SCREEN =====
+async function deleteFood(id) {
+  const el = document.getElementById(`meal_${id}`);
+  if (el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; }
+  const { error } = await sb.from('food_logs').delete().eq('id', id).eq('user_id', user.id);
+  if (error) {
+    showToast('Failed to remove');
+    if (el) { el.style.opacity = '1'; el.style.pointerEvents = ''; }
+    return;
+  }
+  showToast('Meal removed');
+  await loadFoodLogs(); await loadAllFoodLogs(); renderHome();
+}
+
 async function renderNutrition() {
   const content=document.getElementById('nutritionContent');
   await loadAllFoodLogs();
@@ -1928,19 +1941,114 @@ async function renderNutrition() {
         </div>
       </div>
 
+      <!-- TODAY'S ESTIMATED VITAMINS -->
+      ${foodLogs.length > 0 ? `
+      <div class="card" style="margin-top:4px">
+        <div class="card-title">Today's Estimated Nutrients</div>
+        <div id="nutritionVitamins">
+          <div style="text-align:center;padding:16px">
+            <div class="loading-ring" style="margin:0 auto 8px"></div>
+            <div style="font-size:12px;color:var(--text-dim)">Estimating from today's food...</div>
+          </div>
+        </div>
+      </div>` : ''}
+
       <div class="card-title" style="padding:16px 0 10px">Meal History</div>
       ${dates.map(date=>{
         const meals=byDate[date];
         const totalCals=meals.reduce((s,f)=>s+(parseInt(f.calories)||0),0);
-        const emoji={Breakfast:'🌅',Lunch:'☀️',Dinner:'🌙',Snack:'🍎'}; const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
+        const svgFork=`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-dim)"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`;
+        const isToday = date === new Date().toISOString().split('T')[0];
         return `
           <div class="meal-history-day">
             <div class="meal-history-date">${formatDate(date)} · ${totalCals} kcal</div>
-            ${meals.map(f=>`<div class="meal-item"><div class="meal-thumb">${svgFork}</div><div class="meal-info"><div class="meal-name">${f.meal_name}</div><div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div></div><div class="meal-cals">${f.calories}</div></div>`).join('')}
+            ${meals.map(f=>`
+              <div class="meal-item" id="mealh_${f.id}">
+                <div class="meal-thumb">${svgFork}</div>
+                <div class="meal-info">
+                  <div class="meal-name">${f.meal_name}</div>
+                  <div class="meal-macros">P: ${f.protein_g||0}g · C: ${f.carbs_g||0}g · F: ${f.fat_g||0}g</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="meal-cals">${f.calories}</div>
+                  ${isToday?`<button onclick="deleteFood('${f.id}')" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--text-dim)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>`:''}
+                </div>
+              </div>`).join('')}
           </div>`;
       }).join('')}
     </div>
     <div style="height:100px"></div>`;
+
+  // Load today's estimated vitamins in background
+  if (foodLogs.length > 0) {
+    loadNutritionVitamins();
+  }
+}
+
+async function loadNutritionVitamins() {
+  const el = document.getElementById('nutritionVitamins');
+  if (!el) return;
+
+  const mealNames = foodLogs.map(f => `${f.meal_name} (${f.calories}kcal)`).join(', ');
+  const totalCals = foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0);
+  const totalP = foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0);
+  const totalC = foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0);
+  const totalF = foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0);
+
+  try {
+    const resp = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 700,
+        messages: [{
+          role: 'user',
+          content: `Meals today: ${mealNames}. Macros: ${totalP.toFixed(0)}g protein, ${totalC.toFixed(0)}g carbs, ${totalF.toFixed(0)}g fat, ${totalCals} kcal total.
+
+Estimate micronutrient content. Return JSON only:
+{"nutrients":[
+  {"name":"Vitamin C","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Vitamin E","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Vitamin A","value":"X","unit":"mcg","rda":number,"status":"good/adequate/low"},
+  {"name":"Vitamin B12","value":"X","unit":"mcg","rda":number,"status":"good/adequate/low"},
+  {"name":"Vitamin D","value":"X","unit":"IU","rda":number,"status":"good/adequate/low"},
+  {"name":"Iron","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Zinc","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Magnesium","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Calcium","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Potassium","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"},
+  {"name":"Fibre","value":"X","unit":"g","rda":number,"status":"good/adequate/low"},
+  {"name":"Omega-3","value":"X","unit":"mg","rda":number,"status":"good/adequate/low"}
+]}`
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text||'').join('') || '';
+    const match = text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+    if (!match) throw new Error();
+    const result = JSON.parse(match[0]);
+
+    const colors = { good:'var(--green-vivid)', adequate:'var(--amber)', low:'var(--red)' };
+    const labels = { good:'Good', adequate:'OK', low:'Low' };
+
+    el.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        ${result.nutrients.map(n => `
+          <div style="background:var(--surface3);border-radius:10px;padding:10px 8px;text-align:center">
+            <div style="font-size:10px;color:var(--text-dim);margin-bottom:4px;line-height:1.2">${n.name}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:var(--text);line-height:1">${n.value}<span style="font-size:9px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text-dim);font-weight:400"> ${n.unit}</span></div>
+            <div style="height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;margin:4px 0 2px">
+              <div style="height:100%;width:${Math.min(100,n.rda)}%;background:${colors[n.status]};border-radius:2px"></div>
+            </div>
+            <div style="font-size:9px;color:${colors[n.status]};font-weight:600">${labels[n.status]||n.status} · ${n.rda}% RDA</div>
+          </div>`).join('')}
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);text-align:center;line-height:1.4">Estimates from today's logged meals. Log more for accuracy.</div>`;
+  } catch(e) {
+    if (el) el.innerHTML = `<div style="font-size:12px;color:var(--text-dim);text-align:center;padding:12px">Unable to estimate. Check connection.</div>`;
+  }
 }
 
 // ===== BLOOD MARKERS =====
