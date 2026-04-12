@@ -497,51 +497,69 @@
     </div>
 
     <div class="cal-hero" onclick="openCalDetail()" style="cursor:pointer">
+      <!-- Top row: label + goal pill -->
       <div class="cal-hero-top">
-        <div class="cal-hero-label" id="calHeroLabel">Today's Calories</div>
+        <div class="cal-hero-label">Calories</div>
         <div class="cal-goal-pill" id="calGoalPill">—</div>
       </div>
-      <div style="display:flex;align-items:center;gap:16px">
-        <div class="cal-donut-wrap" id="calDonutWrap">
-          <svg width="130" height="130" viewBox="0 0 130 130">
-            <circle class="donut-track" cx="65" cy="65" r="52"/>
-            <circle class="donut-eaten" id="donutEaten" cx="65" cy="65" r="52" stroke-dasharray="327" stroke-dashoffset="327"/>
-            <circle class="donut-burned" id="donutBurned" cx="65" cy="65" r="52" stroke-dasharray="327" stroke-dashoffset="327"/>
+
+      <!-- Main layout: donut left, stats right -->
+      <div style="display:flex;align-items:center;gap:20px">
+
+        <!-- Donut: eaten vs budget (goal + burned) -->
+        <div style="position:relative;width:120px;height:120px;flex-shrink:0">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)">
+            <!-- Track -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="var(--surface3)" stroke-width="12"/>
+            <!-- Eaten arc -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke-width="12" stroke-linecap="butt"
+              id="calArcEaten" stroke="var(--green-vivid)"
+              stroke-dasharray="314" stroke-dashoffset="314"/>
           </svg>
-          <div class="cal-donut-center">
-            <div class="cal-donut-num" id="calDonutNum">0</div>
-            <div class="cal-donut-label" id="calDonutLabel">remaining</div>
+          <!-- Centre: remaining to budget -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;line-height:1" id="calCentreNum">0</div>
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);margin-top:1px" id="calCentreLabel">to go</div>
           </div>
         </div>
-        <div class="cal-hero-right">
-          <!-- Eaten row -->
-          <div class="cal-legend-row">
-            <div class="cal-legend-dot" style="background:var(--green-vivid)"></div>
-            <div class="cal-legend-label">Eaten</div>
-            <div class="cal-legend-val" id="calLegendEaten">0 kcal</div>
+
+        <!-- Three stat rows -->
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+
+          <!-- Eaten -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--green-vivid);flex-shrink:0"></div>
+            <div style="flex:1;font-size:12px;color:var(--text-dim)">Eaten</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)" id="calStatEaten">0</div>
           </div>
-          <!-- Burned row -->
-          <div class="cal-legend-row">
-            <div class="cal-legend-dot" style="background:var(--blue)"></div>
-            <div class="cal-legend-label">Burned</div>
-            <div class="cal-legend-val" id="calLegendBurned">0 kcal</div>
+
+          <!-- Burned -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+            <div style="flex:1;font-size:12px;color:var(--text-dim)">Burned</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--blue)" id="calStatBurned">0</div>
           </div>
-          <!-- Target row -->
-          <div class="cal-legend-row">
-            <div class="cal-legend-dot" style="background:var(--surface3);border:1px solid var(--border2)"></div>
-            <div class="cal-legend-label" id="calTargetLabel">Target</div>
-            <div class="cal-legend-val" id="calLegendTarget">0 kcal</div>
+
+          <!-- Divider line -->
+          <div style="height:1px;background:var(--border);margin:2px 0"></div>
+
+          <!-- Budget = Goal + Burned -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:8px;height:8px;border-radius:2px;background:var(--surface3);border:1px solid var(--border2);flex-shrink:0"></div>
+            <div style="flex:1;font-size:12px;color:var(--text-dim)" id="calBudgetLabel">Budget</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)" id="calStatBudget">0</div>
           </div>
-          <!-- Status pill -->
-          <div class="cal-remaining-row" id="calRemainingRow">
-            <div class="cal-remaining-num" id="calRemainingNum">0</div>
-            <div class="cal-remaining-label" id="calRemainingLabel">kcal to eat</div>
+
+          <!-- Remaining highlight -->
+          <div style="border-radius:8px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between" id="calRemainingRow">
+            <div style="font-size:11px;font-weight:600;color:var(--text-dim)" id="calRemainingLabel">Remaining</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700" id="calRemainingNum">0</div>
           </div>
-          <!-- Motivating options -->
-          <div id="calMotivation" style="display:none;margin-top:6px"></div>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;text-align:center;line-height:1.5" id="calSource">Tap for full breakdown</div>
+
+      <!-- Source hint -->
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;text-align:center" id="calSource">Tap for breakdown</div>
     </div>
 
     <div class="macro-row" onclick="openNutritionModal()" style="cursor:pointer">
@@ -1261,8 +1279,7 @@ function renderHome() {
 }
 
 function renderCalHero() {
-  const { target, consumed, burned, remaining, isDeficit, isSurplus } = getCalData();
-  const circumference = 327;
+  const { target, consumed, burned, isDeficit, isSurplus } = getCalData();
 
   // Goal pill
   const pillEl = document.getElementById('calGoalPill');
@@ -1270,165 +1287,74 @@ function renderCalHero() {
   else if (isSurplus) { pillEl.textContent = '💪 Muscle Gain'; pillEl.className = 'cal-goal-pill surplus'; }
   else { pillEl.textContent = '⚖️ Maintain'; pillEl.className = 'cal-goal-pill maintain'; }
 
-  // Donut
-  const eatenPct = Math.min(1, consumed / target);
-  const burnedPct = Math.min(1 - eatenPct, burned / target);
+  // Budget = goal + burned (exercise adds back to your daily allowance)
+  const budget = target + burned;
+  const remaining = budget - consumed;
+  const overBudget = remaining < 0;
+
+  // Arc: eaten as % of budget
+  const circumference = 314; // 2π×50
+  const eatenPct = Math.min(1, consumed / budget);
   const eatenDash = circumference * eatenPct;
-  const burnedDash = circumference * burnedPct;
-  const eatenEl = document.getElementById('donutEaten');
-  const burnedEl = document.getElementById('donutBurned');
-  if (eatenEl) {
-    eatenEl.style.strokeDasharray = `${eatenDash} ${circumference - eatenDash}`;
-    eatenEl.style.strokeDashoffset = '0';
-    eatenEl.style.stroke = consumed > target ? 'var(--red)' : 'var(--green-vivid)';
-  }
-  if (burnedEl) {
-    burnedEl.style.strokeDasharray = `${burnedDash} ${circumference - burnedDash}`;
-    burnedEl.style.strokeDashoffset = -eatenDash;
+  const arc = document.getElementById('calArcEaten');
+  if (arc) {
+    arc.style.strokeDasharray = `${eatenDash} ${circumference - eatenDash}`;
+    arc.style.strokeDashoffset = '0';
+    arc.style.stroke = overBudget ? 'var(--red)' : 'var(--green-vivid)';
   }
 
-  // Legend
-  document.getElementById('calLegendEaten').textContent = consumed + ' kcal';
-  document.getElementById('calLegendBurned').textContent = burned > 0 ? '+' + burned + ' kcal' : '—';
-  document.getElementById('calLegendTarget').textContent = target + ' kcal';
+  // Centre: remaining to budget
+  document.getElementById('calCentreNum').textContent = Math.abs(remaining);
+  const centreLabel = document.getElementById('calCentreLabel');
+  centreLabel.textContent = overBudget ? 'over' : 'to go';
+  centreLabel.style.color = overBudget ? 'var(--red)' : 'var(--text-dim)';
 
-  // Goal-specific centre + status messaging
-  const remEl = document.getElementById('calRemainingNum');
-  const remLabelEl = document.getElementById('calRemainingLabel');
-  const remRowEl = document.getElementById('calRemainingRow');
-  const targetLabelEl = document.getElementById('calTargetLabel');
-  const donutNumEl = document.getElementById('calDonutNum');
-  const donutLabelEl = document.getElementById('calDonutLabel');
+  // Stats
+  document.getElementById('calStatEaten').textContent = consumed;
+  const burnedEl = document.getElementById('calStatBurned');
+  burnedEl.textContent = burned > 0 ? '+' + burned : '—';
+  burnedEl.style.color = burned > 0 ? 'var(--blue)' : 'var(--text-dim)';
+  document.getElementById('calStatBudget').textContent = budget;
 
-  if (isDeficit) {
-    targetLabelEl.textContent = 'Deficit target';
-    if (remaining > 0) {
-      // Under target — still room to eat
-      donutNumEl.textContent = remaining;
-      donutLabelEl.textContent = 'left to eat';
-      remEl.textContent = remaining;
-      remEl.style.color = 'var(--green-vivid)';
-      remLabelEl.textContent = 'kcal left to eat today';
-      remRowEl.style.background = 'rgba(30,132,73,0.12)';
-    } else {
-      // Over deficit target
-      donutNumEl.textContent = Math.abs(remaining);
-      donutLabelEl.textContent = 'over limit';
-      remEl.textContent = Math.abs(remaining);
-      remEl.style.color = 'var(--red)';
-      remLabelEl.textContent = 'kcal over your deficit limit';
-      remRowEl.style.background = 'var(--red-dim)';
-    }
-  } else if (isSurplus) {
-    targetLabelEl.textContent = 'Surplus target';
-    const netEaten = consumed - burned;
-    const stillNeeded = target - netEaten;
-    if (stillNeeded > 0) {
-      // Need to eat more
-      donutNumEl.textContent = stillNeeded;
-      donutLabelEl.textContent = 'still needed';
-      remEl.textContent = stillNeeded;
-      remEl.style.color = 'var(--amber)';
-      remLabelEl.textContent = 'kcal still needed for surplus';
-      remRowEl.style.background = 'var(--amber-dim)';
-    } else {
-      // Surplus hit
-      donutNumEl.textContent = Math.abs(stillNeeded);
-      donutLabelEl.textContent = 'surplus ✓';
-      remEl.textContent = Math.abs(stillNeeded);
-      remEl.style.color = 'var(--green-vivid)';
-      remLabelEl.textContent = 'kcal surplus achieved today ✓';
-      remRowEl.style.background = 'rgba(30,132,73,0.12)';
-    }
+  // Budget label explains the formula
+  const budgetLabel = document.getElementById('calBudgetLabel');
+  if (isDeficit) budgetLabel.textContent = burned > 0 ? `Budget (${target}+${burned})` : 'Budget (deficit)';
+  else if (isSurplus) budgetLabel.textContent = burned > 0 ? `Budget (${target}+${burned})` : 'Budget (surplus)';
+  else budgetLabel.textContent = burned > 0 ? `Budget (${target}+${burned})` : 'Budget';
+
+  // Remaining row
+  const remRow = document.getElementById('calRemainingRow');
+  const remNum = document.getElementById('calRemainingNum');
+  const remLabel = document.getElementById('calRemainingLabel');
+  remNum.textContent = Math.abs(remaining);
+
+  if (overBudget) {
+    remRow.style.background = 'var(--red-dim)';
+    remNum.style.color = 'var(--red)';
+    const mins = Math.round(Math.abs(remaining) / 8);
+    remLabel.textContent = `Over — ~${mins} min exercise to balance`;
+    remLabel.style.color = 'var(--red)';
+  } else if (isSurplus && remaining === 0) {
+    remRow.style.background = 'rgba(30,132,73,0.12)';
+    remNum.style.color = 'var(--green-vivid)';
+    remLabel.textContent = 'Surplus hit — muscle mode ✓';
+    remLabel.style.color = 'var(--green-vivid)';
   } else {
-    targetLabelEl.textContent = 'Maintenance';
-    donutNumEl.textContent = Math.abs(remaining);
-    donutLabelEl.textContent = remaining >= 0 ? 'remaining' : 'over';
-    remEl.textContent = Math.abs(remaining);
-    remEl.style.color = remaining >= 0 ? 'var(--green-vivid)' : 'var(--red)';
-    remLabelEl.textContent = remaining >= 0 ? 'kcal remaining today' : 'kcal over maintenance';
-    remRowEl.style.background = remaining >= 0 ? 'rgba(30,132,73,0.12)' : 'var(--red-dim)';
+    const color = isDeficit ? 'var(--green-vivid)' : isSurplus ? 'var(--amber)' : 'var(--green-vivid)';
+    remRow.style.background = isDeficit ? 'rgba(30,132,73,0.1)' : isSurplus ? 'var(--amber-dim)' : 'rgba(30,132,73,0.1)';
+    remNum.style.color = color;
+    if (isDeficit) remLabel.textContent = 'kcal left to eat today';
+    else if (isSurplus) remLabel.textContent = 'kcal still needed for surplus';
+    else remLabel.textContent = 'kcal remaining today';
+    remLabel.style.color = 'var(--text-dim)';
   }
 
-  // Source — show clear calculation
+  // Source line
   const calResult = calcSmartCalTarget();
-  let src;
-  if (calResult.usingRenpho) {
-    src = `Renpho BMR ${calResult.bmr} × activity = ${calResult.tdee}${isDeficit?' − 500':isSurplus?' + 250':''} = ${target} kcal · tap`;
-  } else {
-    src = `Est. BMR ${calResult.bmr} × activity = ${calResult.tdee}${isDeficit?' − 500 = '+target+' kcal (fat loss)':isSurplus?' + 250 = '+target+' kcal (muscle)':' = '+target+' kcal'} · Scan Renpho for accuracy`;
-  }
+  const src = calResult.usingRenpho
+    ? `BMR ${calResult.bmr} × activity = ${calResult.tdee}${isDeficit?' − 500':isSurplus?' + 250':''} = ${target} kcal goal · tap`
+    : `Estimated goal: ${target} kcal · Scan Renpho for your real BMR · tap`;
   document.getElementById('calSource').textContent = src;
-
-  // Motivation options — show what it takes to hit goal
-  const motivEl = document.getElementById('calMotivation');
-  if (!motivEl) return;
-
-  if (isDeficit && remaining > 0) {
-    // Fat loss — under target: show food option OR exercise option
-    const walkMins = Math.round(remaining / 4); // ~4 kcal/min walking
-    const runMins = Math.round(remaining / 10); // ~10 kcal/min running
-    motivEl.style.display = 'block';
-    motivEl.innerHTML = `
-      <div style="font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">To hit your deficit today</div>
-      <div class="cal-option-row">
-        <div class="cal-option" style="background:rgba(30,132,73,0.08)">
-          <div class="cal-option-val" style="color:var(--green-vivid)">${remaining}</div>
-          <div class="cal-option-label">kcal left to eat<br>stay under limit</div>
-        </div>
-        <div class="cal-option" style="background:var(--blue-dim)">
-          <div class="cal-option-val" style="color:var(--blue)">${runMins}–${walkMins}</div>
-          <div class="cal-option-label">mins exercise<br>run or walk it off</div>
-        </div>
-      </div>`;
-  } else if (isDeficit && remaining < 0) {
-    // Over deficit
-    const walkMins = Math.round(Math.abs(remaining) / 4);
-    const runMins = Math.round(Math.abs(remaining) / 10);
-    motivEl.style.display = 'block';
-    motivEl.innerHTML = `
-      <div style="font-size:10px;font-weight:600;color:var(--red);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Over your limit — burn it off</div>
-      <div class="cal-option-row">
-        <div class="cal-option" style="background:var(--red-dim)">
-          <div class="cal-option-val" style="color:var(--red)">${Math.abs(remaining)}</div>
-          <div class="cal-option-label">kcal over your<br>deficit limit</div>
-        </div>
-        <div class="cal-option" style="background:var(--blue-dim)">
-          <div class="cal-option-val" style="color:var(--blue)">${runMins}–${walkMins}</div>
-          <div class="cal-option-label">mins exercise<br>to get back on track</div>
-        </div>
-      </div>`;
-  } else if (isSurplus) {
-    const netEaten = consumed - burned;
-    const stillNeeded = target - netEaten;
-    if (stillNeeded > 0) {
-      // Need to eat more
-      const proteinNeeded = Math.round(stillNeeded / 4 * 0.4); // rough protein portion
-      motivEl.style.display = 'block';
-      motivEl.innerHTML = `
-        <div style="font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Eat more to hit your surplus</div>
-        <div class="cal-option-row">
-          <div class="cal-option" style="background:var(--amber-dim)">
-            <div class="cal-option-val" style="color:var(--amber)">${stillNeeded}</div>
-            <div class="cal-option-label">kcal still needed<br>for muscle growth</div>
-          </div>
-          <div class="cal-option" style="background:rgba(74,158,255,0.08)">
-            <div class="cal-option-val" style="color:var(--blue)">${proteinNeeded}g</div>
-            <div class="cal-option-label">extra protein<br>to prioritise</div>
-          </div>
-        </div>`;
-    } else {
-      motivEl.style.display = 'block';
-      motivEl.innerHTML = `
-        <div style="font-size:10px;font-weight:600;color:var(--green-vivid);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Surplus hit — muscle building mode ✓</div>
-        <div class="cal-option" style="background:rgba(30,132,73,0.08);border-radius:10px;padding:8px 12px;text-align:center;border:1px solid var(--border)">
-          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--green-vivid)">${Math.abs(stillNeeded)} kcal surplus</div>
-          <div style="font-size:10px;color:var(--text-dim);margin-top:2px">Your body has what it needs to grow today</div>
-        </div>`;
-    }
-  } else {
-    motivEl.style.display = 'none';
-  }
 }
 
 function renderMacros() {
