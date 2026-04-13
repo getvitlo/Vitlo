@@ -1233,8 +1233,6 @@ async function nextOb() {
 
 // ===== SMART CALORIE CALCULATION =====
 function calcSmartCalTarget() {
-  // No activity multiplier — exercise is tracked manually via Whoop/workout
-  // BMR is your base. Exercise calories are added on top in real time.
   const goals = profile?.goals || [];
   const bm = latestBodyMetrics;
   const renphoMBR = parseFloat(bm?.bmr_kcal) || 0;
@@ -1251,26 +1249,30 @@ function calcSmartCalTarget() {
     bmr = s === 'male' ? Math.round(10*w+6.25*h-5*a+5) : Math.round(10*w+6.25*h-5*a-161);
   }
 
-  // Apply goal adjustment to BMR directly
+  // Target = what you eat. Exercise creates additional deficit on top.
+  // Fat loss: BMR - 500.  Muscle: BMR + 250.  Maintain: BMR.
   let target;
-  if (goals.includes('fat_loss')) target = Math.max(1200, bmr - 500);
+  if (goals.includes('fat_loss'))   target = Math.max(1200, bmr - 500);
   else if (goals.includes('muscle')) target = bmr + 250;
-  else target = bmr;
+  else                               target = bmr;
 
   return { target, bmr, usingRenpho };
 }
 
 function getCalData() {
   const calResult = calcSmartCalTarget();
-  const target = calResult.target;
+  const target = calResult.target;         // what you aim to eat
   const consumed = foodLogs.reduce((s,f) => s+(parseInt(f.calories)||0), 0);
   const burned = workoutLog ? (workoutLog.calories_burned || 0) : 0;
   const goals = profile?.goals || [];
   const isDeficit = goals.includes('fat_loss');
   const isSurplus = goals.includes('muscle');
-  const budget = target + burned;
-  const remaining = budget - consumed;
-  return { target, consumed, burned, budget, remaining, isDeficit, isSurplus };
+  // Remaining to eat = target - consumed (burned is shown separately, not added to budget)
+  const remaining = target - consumed;
+  // Net deficit = how much under on the day (consumed - (target + burned))
+  // negative = you burned more than you ate = good for fat loss
+  const netDeficit = consumed - (target + burned);
+  return { target, consumed, burned, remaining, netDeficit, isDeficit, isSurplus };
 }
 
 function getMacroTargets() {
@@ -1317,57 +1319,52 @@ function renderHome() {
 }
 
 function renderCalHero() {
-  const { target, consumed, burned, isDeficit, isSurplus } = getCalData();
+  const { target, consumed, burned, remaining, netDeficit, isDeficit, isSurplus } = getCalData();
   const mt = getMacroTargets();
   const protein = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0));
+  const calResult = calcSmartCalTarget();
 
   // ── Goal pill ──
   const pillEl = document.getElementById('calGoalPill');
-  if (isDeficit)       { pillEl.textContent = 'Fat Loss';    pillEl.className = 'cal-goal-pill deficit'; }
-  else if (isSurplus)  { pillEl.textContent = 'Muscle Gain'; pillEl.className = 'cal-goal-pill surplus'; }
-  else                 { pillEl.textContent = 'Maintain';    pillEl.className = 'cal-goal-pill maintain'; }
+  if (isDeficit)      { pillEl.textContent = 'Fat Loss';    pillEl.className = 'cal-goal-pill deficit'; }
+  else if (isSurplus) { pillEl.textContent = 'Muscle Gain'; pillEl.className = 'cal-goal-pill surplus'; }
+  else                { pillEl.textContent = 'Maintain';    pillEl.className = 'cal-goal-pill maintain'; }
 
-  // ── Budget: base goal + today's exercise (earn food back) ──
-  // No activity multiplier — BMR is base, exercise adds in real time
-  const budget = target + burned;
-  const remaining = budget - consumed;
-  const over = remaining < 0;
-
-  // ── Subtext ──
-  const calResult = calcSmartCalTarget();
+  // ── Subtext: show the formula clearly ──
   const subEl = document.getElementById('calGoalSubtext');
   if (subEl) {
     subEl.textContent = calResult.usingRenpho
-      ? `BMR ${calResult.bmr} kcal${isDeficit?' − 500 deficit':isSurplus?' + 250 surplus':''} = ${target} kcal goal`
-      : `Est. goal: ${target} kcal · Scan Renpho for accuracy`;
+      ? `BMR ${calResult.bmr}${isDeficit?' − 500':isSurplus?' + 250':''} = ${target} kcal to eat`
+      : `Est. BMR ${calResult.bmr}${isDeficit?' − 500':isSurplus?' + 250':''} = ${target} kcal · scan Renpho for accuracy`;
   }
 
-  // ── Ring 1: EAT — eaten vs budget ──
-  const r1 = 440; // 2π×70
-  const eatPct = Math.min(1.05, consumed / Math.max(budget, 1));
-  const eatDash = r1 * Math.min(1, eatPct);
+  // ── Ring 1 (outer, green): EAT — consumed vs target ──
+  const r1c = 440;
+  const eatPct = Math.min(1.05, consumed / Math.max(target, 1));
   const ring1 = document.getElementById('ring1Fill');
   if (ring1) {
-    ring1.style.strokeDashoffset = r1 - eatDash;
-    ring1.style.stroke = over ? '#e74c3c' : '#27ae60';
+    ring1.style.strokeDashoffset = r1c - (r1c * Math.min(1, eatPct));
+    ring1.style.stroke = consumed > target ? '#e74c3c' : '#27ae60';
   }
 
-  // ── Ring 2: BURN — calories burned vs 500 kcal goal ──
+  // ── Ring 2 (middle, blue): BURN — burned vs 500 kcal target ──
   const burnGoal = 500;
-  const r2 = 339; // 2π×54
+  const r2c = 339;
   const burnPct = Math.min(1.05, burned / burnGoal);
-  const burnDash = r2 * Math.min(1, burnPct);
   const ring2 = document.getElementById('ring2Fill');
-  if (ring2) ring2.style.strokeDashoffset = r2 - burnDash;
+  if (ring2) {
+    ring2.style.strokeDashoffset = r2c - (r2c * Math.min(1, burnPct));
+    ring2.style.stroke = burned >= burnGoal ? '#27ae60' : '#4a9eff';
+  }
 
-  // ── Ring 3: PROTEIN — consumed vs target ──
-  const r3 = 239; // 2π×38
+  // ── Ring 3 (inner, purple): PROTEIN ──
+  const r3c = 239;
   const protPct = Math.min(1.05, protein / Math.max(mt.protein, 1));
-  const protDash = r3 * Math.min(1, protPct);
   const ring3 = document.getElementById('ring3Fill');
-  if (ring3) ring3.style.strokeDashoffset = r3 - protDash;
+  if (ring3) ring3.style.strokeDashoffset = r3c - (r3c * Math.min(1, protPct));
 
-  // ── Centre: most important number = remaining to eat ──
+  // ── Centre: remaining to eat today ──
+  const over = consumed > target;
   const centreEl = document.getElementById('calCentreNum');
   const centreLabelEl = document.getElementById('calCentreLabel');
   if (centreEl) {
@@ -1375,44 +1372,49 @@ function renderCalHero() {
     centreEl.style.color = over ? '#e74c3c' : '#27ae60';
   }
   if (centreLabelEl) {
-    centreLabelEl.textContent = over ? 'kcal over' : 'kcal left';
+    centreLabelEl.textContent = over ? 'over limit' : 'left to eat';
     centreLabelEl.style.color = over ? '#e74c3c' : 'var(--text-dim)';
   }
 
-  // ── Stat: Eaten ──
+  // ── Stat: Eaten / target ──
   const statEatenEl = document.getElementById('statEaten');
   const statEatenOfEl = document.getElementById('statEatenOf');
-  if (statEatenEl) { statEatenEl.innerHTML = consumed + ' <span style="font-size:12px;font-weight:400;color:var(--text-dim)" id="statEatenOf">/ ' + budget + ' kcal</span>'; }
-  // statEatenOf set above inline
+  if (statEatenEl) statEatenEl.innerHTML = consumed + ' <span style="font-size:12px;font-weight:400;color:var(--text-dim)" id="statEatenOf">/ ' + target + ' kcal</span>';
 
   // ── Stat: Burned ──
   const statBurnedEl = document.getElementById('statBurned');
-  const statBurnedOfEl = document.getElementById('statBurnedOf');
   if (statBurnedEl) {
     const bColor = burned >= burnGoal ? '#27ae60' : '#4a9eff';
     statBurnedEl.style.color = bColor;
-    statBurnedEl.innerHTML = (burned > 0 ? burned : '0') + ' <span style="font-size:12px;font-weight:400;color:var(--text-dim)" id="statBurnedOf">/ ' + burnGoal + ' goal</span>';
+    statBurnedEl.innerHTML = (burned || '0') + ' <span style="font-size:12px;font-weight:400;color:var(--text-dim)">/ ' + burnGoal + ' goal</span>';
   }
 
   // ── Stat: Protein ──
   const statProteinEl = document.getElementById('statProtein');
-  const statProteinOfEl = document.getElementById('statProteinOf');
   if (statProteinEl) {
-    statProteinEl.innerHTML = protein + 'g <span style="font-size:12px;font-weight:400;color:var(--text-dim)" id="statProteinOf">/ ' + mt.protein + 'g</span>';
+    statProteinEl.innerHTML = protein + 'g <span style="font-size:12px;font-weight:400;color:var(--text-dim)">/ ' + mt.protein + 'g</span>';
   }
 
-  // ── Bottom source line ──
+  // ── Bottom line: net picture ──
   const srcEl = document.getElementById('calSource');
   if (srcEl) {
-    if (over) {
-      const mins = Math.round(Math.abs(remaining) / 8);
-      srcEl.textContent = `${Math.abs(remaining)} kcal over · burn ~${mins} min to balance`;
+    const totalDeficit = -(netDeficit); // positive = good, you burned more than you ate
+    if (over && burned === 0) {
+      srcEl.textContent = `${Math.abs(remaining)} kcal over your limit · log a workout to offset`;
       srcEl.style.color = '#e74c3c';
+    } else if (over && burned > 0) {
+      const net = consumed - (target + burned);
+      srcEl.textContent = net > 0
+        ? `Still ${net} kcal over even with exercise`
+        : `Exercise brings you ${Math.abs(net)} kcal into deficit ✓`;
+      srcEl.style.color = net > 0 ? '#e74c3c' : '#27ae60';
     } else if (isDeficit) {
-      srcEl.textContent = `${remaining} kcal left · ${budget - consumed > 0 ? 'stay under your goal' : 'goal hit ✓'}`;
+      srcEl.textContent = remaining > 0
+        ? `${remaining} kcal left · eat up to ${target} kcal`
+        : `On target today ✓`;
       srcEl.style.color = 'var(--text-dim)';
     } else if (isSurplus) {
-      srcEl.textContent = remaining > 0 ? `Eat ${remaining} more kcal to hit your surplus` : 'Surplus achieved ✓';
+      srcEl.textContent = remaining > 0 ? `Eat ${remaining} more kcal to hit surplus` : 'Surplus achieved ✓';
       srcEl.style.color = remaining > 0 ? 'var(--amber)' : '#27ae60';
     } else {
       srcEl.textContent = `${Math.abs(remaining)} kcal ${over ? 'over' : 'remaining'}`;
@@ -2446,20 +2448,18 @@ function formatDate(d) {
 
 // ===== CALORIE DETAIL MODAL =====
 function openCalDetail() {
-  const { target, consumed, burned, isDeficit, isSurplus } = getCalData();
+  const { target, consumed, burned, remaining, netDeficit, isDeficit, isSurplus } = getCalData();
   const mt = getMacroTargets();
   const p = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.protein_g)||0), 0));
   const c = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.carbs_g)||0), 0));
   const f = Math.round(foodLogs.reduce((s,f) => s+(parseFloat(f.fat_g)||0), 0));
   const calResult = calcSmartCalTarget();
 
-  const budget = target + burned;
-  const remaining = budget - consumed;
-  const over = remaining < 0;
+  const over = consumed > target;
 
   // How to hit goal messages
   const toEatMore = remaining > 0 ? remaining : 0;
-  const burnExtra = over ? Math.abs(remaining) : 0;
+  const burnExtra = over ? Math.abs(consumed - target) : 0;
   const walkMins = Math.round(burnExtra / 5);
   const runMins = Math.round(burnExtra / 10);
 
@@ -2488,22 +2488,17 @@ function openCalDetail() {
           <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--green-vivid)">${target} kcal</div>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-size:13px;color:var(--text-mid)">Burned today</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#4a9eff">+${burned} kcal</div>
-        </div>
-        <div style="height:1px;background:var(--border)"></div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-size:13px;font-weight:600;color:var(--text)">Today's budget</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--text)">${budget} kcal</div>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
           <div style="font-size:13px;color:var(--text-mid)">Eaten so far</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">−${consumed} kcal</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--text)">${consumed} kcal</div>
         </div>
         <div style="height:1px;background:var(--border)"></div>
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-size:13px;font-weight:700;color:var(--text)">${over ? 'Over budget' : 'Remaining'}</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">${over ? 'Over limit' : 'Left to eat'}</div>
           <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:${over?'#e74c3c':'#27ae60'}">${Math.abs(remaining)} kcal</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding:10px 12px;background:var(--blue-dim);border-radius:10px">
+          <div style="font-size:13px;color:var(--text-mid)">Bonus: burned today</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:#4a9eff">${burned > 0 ? '+'+burned+' kcal extra deficit' : '0 — log a workout'}</div>
         </div>
       </div>
     </div>
