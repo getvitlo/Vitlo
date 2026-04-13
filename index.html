@@ -1274,26 +1274,33 @@ function getCalData() {
 }
 
 function getMacroTargets() {
-  const { target } = getCalData();
+  // Use today's budget (goal + burned) so macros scale on training days
+  const { budget, target } = getCalData();
+  const calBudget = budget > target ? budget : target; // at minimum use the base goal
   const goals = profile?.goals || [];
   const bm = latestBodyMetrics;
 
-  // Use lean mass or skeletal muscle from scan if available — more accurate than total weight
-  const leanMass = bm?.lean_mass_kg || bm?.fat_free_mass_kg || null;
-  const muscleMass = bm?.skeletal_muscle_kg || bm?.muscle_mass_kg || null;
-  const refMass = leanMass || muscleMass || profile?.weight_kg || 75;
+  // Protein reference: skeletal muscle mass is most accurate for cutting
+  // lean_mass includes water/organs — skeletal muscle is cleaner for protein target
+  const skeletal = parseFloat(bm?.skeletal_muscle_kg) || 0;
+  const leanMass = parseFloat(bm?.lean_mass_kg || bm?.fat_free_mass_kg) || 0;
+  const bodyWeight = parseFloat(bm?.weight_kg || profile?.weight_kg) || 75;
 
-  // Protein: 2.0-2.4g per kg lean mass depending on goal
+  // Use skeletal muscle if available (38.42kg for you → 85g protein at 2.2g/kg)
+  // Fall back to lean mass, then to 0.4 × bodyweight as estimate of lean mass
+  const refMass = skeletal > 0 ? skeletal : leanMass > 0 ? leanMass : Math.round(bodyWeight * 0.75);
+
+  // Protein: 2.2g/kg lean mass for fat loss (muscle preservation), 2.4 for muscle gain
   const proteinMultiplier = goals.includes('muscle') ? 2.4 : goals.includes('fat_loss') ? 2.2 : 1.8;
   const protein = Math.round(refMass * proteinMultiplier);
 
-  // Fat: 25% of calories
-  const fat = Math.round((target * 0.25) / 9);
+  // Fat: 25% of budget calories (minimum 30g for hormones)
+  const fat = Math.max(30, Math.round((calBudget * 0.25) / 9));
 
-  // Carbs: remaining calories
-  const carbs = Math.max(50, Math.round((target - (protein * 4) - (fat * 9)) / 4));
+  // Carbs: everything remaining (minimum 50g to avoid fatigue)
+  const carbs = Math.max(50, Math.round((calBudget - (protein * 4) - (fat * 9)) / 4));
 
-  return { protein, carbs, fat, source: leanMass ? 'lean mass' : muscleMass ? 'muscle mass' : 'weight' };
+  return { protein, carbs, fat };
 }
 
 // ===== HOME RENDER =====
