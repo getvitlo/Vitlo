@@ -72,7 +72,7 @@ textarea.inp{resize:none;line-height:1.5}
 <body>
 <div class="screen active" id="authScreen"><div class="auth"><div><div class="auth-logo">vitlo</div><div class="auth-tag">Know what you eat. Hit your goals.</div></div><div><div class="auth-title" id="authTitle">Welcome back</div><input class="inp" type="email" id="aE" placeholder="Email" autocomplete="email"><input class="inp" type="password" id="aP" placeholder="Password" autocomplete="current-password"><button class="btn btn-g" id="aB" onclick="doAuth()">Sign In</button><button class="sw" id="aSw" onclick="flipAuth()">No account? <b>Sign up free</b></button></div></div></div>
 <div class="screen" id="obScreen"><div class="ob"><div class="ob-bar"><div class="ob-fill" id="obBar"></div></div><div class="ob-sl" id="obLbl">STEP 1 OF 4</div><div id="obC"></div><button class="btn btn-g" style="margin-top:auto" id="obBtn" onclick="obNext()">Continue</button></div></div>
-<div class="screen" id="homeScreen"><div class="ht"><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div><div class="pill" id="hPill">—</div></div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--blu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--blu)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--blu)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
+<div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div></div><div class="pill" id="hPill">—</div></div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--blu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--blu)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--blu)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
 <div class="screen" id="exScreen"><div class="exh"><div class="exh-t">Exercise</div><div class="exh-s">Track calories burned today</div></div>
 <!-- Activity Score -->
 <div style="display:flex;justify-content:center;padding:10px 0 16px"><div style="position:relative;width:120px;height:120px"><svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--blu)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" id="scoreRing" style="transition:stroke-dashoffset 1s ease"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1" id="scoreNum">0</div><div style="font-size:8px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin-top:2px">/ 10</div></div></div></div>
@@ -81,6 +81,75 @@ textarea.inp{resize:none;line-height:1.5}
 <div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Food</div><div class="sh-s">Photo your plate or describe what you ate.</div><div class="tr"><div class="tb on" onclick="fT('photo',this)">📷 Photo</div><div class="tb" onclick="fT('desc',this)">✏️ Describe</div><div class="tb" onclick="fT('man',this)">🔢 Manual</div></div><div id="fp"><div class="pd" id="pD" onclick="document.getElementById('cI').click()"><input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)"><input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)"><div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div></div><div class="pa"><button class="btn btn-s" onclick="document.getElementById('cI').click()">📷 Camera</button><button class="btn btn-s" onclick="document.getElementById('gI').click()">📁 Library</button></div></div><div id="fd" style="display:none"><label class="lbl">What did you eat?</label><textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, 1 hash brown and a toast that's slightly buttered"></textarea><button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">✨ Calculate Calories</button></div><div id="fm" style="display:none"></div><div id="fR" style="display:none"></div><div id="cB" style="display:none"><div class="corr"><div class="corr-h">Something wrong? Tell the AI</div><input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:6px"><button class="btn btn-s" style="height:38px;font-size:11px" onclick="doCorr()">↻ Re-analyse</button></div></div><div id="eA" style="display:none"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">DETAILS</div><label class="lbl">Meal name</label><input class="inp" id="fN"><label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr"></div><div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr"></div><div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt"></div></div><label class="lbl">Weight of food (g, optional)</label><input class="inp" type="number" id="fW" placeholder="e.g. 350" inputmode="numeric"><button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log Meal</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('foodModal');resetF()">Cancel</button></div></div>
 <div class="ov" id="exModal" onclick="closeO(event,'exModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Exercise</div><div class="sh-s">From your Whoop, watch, or enter manually.</div><div class="tr"><div class="tb on" onclick="eT('man',this)">📝 Manual</div><div class="tb" onclick="eT('ss',this)">📸 Screenshot</div></div><div id="eM"><label class="lbl">Calories burned</label><input class="inp" type="number" id="eCIn" placeholder="e.g. 520" inputmode="numeric"><label class="lbl">Steps (optional)</label><input class="inp" type="number" id="eSIn" placeholder="e.g. 8500" inputmode="numeric"><button class="btn btn-g" onclick="saveEx()">Save</button></div><div id="eSS" style="display:none"><div class="pd" id="eSSD" onclick="document.getElementById('eSSI').click()"><input type="file" id="eSSI" accept="image/*" style="display:none" onchange="onESS(event)"><div style="font-size:44px;opacity:.25">📸</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Upload workout screenshot</div></div><div id="eSSR" style="display:none"></div><button class="btn btn-g" id="eSSB" style="display:none" onclick="saveESSx()">Save Exercise</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('exModal')">Cancel</button></div></div>
 <div class="ov" id="detailModal" onclick="closeO(event,'detailModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Today's Breakdown</div><div id="dB"></div><button class="btn btn-s" style="margin-top:12px" onclick="closeModal('detailModal')">Close</button></div></div>
+
+<!-- SETTINGS MODAL -->
+<div class="ov" id="settingsModal" onclick="closeO(event,'settingsModal')">
+<div class="sh">
+  <div class="sh-h"></div>
+  <div class="sh-t">Settings</div>
+  <div class="sh-s">Update your stats and goals.</div>
+
+  <!-- Current target display -->
+  <div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:14px;padding:16px;text-align:center;margin-bottom:16px">
+    <div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1px">CURRENT DAILY TARGET</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:44px;color:var(--grn);line-height:1;margin:6px 0" id="setTargetPreview">—</div>
+    <div style="font-size:12px;color:var(--tx2)" id="setTargetFormula">—</div>
+  </div>
+
+  <!-- Body stats -->
+  <div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">BODY STATS</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="setW" inputmode="decimal"></div>
+    <div><label class="lbl">Height (cm)</label><input class="inp" type="number" id="setH" inputmode="decimal"></div>
+    <div><label class="lbl">Age</label><input class="inp" type="number" id="setA" inputmode="numeric"></div>
+    <div><label class="lbl">Body fat %</label><input class="inp" type="number" id="setBF" inputmode="decimal" placeholder="Optional"></div>
+  </div>
+  <label class="lbl">Sex</label>
+  <div class="seg" style="margin-bottom:14px">
+    <div class="seg-b" id="setSexM" onclick="setField('sex','male')">Male</div>
+    <div class="seg-b" id="setSexF" onclick="setField('sex','female')">Female</div>
+  </div>
+  <label class="lbl">BMR (leave blank to auto-calculate)</label>
+  <input class="inp" type="number" id="setBMR" inputmode="numeric" placeholder="e.g. 1670 — from Renpho or manual">
+  <div style="font-size:10px;color:var(--tx3);margin:-6px 0 14px;line-height:1.4">If you know your exact BMR from a body scan, enter it here. Otherwise we calculate using your weight, height, age and sex.</div>
+
+  <button class="btn btn-g" onclick="saveSettings()">Save Stats</button>
+
+  <!-- AI Coach button -->
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
+    <div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:10px">AI COACH</div>
+    <button class="btn btn-s" style="gap:8px" onclick="closeModal('settingsModal');openModal('coachModal')">
+      <span style="font-size:18px">🤖</span> Set Goals with AI Coach
+    </button>
+    <div style="font-size:11px;color:var(--tx3);margin-top:8px;line-height:1.5">Tell the AI your goal — lose weight, build muscle, hit a target body fat %. It'll calculate exactly how many calories to eat and what deficit or surplus to aim for.</div>
+  </div>
+
+  <!-- Sign out -->
+  <button style="display:block;margin:20px auto 0;background:none;border:none;color:var(--red);font-size:13px;font-weight:600;cursor:pointer;padding:10px" onclick="signOut()">Sign Out</button>
+  <button class="btn btn-s" style="margin-top:8px" onclick="closeModal('settingsModal')">Close</button>
+</div>
+</div>
+
+<!-- AI COACH MODAL -->
+<div class="ov" id="coachModal" onclick="closeO(event,'coachModal')">
+<div class="sh">
+  <div class="sh-h"></div>
+  <div class="sh-t">🤖 AI Coach</div>
+  <div class="sh-s">Tell the AI what you want to achieve. It'll build your calorie plan using your body stats.</div>
+
+  <label class="lbl">What's your goal?</label>
+  <textarea class="inp" id="coachInput" rows="4" placeholder="e.g. I'm 27% body fat and want to get down to 18%. I train 4 days a week and want to do it safely without losing muscle." style="min-height:100px"></textarea>
+
+  <button class="btn btn-g" style="margin-bottom:12px;gap:8px" id="coachBtn" onclick="runCoach()">
+    <span style="font-size:16px">✨</span> Build My Plan
+  </button>
+
+  <div id="coachResult" style="display:none"></div>
+
+  <button class="btn btn-s" style="margin-top:8px" onclick="closeModal('coachModal')">Close</button>
+</div>
+</div>
+
 <div class="tabs" id="tabs"><button class="ti on" id="tH" onclick="goTab('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="ti-l">Home</span></button><button class="ti" id="tE" onclick="goTab('ex')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="ti-l">Exercise</span></button></div>
 <div class="fab" id="fab" onclick="openModal('foodModal')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
 <div class="toast" id="toast"></div>
@@ -201,7 +270,115 @@ function resetF(){$('fR').style.display='none';$('eA').style.display='none';$('c
 function eT(t,el){document.querySelectorAll('#exModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('eM').style.display=t==='man'?'block':'none';$('eSS').style.display=t==='ss'?'block':'none'}
 async function saveEx(){const c=+$('eCIn').value,s=+$('eSIn').value||0;if(!c||c<1)return toast('Enter calories burned');const{data:ex}=await sb.from('workouts').select('id').eq('user_id',user.id).eq('date',td()).maybeSingle();const p={user_id:user.id,date:td(),calories_burned:c,steps:s,workout_type:'Exercise',duration_minutes:0,effort:5};await(ex?sb.from('workouts').update(p).eq('id',ex.id):sb.from('workouts').insert(p));closeModal('exModal');await loadEx();renderHome();renderEx();toast('✓ '+c+' kcal logged')}
 async function onESS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{const b64=ev.target.result.split(',')[1];$('eSSD').innerHTML=`<img src="${ev.target.result}">`;$('eSSR').style.display='block';$('eSSR').innerHTML='<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:12px">Reading screenshot…</span></div>';try{const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:f.type,data:b64}},{type:'text',text:'Extract calories burned and steps from this fitness screenshot. JSON only: {"calories_burned":number,"steps":number,"summary":"one sentence"}'}]}]})});const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;exSSdata=JSON.parse(mt[0]);$('eSSR').innerHTML=`<div style="background:var(--grn-g);border-radius:11px;padding:12px;margin:10px 0;border:1px solid rgba(46,204,113,.2)"><div style="font-size:12px;font-weight:700;color:var(--grn)">✓ ${exSSdata.calories_burned} kcal${exSSdata.steps?' · '+exSSdata.steps.toLocaleString()+' steps':''}</div><div style="font-size:11px;color:var(--tx2);margin-top:3px">${exSSdata.summary||''}</div></div>`;$('eSSB').style.display='block'}catch(e){$('eSSR').innerHTML='<div style="padding:12px;text-align:center;color:var(--tx3);font-size:12px">Could not read. Enter manually.</div>'}};r.readAsDataURL(f)}
-async function saveESSx(){if(!exSSdata)return;$('eCIn').value=exSSdata.calories_burned;$('eSIn').value=exSSdata.steps||'';await saveEx();exSSdata=null}
+async function saveESSx(){
+  if(!exSSdata)return;
+  const c=exSSdata.calories_burned||0,s=exSSdata.steps||0;
+  if(!c)return toast('No calorie data found');
+  const{data:ex}=await sb.from('workouts').select('id').eq('user_id',user.id).eq('date',td()).maybeSingle();
+  const p={user_id:user.id,date:td(),calories_burned:c,steps:s,workout_type:'Exercise',duration_minutes:0,effort:5};
+  await(ex?sb.from('workouts').update(p).eq('id',ex.id):sb.from('workouts').insert(p));
+  closeModal('exModal');exSSdata=null;await loadEx();renderHome();renderEx();toast('✓ '+c+' kcal logged');
+}
+
+// ── Settings ──
+let settingSex='male';
+function openSettings(){
+  if(!profile)return;
+  $('setW').value=profile.weight_kg||'';$('setH').value=profile.height_cm||'';$('setA').value=profile.age||'';
+  $('setBF').value=profile.body_fat_pct||'';$('setBMR').value=profile.bmr_override||'';
+  settingSex=profile.sex||'male';
+  $('setSexM').classList.toggle('on',settingSex==='male');$('setSexF').classList.toggle('on',settingSex==='female');
+  $('setTargetPreview').textContent=tgt();
+  const b=bmr(),g=profile.goal,d=+(profile.deficit||500);
+  $('setTargetFormula').textContent=`BMR ${b} ${g==='fat_loss'?'− '+d:g==='muscle'?'+ '+Math.round(d/2):''} = ${tgt()} kcal`;
+  openModal('settingsModal');
+}
+function setField(f,v){
+  if(f==='sex'){settingSex=v;$('setSexM').classList.toggle('on',v==='male');$('setSexF').classList.toggle('on',v==='female')}
+}
+async function saveSettings(){
+  const updates={
+    weight_kg:+$('setW').value||profile.weight_kg,
+    height_cm:+$('setH').value||profile.height_cm,
+    age:+$('setA').value||profile.age,
+    sex:settingSex,
+    body_fat_pct:+$('setBF').value||null,
+    bmr_override:+$('setBMR').value||null
+  };
+  const{error}=await sb.from('profiles').update(updates).eq('id',user.id);
+  if(error)return toast(error.message);
+  await loadProfile();closeModal('settingsModal');renderHome();toast('✓ Stats updated · target: '+tgt()+' kcal');
+}
+async function signOut(){
+  await sb.auth.signOut();
+  user=null;profile=null;foodLogs=[];burnedCals=0;stepsCount=0;
+  $('tabs').classList.remove('show');$('fab').classList.remove('show');
+  show('authScreen');toast('Signed out');
+}
+
+// ── AI Coach ──
+async function runCoach(){
+  const input=$('coachInput').value.trim();
+  if(!input)return toast('Describe your goal');
+  const btn=$('coachBtn');btn.disabled=true;btn.innerHTML='<div class="sp" style="width:16px;height:16px;border-width:2px"></div> Thinking...';
+  const b=bmr(),w=profile?.weight_kg||'?',h=profile?.height_cm||'?',a=profile?.age||'?',s=profile?.sex||'?',bf=profile?.body_fat_pct||'unknown';
+  try{
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A user wants help setting their calorie goals.
+
+Their stats: Weight ${w}kg, Height ${h}cm, Age ${a}, Sex ${s}, Body fat ${bf}%, Current BMR ${b} kcal.
+
+Their goal: "${input}"
+
+Based on their stats and goal, calculate exactly:
+1. Whether they need a calorie deficit or surplus
+2. How much of a deficit/surplus per day (in kcal)
+3. Their daily calorie target
+4. Estimated timeline to reach their goal
+5. Recommended macro split (protein/carbs/fat in grams)
+
+Return JSON only:
+{"goal_type":"fat_loss/muscle/maintain","daily_target":number,"deficit_or_surplus":number,"protein_g":number,"carbs_g":number,"fat_g":number,"timeline":"X weeks/months","explanation":"2-3 sentences explaining the plan simply","tip":"one practical tip"}`}]})});
+    const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';
+    const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;
+    const plan=JSON.parse(mt[0]);
+    $('coachResult').style.display='block';
+    $('coachResult').innerHTML=`
+      <div style="background:var(--s2);border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:12px">
+        <div style="padding:16px;border-bottom:1px solid var(--bd)">
+          <div style="font-size:10px;font-weight:700;color:var(--grn);letter-spacing:.8px;margin-bottom:6px">YOUR AI PLAN</div>
+          <div style="font-size:13px;color:var(--tx2);line-height:1.6">${plan.explanation}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--bd)">
+          <div style="padding:14px;text-align:center;border-right:1px solid var(--bd)">
+            <div style="font-family:'Instrument Serif',serif;font-size:32px;color:var(--grn)">${plan.daily_target}</div>
+            <div style="font-size:9px;color:var(--tx3);margin-top:2px">KCAL / DAY</div>
+          </div>
+          <div style="padding:14px;text-align:center">
+            <div style="font-family:'Instrument Serif',serif;font-size:32px;color:${plan.goal_type==='fat_loss'?'var(--red)':'var(--grn)'}">${plan.goal_type==='fat_loss'?'−':'+'}${Math.abs(plan.deficit_or_surplus)}</div>
+            <div style="font-size:9px;color:var(--tx3);margin-top:2px">${plan.goal_type==='fat_loss'?'DEFICIT':'SURPLUS'}</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)">
+          <div style="padding:12px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--blu)">${plan.protein_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">PROTEIN</div></div>
+          <div style="padding:12px;text-align:center;border-left:1px solid var(--bd);border-right:1px solid var(--bd)"><div style="font-size:18px;font-weight:700;color:var(--amb)">${plan.carbs_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">CARBS</div></div>
+          <div style="padding:12px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--pur)">${plan.fat_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">FAT</div></div>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:12px;color:var(--tx2);margin-bottom:6px">⏱ Estimated timeline: <b style="color:var(--tx)">${plan.timeline}</b></div>
+          <div style="font-size:12px;color:var(--tx2)">💡 ${plan.tip}</div>
+        </div>
+      </div>
+      <button class="btn btn-g" onclick="applyCoachPlan('${plan.goal_type}',${plan.daily_target},${plan.deficit_or_surplus})">Apply This Plan</button>`;
+  }catch(e){$('coachResult').style.display='block';$('coachResult').innerHTML='<div style="padding:16px;text-align:center;color:var(--tx3);font-size:12px">Failed. Check connection and try again.</div>'}
+  btn.disabled=false;btn.innerHTML='<span style="font-size:16px">✨</span> Build My Plan';
+}
+async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
+  const b=bmr();const deficit=Math.abs(deficitAmt);
+  const{error}=await sb.from('profiles').update({goal:goalType,deficit:deficit}).eq('id',user.id);
+  if(error)return toast(error.message);
+  await loadProfile();closeModal('coachModal');renderHome();
+  toast('✓ Plan applied · '+dailyTarget+' kcal/day');
+}
 function openDetail(){const t=tgt(),to=tots(),b=bmr(),m=macs(t),g=profile.goal,d=+(profile.deficit||500),rem=t-to.k,over=rem<0;
 $('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:14px;margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Your BMR</span><span style="font-weight:700">${b} kcal</span></div>${g!=='maintain'?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">${g==='fat_loss'?'Deficit':'Surplus'}</span><span style="font-weight:700;color:${g==='fat_loss'?'var(--red)':'var(--grn)'}">${g==='fat_loss'?'−'+d:'+'+Math.round(d/2)}</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:700;font-size:14px">Daily target</span><span style="font-weight:700;font-size:18px;color:var(--grn)">${t} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Eaten</span><span style="font-weight:700">${to.k} kcal</span></div>${burnedCals?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Burned (bonus)</span><span style="font-weight:700;color:var(--blu)">${burnedCals} kcal</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between"><span style="font-weight:700;font-size:14px">${over?'Over limit':'Left to eat'}</span><span style="font-weight:700;font-size:22px;color:${over?'var(--red)':'var(--grn)'}">${Math.abs(rem)} kcal</span></div></div>${over?`<div style="background:var(--red-g);border:1px solid rgba(239,83,80,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You're <b style="color:var(--red)">${Math.abs(rem)} kcal over</b>. A ${Math.round(Math.abs(rem)/5)} min walk or ${Math.round(Math.abs(rem)/10)} min jog would balance it out.</div>`:rem>100?`<div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You have <b style="color:var(--grn)">${rem} kcal left</b> to eat today.</div>`:''}<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">MACROS</div>${[{l:'Protein',v:Math.round(to.p),t:m.p,c:'var(--blu)'},{l:'Carbs',v:Math.round(to.c),t:m.c,c:'var(--amb)'},{l:'Fat',v:Math.round(to.f),t:m.f,c:'var(--pur)'}].map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:8px;height:8px;border-radius:4px;background:${x.c}"></div><div style="flex:1;font-size:13px;color:var(--tx2)">${x.l}</div><div style="width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(x.v/x.t)*100)}%;background:${x.c};border-radius:2px"></div></div><div style="font-size:13px;font-weight:700;min-width:65px;text-align:right">${x.v}g / ${x.t}g</div></div>`).join('')}`;openModal('detailModal')}
 async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}}
