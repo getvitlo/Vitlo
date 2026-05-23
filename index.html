@@ -167,6 +167,7 @@ function closeModal(id){$(id).classList.remove('open')}
 function closeO(e,id){if(e.target.id===id)closeModal(id)}
 function showUI(){$('tabs').classList.add('show');$('fab').classList.add('show')}
 function bmr(){
+  if(+(profile?.bmr_override)>0)return +profile.bmr_override;
   const w=+(profile?.weight_kg||ob.weight)||75,h=+(profile?.height_cm||ob.height)||175,a=+(profile?.age||ob.age)||25,s=profile?.sex||ob.sex;
   return s==='male'?Math.round(10*w+6.25*h-5*a+5):Math.round(10*w+6.25*h-5*a-161);
 }
@@ -189,14 +190,14 @@ function renderOb(){
   $('obBar').style.width=(obStep/3*100)+'%';$('obLbl').textContent=`STEP ${obStep} OF 3`;$('obBtn').textContent=obStep===3?'Start tracking':'Continue';
   const c=$('obC');
   if(obStep===1)c.innerHTML=`<div class="ob-h">About you</div><div class="ob-p">We'll personalise your calorie target.</div><label class="lbl">Name</label><input class="inp" id="oN" value="${ob.name}" placeholder="First name"><label class="lbl">Age</label><input class="inp" type="number" id="oA" value="${ob.age}" placeholder="e.g. 28" inputmode="numeric"><label class="lbl">Sex</label><div class="seg"><div class="seg-b ${ob.sex==='male'?'on':''}" onclick="ob.sex='male';renderOb()">Male</div><div class="seg-b ${ob.sex==='female'?'on':''}" onclick="ob.sex='female';renderOb()">Female</div></div>`;
-  else if(obStep===2)c.innerHTML=`<div class="ob-h">Body stats</div><div class="ob-p">Used to calculate your BMR — how many calories your body burns at rest.</div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="oW" value="${ob.weight}" placeholder="e.g. 81" inputmode="decimal"><label class="lbl">Height (cm)</label><input class="inp" type="number" id="oH" value="${ob.height}" placeholder="e.g. 178" inputmode="decimal">`;
+  else if(obStep===2)c.innerHTML=`<div class="ob-h">Body stats</div><div class="ob-p">Used to calculate your BMR — how many calories your body burns at rest.</div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="oW" value="${ob.weight}" placeholder="e.g. 81" inputmode="decimal"><label class="lbl">Height (cm)</label><input class="inp" type="number" id="oH" value="${ob.height}" placeholder="e.g. 178" inputmode="decimal"><label class="lbl">Body fat % (optional)</label><input class="inp" type="number" id="oBF" value="${ob.bf}" placeholder="e.g. 27 — leave blank if unsure" inputmode="decimal">`;
   else if(obStep===3){const b=bmr(),t=tgt();c.innerHTML=`<div class="ob-h">Your goal</div><div class="ob-p">Pick one. We'll calculate your daily calorie target.</div><div class="go ${ob.goal==='fat_loss'?'on':''}" onclick="ob.goal='fat_loss';renderOb()"><div class="go-d"></div><div><div class="go-t">Lose Fat</div><div class="go-s">BMR − 500 kcal · ~0.5kg/week</div></div></div><div class="go ${ob.goal==='maintain'?'on':''}" onclick="ob.goal='maintain';renderOb()"><div class="go-d"></div><div><div class="go-t">Maintain</div><div class="go-s">Eat at your BMR</div></div></div><div class="go ${ob.goal==='muscle'?'on':''}" onclick="ob.goal='muscle';renderOb()"><div class="go-d"></div><div><div class="go-t">Build Muscle</div><div class="go-s">BMR + 250 kcal · lean surplus</div></div></div><div class="pv"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1px">YOUR DAILY TARGET</div><div class="pv-n">${t}</div><div class="pv-u">KCAL / DAY</div><div class="pv-d">BMR ${b} ${ob.goal==='fat_loss'?'− 500':ob.goal==='muscle'?'+ 250':''} = ${t} kcal</div></div>`}
 }
 async function obNext(){
   if(obStep===1){ob.name=$('oN').value.trim();ob.age=$('oA').value;if(!ob.name)return toast('Enter your name');if(!ob.age||+ob.age<13)return toast('Enter a valid age')}
   else if(obStep===2){ob.weight=$('oW').value;ob.height=$('oH').value;ob.bf=$('oBF')?.value||'';if(!ob.weight||+ob.weight<30)return toast('Enter your weight');if(!ob.height||+ob.height<100)return toast('Enter your height')}
   if(obStep<3){obStep++;renderOb();return}
-  const{error}=await sb.from('profiles').upsert({id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,weight_kg:+ob.weight,height_cm:+ob.height,goal:ob.goal,onboarded:true});
+  const{error}=await sb.from('profiles').upsert({id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,weight_kg:+ob.weight,height_cm:+ob.height,goal:ob.goal,onboarded:true,body_fat_pct:+ob.bf||null,deficit:500,target_body_fat_pct:+ob.bfTarget||null});
   if(error)return toast(error.message);await loadProfile();show('homeScreen');showUI();renderHome()
 }
 async function loadProfile(){const{data}=await sb.from('profiles').select('*').eq('id',user.id).single();profile=data}
@@ -280,7 +281,7 @@ let settingSex='male';
 function openSettings(){
   if(!profile)return;
   $('setW').value=profile.weight_kg||'';$('setH').value=profile.height_cm||'';$('setA').value=profile.age||'';
-  $('setBF').value='';$('setBMR').value=bmr();
+  $('setBF').value=profile.body_fat_pct||'';$('setBMR').value=profile.bmr_override||'';
   settingSex=profile.sex||'male';
   $('setSexM').classList.toggle('on',settingSex==='male');$('setSexF').classList.toggle('on',settingSex==='female');
   $('setTargetPreview').textContent=tgt();
@@ -296,7 +297,9 @@ async function saveSettings(){
     weight_kg:+$('setW').value||profile.weight_kg,
     height_cm:+$('setH').value||profile.height_cm,
     age:+$('setA').value||profile.age,
-    sex:settingSex
+    sex:settingSex,
+    body_fat_pct:+$('setBF').value||null,
+    bmr_override:+$('setBMR').value||null
   };
   const{error}=await sb.from('profiles').update(updates).eq('id',user.id);
   if(error)return toast(error.message);
@@ -314,7 +317,7 @@ async function runCoach(){
   const input=$('coachInput').value.trim();
   if(!input)return toast('Describe your goal');
   const btn=$('coachBtn');btn.disabled=true;btn.innerHTML='<div class="sp" style="width:16px;height:16px;border-width:2px"></div> Thinking...';
-  const b=bmr(),w=profile?.weight_kg||'?',h=profile?.height_cm||'?',a=profile?.age||'?',s=profile?.sex||'?',bf='unknown';
+  const b=bmr(),w=profile?.weight_kg||'?',h=profile?.height_cm||'?',a=profile?.age||'?',s=profile?.sex||'?',bf=profile?.body_fat_pct||'unknown';
   try{
     const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A user wants help setting their calorie goals.
 
@@ -366,7 +369,7 @@ Return JSON only:
   btn.disabled=false;btn.innerHTML='<span style="font-size:16px">✨</span> Build My Plan';
 }
 async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
-  const{error}=await sb.from('profiles').update({goal:goalType}).eq('id',user.id);
+  const{error}=await sb.from('profiles').update({goal:goalType,deficit:Math.abs(deficitAmt)}).eq('id',user.id);
   if(error)return toast(error.message);
   await loadProfile();closeModal('coachModal');renderHome();
   toast('✓ Plan applied · '+dailyTarget+' kcal/day');
