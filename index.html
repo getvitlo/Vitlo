@@ -167,14 +167,13 @@ function closeModal(id){$(id).classList.remove('open')}
 function closeO(e,id){if(e.target.id===id)closeModal(id)}
 function showUI(){$('tabs').classList.add('show');$('fab').classList.add('show')}
 function bmr(){
-  if(profile?.bmr_override>0)return profile.bmr_override;
   const w=+(profile?.weight_kg||ob.weight)||75,h=+(profile?.height_cm||ob.height)||175,a=+(profile?.age||ob.age)||25,s=profile?.sex||ob.sex;
   return s==='male'?Math.round(10*w+6.25*h-5*a+5):Math.round(10*w+6.25*h-5*a-161);
 }
 function tgt(){
-  const b=bmr(),g=profile?.goal||ob.goal,d=+(profile?.deficit||ob.intensity)||500;
-  if(g==='fat_loss')return Math.max(1200,b-d);
-  if(g==='muscle')return b+Math.round(d/2);
+  const b=bmr(),g=profile?.goal||ob.goal;
+  if(g==='fat_loss')return Math.max(1200,b-500);
+  if(g==='muscle')return b+250;
   return b;
 }
 function macs(t){
@@ -201,7 +200,7 @@ async function obNext(){
   else if(obStep===2){ob.weight=$('oW').value;ob.height=$('oH').value;ob.bf=$('oBF')?.value||'';ob.bmrOverride=$('oBMR')?.value||'';if(!ob.weight||+ob.weight<30)return toast('Enter your weight');if(!ob.height||+ob.height<100)return toast('Enter your height')}
   else if(obStep===3){ob.bfTarget=$('oBFT')?.value||''}
   if(obStep<4){obStep++;renderOb();return}
-  const{error}=await sb.from('profiles').upsert({id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,weight_kg:+ob.weight,height_cm:+ob.height,goal:ob.goal,deficit:ob.intensity,onboarded:true,body_fat_pct:+ob.bf||null,target_body_fat_pct:+ob.bfTarget||null,bmr_override:+ob.bmrOverride||null});
+  const{error}=await sb.from('profiles').upsert({id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,weight_kg:+ob.weight,height_cm:+ob.height,goal:ob.goal,onboarded:true,body_fat_pct:+ob.bf||null});
   if(error)return toast(error.message);await loadProfile();show('homeScreen');showUI();renderHome()
 }
 async function loadProfile(){const{data}=await sb.from('profiles').select('*').eq('id',user.id).single();profile=data}
@@ -285,12 +284,12 @@ let settingSex='male';
 function openSettings(){
   if(!profile)return;
   $('setW').value=profile.weight_kg||'';$('setH').value=profile.height_cm||'';$('setA').value=profile.age||'';
-  $('setBF').value=profile.body_fat_pct||'';$('setBMR').value=profile.bmr_override||'';
+  $('setBF').value=profile.body_fat_pct||'';$('setBMR').value=bmr();
   settingSex=profile.sex||'male';
   $('setSexM').classList.toggle('on',settingSex==='male');$('setSexF').classList.toggle('on',settingSex==='female');
   $('setTargetPreview').textContent=tgt();
-  const b=bmr(),g=profile.goal,d=+(profile.deficit||500);
-  $('setTargetFormula').textContent=`BMR ${b} ${g==='fat_loss'?'− '+d:g==='muscle'?'+ '+Math.round(d/2):''} = ${tgt()} kcal`;
+  const b=bmr(),g=profile.goal;
+  $('setTargetFormula').textContent=`BMR ${b} ${g==='fat_loss'?'− 500':g==='muscle'?'+ 250':''} = ${tgt()} kcal`;
   openModal('settingsModal');
 }
 function setField(f,v){
@@ -302,8 +301,7 @@ async function saveSettings(){
     height_cm:+$('setH').value||profile.height_cm,
     age:+$('setA').value||profile.age,
     sex:settingSex,
-    body_fat_pct:+$('setBF').value||null,
-    bmr_override:+$('setBMR').value||null
+    body_fat_pct:+$('setBF').value||null
   };
   const{error}=await sb.from('profiles').update(updates).eq('id',user.id);
   if(error)return toast(error.message);
@@ -373,14 +371,13 @@ Return JSON only:
   btn.disabled=false;btn.innerHTML='<span style="font-size:16px">✨</span> Build My Plan';
 }
 async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
-  const b=bmr();const deficit=Math.abs(deficitAmt);
-  const{error}=await sb.from('profiles').update({goal:goalType,deficit:deficit}).eq('id',user.id);
+  const{error}=await sb.from('profiles').update({goal:goalType}).eq('id',user.id);
   if(error)return toast(error.message);
   await loadProfile();closeModal('coachModal');renderHome();
   toast('✓ Plan applied · '+dailyTarget+' kcal/day');
 }
-function openDetail(){const t=tgt(),to=tots(),b=bmr(),m=macs(t),g=profile.goal,d=+(profile.deficit||500),rem=t-to.k,over=rem<0;
-$('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:14px;margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Your BMR</span><span style="font-weight:700">${b} kcal</span></div>${g!=='maintain'?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">${g==='fat_loss'?'Deficit':'Surplus'}</span><span style="font-weight:700;color:${g==='fat_loss'?'var(--red)':'var(--grn)'}">${g==='fat_loss'?'−'+d:'+'+Math.round(d/2)}</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:700;font-size:14px">Daily target</span><span style="font-weight:700;font-size:18px;color:var(--grn)">${t} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Eaten</span><span style="font-weight:700">${to.k} kcal</span></div>${burnedCals?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Burned (bonus)</span><span style="font-weight:700;color:var(--blu)">${burnedCals} kcal</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between"><span style="font-weight:700;font-size:14px">${over?'Over limit':'Left to eat'}</span><span style="font-weight:700;font-size:22px;color:${over?'var(--red)':'var(--grn)'}">${Math.abs(rem)} kcal</span></div></div>${over?`<div style="background:var(--red-g);border:1px solid rgba(239,83,80,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You're <b style="color:var(--red)">${Math.abs(rem)} kcal over</b>. A ${Math.round(Math.abs(rem)/5)} min walk or ${Math.round(Math.abs(rem)/10)} min jog would balance it out.</div>`:rem>100?`<div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You have <b style="color:var(--grn)">${rem} kcal left</b> to eat today.</div>`:''}<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">MACROS</div>${[{l:'Protein',v:Math.round(to.p),t:m.p,c:'var(--blu)'},{l:'Carbs',v:Math.round(to.c),t:m.c,c:'var(--amb)'},{l:'Fat',v:Math.round(to.f),t:m.f,c:'var(--pur)'}].map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:8px;height:8px;border-radius:4px;background:${x.c}"></div><div style="flex:1;font-size:13px;color:var(--tx2)">${x.l}</div><div style="width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(x.v/x.t)*100)}%;background:${x.c};border-radius:2px"></div></div><div style="font-size:13px;font-weight:700;min-width:65px;text-align:right">${x.v}g / ${x.t}g</div></div>`).join('')}`;openModal('detailModal')}
+function openDetail(){const t=tgt(),to=tots(),b=bmr(),m=macs(t),g=profile.goal,rem=t-to.k,over=rem<0;
+$('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:14px;margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Your BMR</span><span style="font-weight:700">${b} kcal</span></div>${g!=='maintain'?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">${g==='fat_loss'?'Deficit':'Surplus'}</span><span style="font-weight:700;color:${g==='fat_loss'?'var(--red)':'var(--grn)'}">${g==='fat_loss'?'−500':'+250'}</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:700;font-size:14px">Daily target</span><span style="font-weight:700;font-size:18px;color:var(--grn)">${t} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Eaten</span><span style="font-weight:700">${to.k} kcal</span></div>${burnedCals?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Burned (bonus)</span><span style="font-weight:700;color:var(--blu)">${burnedCals} kcal</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between"><span style="font-weight:700;font-size:14px">${over?'Over limit':'Left to eat'}</span><span style="font-weight:700;font-size:22px;color:${over?'var(--red)':'var(--grn)'}">${Math.abs(rem)} kcal</span></div></div>${over?`<div style="background:var(--red-g);border:1px solid rgba(239,83,80,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You're <b style="color:var(--red)">${Math.abs(rem)} kcal over</b>. A ${Math.round(Math.abs(rem)/5)} min walk or ${Math.round(Math.abs(rem)/10)} min jog would balance it out.</div>`:rem>100?`<div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You have <b style="color:var(--grn)">${rem} kcal left</b> to eat today.</div>`:''}<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">MACROS</div>${[{l:'Protein',v:Math.round(to.p),t:m.p,c:'var(--blu)'},{l:'Carbs',v:Math.round(to.c),t:m.c,c:'var(--amb)'},{l:'Fat',v:Math.round(to.f),t:m.f,c:'var(--pur)'}].map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:8px;height:8px;border-radius:4px;background:${x.c}"></div><div style="flex:1;font-size:13px;color:var(--tx2)">${x.l}</div><div style="width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(x.v/x.t)*100)}%;background:${x.c};border-radius:2px"></div></div><div style="font-size:13px;font-weight:700;min-width:65px;text-align:right">${x.v}g / ${x.t}g</div></div>`).join('')}`;openModal('detailModal')}
 async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}}
 async function init(){const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
 async function boot(){await loadProfile();if(!profile?.onboarded){show('obScreen');renderOb();return}await Promise.all([loadFood(),loadEx()]);show('homeScreen');showUI();renderHome();renderEx()}
