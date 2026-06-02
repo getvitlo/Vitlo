@@ -157,7 +157,7 @@ textarea.inp{resize:none;line-height:1.5}
 const SB='https://tvhkxsnmfcnwaxeadxeg.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio',PX='https://vitlo-proxy.vercel.app/api/claude';
 const sb=supabase.createClient(SB,SK);
 let user=null,profile=null,foodLogs=[],burnedCals=0,stepsCount=0,authMode='signin',obStep=1;
-let ob={name:'',age:'',sex:'male',weight:'',height:'',bf:'',bfTarget:'',goal:'fat_loss',intensity:500,bmrOverride:''};
+let ob={name:'',age:'',sex:'male',weight:'',height:'',bf:'',bfTarget:'',goal:'fat_loss',intensity:500,bmrOverride:'',goalText:'',aiPlan:null};
 let aiRes=null,photoB64=null,exSSdata=null;
 const $=id=>document.getElementById(id),td=()=>new Date().toISOString().split('T')[0];
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active')}
@@ -172,11 +172,10 @@ function bmr(){
   return s==='male'?Math.round(10*w+6.25*h-5*a+5):Math.round(10*w+6.25*h-5*a-161);
 }
 function tgt(){
-  // BMR × 1.3 for daily living (walking, working, cooking — NOT exercise)
-  // Exercise is tracked separately via Whoop/manual input
   const b=bmr(),tdee=Math.round(b*1.3),g=profile?.goal||ob.goal;
-  if(g==='fat_loss')return Math.max(1400,tdee-500);
-  if(g==='muscle')return tdee+250;
+  const d=+(profile?.deficit)||500;
+  if(g==='fat_loss')return Math.max(1400,tdee-d);
+  if(g==='muscle')return tdee+Math.round(d/2);
   return tdee;
 }
 function macs(t){
@@ -189,18 +188,110 @@ function tots(){return foodLogs.reduce((a,x)=>({k:a.k+(+x.calories||0),p:a.p+(+x
 function flipAuth(){authMode=authMode==='signin'?'signup':'signin';$('authTitle').textContent=authMode==='signin'?'Welcome back':'Create your account';$('aB').textContent=authMode==='signin'?'Sign In':'Create Account';$('aSw').innerHTML=authMode==='signin'?'No account? <b>Sign up free</b>':'Have an account? <b>Sign in</b>'}
 async function doAuth(){const e=$('aE').value.trim(),p=$('aP').value;if(!e||!p)return toast('Enter email and password');if(p.length<6)return toast('Password: 6+ characters');$('aB').disabled=true;$('aB').textContent='...';const{error}=authMode==='signin'?await sb.auth.signInWithPassword({email:e,password:p}):await sb.auth.signUp({email:e,password:p});$('aB').disabled=false;$('aB').textContent=authMode==='signin'?'Sign In':'Create Account';if(error)return toast(error.message);if(authMode==='signup')toast('Check email to confirm')}
 function renderOb(){
-  $('obBar').style.width=(obStep/3*100)+'%';$('obLbl').textContent=`STEP ${obStep} OF 3`;$('obBtn').textContent=obStep===3?'Start tracking':'Continue';
+  $('obBar').style.width=(obStep/3*100)+'%';$('obLbl').textContent=`STEP ${obStep} OF 3`;
+  $('obBtn').textContent=obStep===2?'🤖 Build My Plan':obStep===3?'Start Tracking':'Continue';
   const c=$('obC');
-  if(obStep===1)c.innerHTML=`<div class="ob-h">About you</div><div class="ob-p">We'll personalise your calorie target.</div><label class="lbl">Name</label><input class="inp" id="oN" value="${ob.name}" placeholder="First name"><label class="lbl">Age</label><input class="inp" type="number" id="oA" value="${ob.age}" placeholder="e.g. 28" inputmode="numeric"><label class="lbl">Sex</label><div class="seg"><div class="seg-b ${ob.sex==='male'?'on':''}" onclick="ob.sex='male';renderOb()">Male</div><div class="seg-b ${ob.sex==='female'?'on':''}" onclick="ob.sex='female';renderOb()">Female</div></div>`;
-  else if(obStep===2)c.innerHTML=`<div class="ob-h">Body stats</div><div class="ob-p">Used to calculate your BMR — how many calories your body burns at rest.</div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="oW" value="${ob.weight}" placeholder="e.g. 81" inputmode="decimal"><label class="lbl">Height (cm)</label><input class="inp" type="number" id="oH" value="${ob.height}" placeholder="e.g. 178" inputmode="decimal"><label class="lbl">Body fat % (optional)</label><input class="inp" type="number" id="oBF" value="${ob.bf}" placeholder="e.g. 27 — leave blank if unsure" inputmode="decimal">`;
-  else if(obStep===3){const b=bmr(),t=tgt();c.innerHTML=`<div class="ob-h">Your goal</div><div class="ob-p">Pick one. We'll calculate your daily calorie target.</div><div class="go ${ob.goal==='fat_loss'?'on':''}" onclick="ob.goal='fat_loss';renderOb()"><div class="go-d"></div><div><div class="go-t">Lose Fat</div><div class="go-s">BMR − 500 kcal · ~0.5kg/week</div></div></div><div class="go ${ob.goal==='maintain'?'on':''}" onclick="ob.goal='maintain';renderOb()"><div class="go-d"></div><div><div class="go-t">Maintain</div><div class="go-s">Eat at your BMR</div></div></div><div class="go ${ob.goal==='muscle'?'on':''}" onclick="ob.goal='muscle';renderOb()"><div class="go-d"></div><div><div class="go-t">Build Muscle</div><div class="go-s">BMR + 250 kcal · lean surplus</div></div></div><div class="pv"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1px">YOUR DAILY TARGET</div><div class="pv-n">${t}</div><div class="pv-u">KCAL / DAY</div><div class="pv-d">BMR ${b} × 1.3 daily activity = ${Math.round(b*1.3)}${ob.goal==='fat_loss'?' − 500':ob.goal==='muscle'?' + 250':''} = ${t} kcal</div></div>`}
+  if(obStep===1)c.innerHTML=`<div class="ob-h">About you</div><div class="ob-p">The basics — we'll use these to calculate your metabolism.</div>
+    <label class="lbl">Name</label><input class="inp" id="oN" value="${ob.name}" placeholder="First name">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label class="lbl">Age</label><input class="inp" type="number" id="oA" value="${ob.age}" placeholder="e.g. 28" inputmode="numeric"></div>
+      <div><label class="lbl">Sex</label><div class="seg" style="margin:0"><div class="seg-b ${ob.sex==='male'?'on':''}" onclick="ob.sex='male';renderOb()">Male</div><div class="seg-b ${ob.sex==='female'?'on':''}" onclick="ob.sex='female';renderOb()">Female</div></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="oW" value="${ob.weight}" placeholder="e.g. 81" inputmode="decimal"></div>
+      <div><label class="lbl">Height (cm)</label><input class="inp" type="number" id="oH" value="${ob.height}" placeholder="e.g. 178" inputmode="decimal"></div>
+    </div>`;
+  else if(obStep===2)c.innerHTML=`<div class="ob-h">Tell us about yourself</div><div class="ob-p">Describe your current situation and what you want to achieve. The more detail the better — our AI will build a personalised calorie and nutrition plan just for you.</div>
+    <textarea class="inp" id="oGoalText" rows="6" style="min-height:140px;line-height:1.6" placeholder="I'm currently about 27% body fat and my aim is to drop down to about 16% while maintaining and growing muscle. I work a desk job and train about 4 times a week doing weights. I want to do this properly without crash dieting.">${ob.goalText||''}</textarea>
+    <div style="font-size:11px;color:var(--tx3);margin-top:-4px;line-height:1.5">Include things like: your current body fat %, your target, whether you want to lose weight or gain muscle, how active you are, any dietary preferences.</div>`;
+  else if(obStep===3){
+    if(ob.aiPlan){
+      const p=ob.aiPlan;
+      c.innerHTML=`<div class="ob-h">Your plan</div><div class="ob-p">Here's what the AI recommends based on what you told us.</div>
+        <div style="background:var(--s2);border:1px solid var(--bd);border-radius:16px;overflow:hidden;margin-bottom:14px">
+          <div style="padding:16px;border-bottom:1px solid var(--bd)">
+            <div style="font-size:10px;font-weight:700;color:var(--grn);letter-spacing:.8px;margin-bottom:8px">YOUR AI PLAN</div>
+            <div style="font-size:13px;color:var(--tx2);line-height:1.6">${p.explanation}</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--bd)">
+            <div style="padding:16px;text-align:center;border-right:1px solid var(--bd)">
+              <div style="font-family:'Instrument Serif',serif;font-size:40px;color:var(--grn)">${p.daily_target}</div>
+              <div style="font-size:9px;color:var(--tx3);margin-top:2px">KCAL / DAY</div>
+            </div>
+            <div style="padding:16px;text-align:center">
+              <div style="font-family:'Instrument Serif',serif;font-size:40px;color:${p.goal_type==='fat_loss'?'var(--red)':'var(--grn)'}">${p.goal_type==='fat_loss'?'−':'+'}${Math.abs(p.deficit_or_surplus)}</div>
+              <div style="font-size:9px;color:var(--tx3);margin-top:2px">${p.goal_type==='fat_loss'?'DEFICIT':'SURPLUS'}</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)">
+            <div style="padding:12px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--blu)">${p.protein_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">PROTEIN</div></div>
+            <div style="padding:12px;text-align:center;border-left:1px solid var(--bd);border-right:1px solid var(--bd)"><div style="font-size:18px;font-weight:700;color:var(--amb)">${p.carbs_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">CARBS</div></div>
+            <div style="padding:12px;text-align:center"><div style="font-size:18px;font-weight:700;color:var(--pur)">${p.fat_g}g</div><div style="font-size:9px;color:var(--tx3);margin-top:1px">FAT</div></div>
+          </div>
+          <div style="padding:14px">
+            <div style="font-size:12px;color:var(--tx2);margin-bottom:6px">⏱ ${p.timeline}</div>
+            <div style="font-size:12px;color:var(--tx2)">💡 ${p.tip}</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--tx3);text-align:center;margin-bottom:8px">You can adjust this anytime in Settings → AI Coach</div>`;
+    } else {
+      c.innerHTML=`<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:13px">Building your plan...</span></div>`;
+    }
+  }
 }
 async function obNext(){
-  if(obStep===1){ob.name=$('oN').value.trim();ob.age=$('oA').value;if(!ob.name)return toast('Enter your name');if(!ob.age||+ob.age<13)return toast('Enter a valid age')}
-  else if(obStep===2){ob.weight=$('oW').value;ob.height=$('oH').value;ob.bf=$('oBF')?.value||'';if(!ob.weight||+ob.weight<30)return toast('Enter your weight');if(!ob.height||+ob.height<100)return toast('Enter your height')}
-  if(obStep<3){obStep++;renderOb();return}
-  const{error}=await sb.from('profiles').upsert({id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,weight_kg:+ob.weight,height_cm:+ob.height,goal:ob.goal,onboarded:true,body_fat_pct:+ob.bf||null,deficit:500,target_body_fat_pct:+ob.bfTarget||null});
-  if(error)return toast(error.message);await loadProfile();show('homeScreen');showUI();renderHome()
+  if(obStep===1){
+    ob.name=$('oN').value.trim();ob.age=$('oA').value;ob.weight=$('oW').value;ob.height=$('oH').value;
+    if(!ob.name)return toast('Enter your name');
+    if(!ob.age||+ob.age<13)return toast('Enter a valid age');
+    if(!ob.weight||+ob.weight<30)return toast('Enter your weight');
+    if(!ob.height||+ob.height<100)return toast('Enter your height');
+    obStep++;renderOb();return;
+  }
+  if(obStep===2){
+    ob.goalText=($('oGoalText')?.value||'').trim();
+    if(!ob.goalText||ob.goalText.length<10)return toast('Describe your goals — the more detail the better');
+    // Send to AI
+    const btn=$('obBtn');btn.disabled=true;btn.textContent='🤖 Analysing...';
+    const b=bmr();
+    try{
+      const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A new user just signed up and described their goals.
+
+Their stats: ${ob.name}, ${ob.age}yo ${ob.sex}, ${ob.weight}kg, ${ob.height}cm, BMR ${b} kcal, TDEE ~${Math.round(b*1.3)} kcal.
+
+What they said: "${ob.goalText}"
+
+Based on this, determine:
+1. Their goal type (fat_loss, muscle, or maintain)
+2. The right daily calorie target
+3. The right deficit or surplus amount
+4. Macro split in grams
+5. Realistic timeline
+6. One practical tip
+
+Return JSON only:
+{"goal_type":"fat_loss/muscle/maintain","daily_target":number,"deficit_or_surplus":number,"protein_g":number,"carbs_g":number,"fat_g":number,"timeline":"realistic timeline statement","explanation":"2-3 sentences explaining the plan simply, referencing their specific situation","tip":"one actionable tip for their specific goal"}`}]})});
+      const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';
+      const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;
+      ob.aiPlan=JSON.parse(mt[0]);
+      ob.goal=ob.aiPlan.goal_type||'fat_loss';
+      obStep=3;renderOb();
+    }catch(e){toast('AI failed — check connection and try again')}
+    btn.disabled=false;btn.textContent='🤖 Build My Plan';
+    return;
+  }
+  if(obStep===3){
+    // Save profile
+    const{error}=await sb.from('profiles').upsert({
+      id:user.id,name:ob.name,age:+ob.age,sex:ob.sex,
+      weight_kg:+ob.weight,height_cm:+ob.height,
+      goal:ob.goal,onboarded:true,
+      body_fat_pct:+ob.bf||null,deficit:Math.abs(ob.aiPlan?.deficit_or_surplus||500),
+      target_body_fat_pct:+ob.bfTarget||null
+    });
+    if(error)return toast(error.message);
+    await loadProfile();show('homeScreen');showUI();renderHome();
+  }
 }
 async function loadProfile(){const{data}=await sb.from('profiles').select('*').eq('id',user.id).single();profile=data}
 async function loadFood(){const{data}=await sb.from('food_logs').select('*').eq('user_id',user.id).eq('date',td()).order('created_at',{ascending:false});foodLogs=data||[]}
