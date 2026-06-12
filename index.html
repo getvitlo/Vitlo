@@ -66,6 +66,14 @@ textarea.inp{resize:none;line-height:1.5}
 .tabs{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg);border-top:1px solid var(--bd);display:none;z-index:50;padding-bottom:max(env(safe-area-inset-bottom),8px)}.tabs.show{display:flex}
 .ti{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 4px;cursor:pointer;background:none;border:none}.ti svg{color:var(--tx3);transition:color .15s}.ti.on svg{color:var(--grn)}.ti-l{font-size:9px;font-weight:600;color:var(--tx3);letter-spacing:.3px}.ti.on .ti-l{color:var(--grn)}
 .fab{position:fixed;bottom:max(calc(env(safe-area-inset-bottom) + 54px),68px);right:calc(50% - 195px);width:56px;height:56px;border-radius:28px;background:var(--grn);display:none;align-items:center;justify-content:center;z-index:60;cursor:pointer;box-shadow:0 4px 20px rgba(46,204,113,.35)}.fab.show{display:flex}.fab:active{transform:scale(.92)}.fab svg{color:#080b09}
+
+.chat-bubble{border-radius:14px;padding:12px 14px;margin-bottom:8px;max-width:88%;font-size:13px;line-height:1.6}
+.chat-user{background:var(--grn-g);border:1px solid rgba(46,204,113,.2);margin-left:auto;color:var(--tx)}
+.chat-ai{background:var(--s2);border:1px solid var(--bd);color:var(--tx2)}
+.brief-card{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.brief-icon{font-size:20px;margin-bottom:6px}
+.brief-title{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px}
+.brief-text{font-size:12px;color:var(--tx2);line-height:1.6}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s1);border:1px solid var(--bd);color:var(--tx);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.5)}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -78,6 +86,17 @@ textarea.inp{resize:none;line-height:1.5}
 <div style="display:flex;justify-content:center;padding:10px 0 16px"><div style="position:relative;width:120px;height:120px"><svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--blu)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" id="scoreRing" style="transition:stroke-dashoffset 1s ease"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1" id="scoreNum">0</div><div style="font-size:8px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin-top:2px">/ 10</div></div></div></div>
 <div style="text-align:center;font-size:11px;font-weight:600;margin-bottom:16px" id="scoreLabel" style="color:var(--tx3)">Log exercise to build your score</div>
 <div class="exb"><div class="exb-i"><div class="exb-v" id="xB" style="color:var(--blu)">0</div><div class="exb-l">Burned</div></div><div class="exb-i"><div class="exb-v" id="xS">0</div><div class="exb-l">Steps</div></div></div><button class="ex-add-btn" onclick="openModal('exModal')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Log Exercise</button><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Today's Activity</span></div><div id="exTabBody" style="font-size:12px;color:var(--tx3);margin-top:4px">No exercise logged yet.</div></div><div style="height:110px"></div></div>
+
+<!-- COACH TAB -->
+<div class="screen" id="coachScreen">
+  <div class="exh"><div class="exh-t">Coach</div><div class="exh-s">Your AI personal trainer</div></div>
+  <div id="coachBrief" style="padding:0 20px"><div style="text-align:center;padding:30px 0;color:var(--tx3);font-size:13px"><div class="sp" style="margin:0 auto 10px"></div>Loading your daily brief...</div></div>
+  <div style="padding:12px 20px 0"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:10px">ASK YOUR COACH</div></div>
+  <div id="chatMsgs" style="padding:0 20px;margin-bottom:10px"></div>
+  <div style="padding:8px 20px;background:var(--bg);border-top:1px solid var(--bd);margin-bottom:56px"><div style="display:flex;gap:8px"><input class="inp" id="chatIn" placeholder="Ask anything... e.g. I'm going on holiday next week" style="margin:0;flex:1" onkeydown="if(event.key==='Enter')sendChat()"><button style="width:46px;height:46px;border-radius:13px;background:var(--grn);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" onclick="sendChat()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#080b09" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button></div></div>
+  <div style="height:60px"></div>
+</div>
+
 <div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Food</div><div class="sh-s">Photo your plate or describe what you ate.</div><div class="tr"><div class="tb on" onclick="fT('photo',this)">📷 Photo</div><div class="tb" onclick="fT('desc',this)">✏️ Describe</div><div class="tb" onclick="fT('man',this)">🔢 Manual</div></div><div id="fp"><div class="pd" id="pD" onclick="document.getElementById('cI').click()"><input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)"><input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)"><div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div></div><div class="pa"><button class="btn btn-s" onclick="document.getElementById('cI').click()">📷 Camera</button><button class="btn btn-s" onclick="document.getElementById('gI').click()">📁 Library</button></div></div><div id="fd" style="display:none"><label class="lbl">What did you eat?</label><textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, 1 hash brown and a toast that's slightly buttered"></textarea><button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">✨ Calculate Calories</button></div><div id="fm" style="display:none"></div><div id="fR" style="display:none"></div><div id="cB" style="display:none"><div class="corr"><div class="corr-h">Something wrong? Tell the AI</div><input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:6px"><button class="btn btn-s" style="height:38px;font-size:11px" onclick="doCorr()">↻ Re-analyse</button></div></div><div id="eA" style="display:none"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">DETAILS</div><label class="lbl">Meal name</label><input class="inp" id="fN"><label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr"></div><div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr"></div><div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt"></div></div><label class="lbl">Weight of food (g, optional)</label><input class="inp" type="number" id="fW" placeholder="e.g. 350" inputmode="numeric"><button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log Meal</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('foodModal');resetF()">Cancel</button></div></div>
 <div class="ov" id="exModal" onclick="closeO(event,'exModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Exercise</div><div class="sh-s">From your Whoop, watch, or enter manually.</div><div class="tr"><div class="tb on" onclick="eT('man',this)">📝 Manual</div><div class="tb" onclick="eT('ss',this)">📸 Screenshot</div></div><div id="eM"><label class="lbl">Calories burned</label><input class="inp" type="number" id="eCIn" placeholder="e.g. 520" inputmode="numeric"><label class="lbl">Steps (optional)</label><input class="inp" type="number" id="eSIn" placeholder="e.g. 8500" inputmode="numeric"><button class="btn btn-g" onclick="saveEx()">Save</button></div><div id="eSS" style="display:none"><div class="pd" id="eSSD" onclick="document.getElementById('eSSI').click()"><input type="file" id="eSSI" accept="image/*" style="display:none" onchange="onESS(event)"><div style="font-size:44px;opacity:.25">📸</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Upload workout screenshot</div></div><div id="eSSR" style="display:none"></div><button class="btn btn-g" id="eSSB" style="display:none" onclick="saveESSx()">Save Exercise</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('exModal')">Cancel</button></div></div>
 <div class="ov" id="detailModal" onclick="closeO(event,'detailModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Today's Breakdown</div><div id="dB"></div><button class="btn btn-s" style="margin-top:12px" onclick="closeModal('detailModal')">Close</button></div></div>
@@ -150,7 +169,7 @@ textarea.inp{resize:none;line-height:1.5}
 </div>
 </div>
 
-<div class="tabs" id="tabs"><button class="ti on" id="tH" onclick="goTab('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="ti-l">Home</span></button><button class="ti" id="tE" onclick="goTab('ex')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="ti-l">Exercise</span></button></div>
+<div class="tabs" id="tabs"><button class="ti on" id="tH" onclick="goTab('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="ti-l">Home</span></button><button class="ti" id="tE" onclick="goTab('ex')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="ti-l">Exercise</span></button><button class="ti" id="tC" onclick="goTab('coach')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M8 22v-5a4 4 0 0 1 8 0v5"/><path d="M19 10c0 0-1.5-1-2-1.5"/><circle cx="19" cy="7" r="1.5"/><path d="M20.5 7h2"/></svg><span class="ti-l">Coach</span></button></div>
 <div class="fab" id="fab" onclick="openModal('foodModal')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
 <div class="toast" id="toast"></div>
 <script>
@@ -471,7 +490,70 @@ async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
 }
 function openDetail(){const t=tgt(),to=tots(),b=bmr(),m=macs(t),g=profile.goal,rem=t-to.k,over=rem<0;
 $('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:14px;margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">BMR</span><span style="font-weight:700">${b} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Daily living (×1.3)</span><span style="font-weight:700">${Math.round(b*1.3)} kcal</span></div>${g!=='maintain'?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">${g==='fat_loss'?'Deficit':'Surplus'}</span><span style="font-weight:700;color:${g==='fat_loss'?'var(--red)':'var(--grn)'}">${g==='fat_loss'?'−500':'+250'}</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:700;font-size:14px">Daily target</span><span style="font-weight:700;font-size:18px;color:var(--grn)">${t} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Eaten</span><span style="font-weight:700">${to.k} kcal</span></div>${burnedCals?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Burned (bonus)</span><span style="font-weight:700;color:var(--blu)">${burnedCals} kcal</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between"><span style="font-weight:700;font-size:14px">${over?'Over limit':'Left to eat'}</span><span style="font-weight:700;font-size:22px;color:${over?'var(--red)':'var(--grn)'}">${Math.abs(rem)} kcal</span></div></div>${over?`<div style="background:var(--red-g);border:1px solid rgba(239,83,80,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You're <b style="color:var(--red)">${Math.abs(rem)} kcal over</b>. A ${Math.round(Math.abs(rem)/5)} min walk or ${Math.round(Math.abs(rem)/10)} min jog would balance it out.</div>`:rem>100?`<div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You have <b style="color:var(--grn)">${rem} kcal left</b> to eat today.</div>`:''}<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">MACROS</div>${[{l:'Protein',v:Math.round(to.p),t:m.p,c:'var(--blu)'},{l:'Carbs',v:Math.round(to.c),t:m.c,c:'var(--amb)'},{l:'Fat',v:Math.round(to.f),t:m.f,c:'var(--pur)'}].map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:8px;height:8px;border-radius:4px;background:${x.c}"></div><div style="flex:1;font-size:13px;color:var(--tx2)">${x.l}</div><div style="width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(x.v/x.t)*100)}%;background:${x.c};border-radius:2px"></div></div><div style="font-size:13px;font-weight:700;min-width:65px;text-align:right">${x.v}g / ${x.t}g</div></div>`).join('')}`;openModal('detailModal')}
-async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}}
+async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('tC').classList.toggle('on',t==='coach');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';$('coachScreen').style.display=t==='coach'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}if(t==='coach'){loadCoachBrief()}}
+// ── Coach ──
+let briefLoaded=false;
+async function loadCoachBrief(){
+  if(briefLoaded)return;
+  const el=$('coachBrief');
+  const t=tgt(),to=tots(),m=macs(t),b=bmr();
+  const foodSummary=foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'No food logged yet';
+  try{
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a personal trainer giving a daily brief. Be direct, specific, use their actual numbers.
+
+User: ${profile.name}, ${profile.age}yo ${profile.sex}, ${profile.weight_kg}kg, Goal: ${profile.goal}
+BMR: ${b}, Daily target: ${t} kcal, Eaten today: ${to.k} kcal, Burned: ${burnedCals}, Steps: ${stepsCount}
+Food today: ${foodSummary}
+Protein today: ${Math.round(to.p)}g / ${m.p}g target
+
+Return JSON only:
+{"focus":{"title":"short title","text":"1-2 sentences about what to focus on today based on their data"},"workout":{"title":"suggested workout","text":"specific workout recommendation with duration and estimated burn"},"steps":{"target":number,"text":"one sentence about step goal for today"}}`}]})});
+    const d=await resp.json();const t2=d.content?.map(c=>c.text||'').join('')||'';
+    const mt=t2.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;
+    const brief=JSON.parse(mt[0]);
+    el.innerHTML=`
+      <div class="brief-card"><div class="brief-icon">🎯</div><div class="brief-title">${brief.focus.title}</div><div class="brief-text">${brief.focus.text}</div></div>
+      <div class="brief-card"><div class="brief-icon">🏋️</div><div class="brief-title">${brief.workout.title}</div><div class="brief-text">${brief.workout.text}</div></div>
+      <div class="brief-card"><div class="brief-icon">👟</div><div class="brief-title">${brief.steps.target.toLocaleString()} steps today</div><div class="brief-text">${brief.steps.text}</div></div>`;
+    briefLoaded=true;
+  }catch(e){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--tx3);font-size:12px">Could not load brief. Pull down to retry.</div>'}
+}
+
+async function sendChat(){
+  const input=$('chatIn').value.trim();
+  if(!input)return;
+  $('chatIn').value='';
+  const msgs=$('chatMsgs');
+  // Add user bubble
+  msgs.innerHTML+=`<div class="chat-bubble chat-user">${input}</div>`;
+  // Add loading bubble
+  msgs.innerHTML+=`<div class="chat-bubble chat-ai" id="chatLoading"><div class="sp" style="width:16px;height:16px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px"></div>Thinking...</div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+
+  const t=tgt(),to=tots(),m=macs(t),b=bmr();
+  const foodSummary=foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'Nothing logged yet';
+  try{
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer talking to your client. Be direct, warm, and specific. Use their actual data in your answer. Keep it concise — 2-4 sentences max.
+
+Client: ${profile.name}, ${profile.age}yo ${profile.sex}, ${profile.weight_kg}kg
+Goal: ${profile.goal}, BMR: ${b}, Daily target: ${t} kcal
+Today so far: eaten ${to.k} kcal, burned ${burnedCals}, ${stepsCount} steps
+Food today: ${foodSummary}
+Protein: ${Math.round(to.p)}g / ${m.p}g target
+
+Their question: "${input}"
+
+Reply naturally as their PT. No JSON, just plain text.`}]})});
+    const d=await resp.json();const reply=d.content?.map(c=>c.text||'').join('')||'Sorry, I couldn\'t process that.';
+    const loadEl=$('chatLoading');
+    if(loadEl)loadEl.outerHTML=`<div class="chat-bubble chat-ai">${reply}</div>`;
+  }catch(e){
+    const loadEl=$('chatLoading');
+    if(loadEl)loadEl.outerHTML=`<div class="chat-bubble chat-ai">Connection issue. Try again.</div>`;
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
 async function init(){const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
 async function boot(){await loadProfile();if(!profile?.onboarded){show('obScreen');renderOb();return}await Promise.all([loadFood(),loadEx()]);show('homeScreen');showUI();renderHome();renderEx()}
 init();
