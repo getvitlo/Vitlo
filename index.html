@@ -493,21 +493,58 @@ $('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);b
 async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('tC').classList.toggle('on',t==='coach');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';$('coachScreen').style.display=t==='coach'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}if(t==='coach'){loadCoachBrief()}}
 // ── Coach ──
 let briefLoaded=false;
+async function getCoachContext(){
+  // Time awareness
+  const now=new Date();
+  const hour=now.getHours();
+  const timeStr=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const hoursLeft=Math.max(0,23-hour);
+  const mealWindow=hour<22?`${hoursLeft} hours left in the day`:'Day is almost over';
+  const timeContext=hour<10?'Early morning — most of the day ahead':hour<13?'Late morning — lunch time approaching':hour<16?'Afternoon — should have had lunch by now':hour<19?'Evening — dinner time window':hour<21?'Late evening — winding down':'Night — day is nearly done';
+
+  // Load last 7 days of food history for habit detection
+  let habitSummary='No history yet — new user';
+  try{
+    const weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
+    const{data:history}=await sb.from('food_logs').select('date,calories,meal_name,created_at').eq('user_id',user.id).gte('date',weekAgo.toISOString().split('T')[0]).order('created_at',{ascending:true});
+    if(history&&history.length>3){
+      // Group by date
+      const byDate={};history.forEach(h=>{if(!byDate[h.date])byDate[h.date]=[];byDate[h.date].push(h)});
+      const days=Object.keys(byDate);
+      const avgCals=Math.round(days.reduce((s,d)=>s+byDate[d].reduce((ss,f)=>ss+(+f.calories||0),0),0)/days.length);
+      const mealsPerDay=Math.round(history.length/days.length*10)/10;
+      // Detect meal timing patterns
+      const mealHours=history.map(h=>new Date(h.created_at).getHours()).filter(h=>h>0);
+      const avgFirstMeal=mealHours.length>0?Math.round(mealHours.reduce((s,h)=>s+h,0)/mealHours.length):12;
+      habitSummary=`Over the last ${days.length} days: avg ${avgCals} kcal/day, ~${mealsPerDay} meals/day. Usually starts eating around ${avgFirstMeal>12?avgFirstMeal+':00':''+avgFirstMeal+':00'}`;
+    }
+  }catch(e){}
+
+  const t=tgt(),to=tots(),m=macs(t),b=bmr();
+  return{
+    timeStr,timeContext,mealWindow,hoursLeft,habitSummary,
+    contextBlock:`Current time: ${timeStr} (${timeContext}). ${mealWindow}.
+User: ${profile.name}, ${profile.age}yo ${profile.sex}, ${profile.weight_kg}kg, Goal: ${profile.goal}
+BMR: ${b}, Daily target: ${t} kcal
+Today so far: eaten ${to.k} kcal (${Math.round(to.k/t*100)}% of target), burned ${burnedCals}, ${stepsCount} steps
+Protein: ${Math.round(to.p)}g / ${m.p}g target
+Food today: ${foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'Nothing logged yet'}
+Eating habits: ${habitSummary}
+Important: Consider what time of day it is. If it's early and they haven't eaten much, that's NORMAL — they have hours left. Don't say they're under-eating at 9am. Only flag concern if it's late evening AND they're severely under target.`
+  };
+}
+
 async function loadCoachBrief(){
   if(briefLoaded)return;
   const el=$('coachBrief');
-  const t=tgt(),to=tots(),m=macs(t),b=bmr();
-  const foodSummary=foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'No food logged yet';
+  const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a personal trainer giving a daily brief. Be direct, specific, use their actual numbers.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a personal trainer giving a daily brief. Be direct, specific, use their actual numbers. Factor in the time of day — don't panic about low intake if the day is young.
 
-User: ${profile.name}, ${profile.age}yo ${profile.sex}, ${profile.weight_kg}kg, Goal: ${profile.goal}
-BMR: ${b}, Daily target: ${t} kcal, Eaten today: ${to.k} kcal, Burned: ${burnedCals}, Steps: ${stepsCount}
-Food today: ${foodSummary}
-Protein today: ${Math.round(to.p)}g / ${m.p}g target
+${ctx.contextBlock}
 
 Return JSON only:
-{"focus":{"title":"short title","text":"1-2 sentences about what to focus on today based on their data"},"workout":{"title":"suggested workout","text":"specific workout recommendation with duration and estimated burn"},"steps":{"target":number,"text":"one sentence about step goal for today"}}`}]})});
+{"focus":{"title":"short title","text":"1-2 sentences. Factor in time of day and their eating patterns. If early in the day and low intake, reassure and plan ahead. If late and under, flag it constructively."},"workout":{"title":"suggested workout","text":"specific recommendation with duration and estimated burn. Consider time of day — don't suggest a heavy session at 10pm."},"steps":{"target":number,"text":"one sentence step goal considering how much of the day is left"}}`}]})});
     const d=await resp.json();const t2=d.content?.map(c=>c.text||'').join('')||'';
     const mt=t2.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;
     const brief=JSON.parse(mt[0]);
@@ -516,7 +553,7 @@ Return JSON only:
       <div class="brief-card"><div class="brief-icon">🏋️</div><div class="brief-title">${brief.workout.title}</div><div class="brief-text">${brief.workout.text}</div></div>
       <div class="brief-card"><div class="brief-icon">👟</div><div class="brief-title">${brief.steps.target.toLocaleString()} steps today</div><div class="brief-text">${brief.steps.text}</div></div>`;
     briefLoaded=true;
-  }catch(e){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--tx3);font-size:12px">Could not load brief. Pull down to retry.</div>'}
+  }catch(e){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--tx3);font-size:12px">Could not load brief. Try again later.</div>'}
 }
 
 async function sendChat(){
@@ -524,27 +561,19 @@ async function sendChat(){
   if(!input)return;
   $('chatIn').value='';
   const msgs=$('chatMsgs');
-  // Add user bubble
   msgs.innerHTML+=`<div class="chat-bubble chat-user">${input}</div>`;
-  // Add loading bubble
   msgs.innerHTML+=`<div class="chat-bubble chat-ai" id="chatLoading"><div class="sp" style="width:16px;height:16px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:6px"></div>Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
-
-  const t=tgt(),to=tots(),m=macs(t),b=bmr();
-  const foodSummary=foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'Nothing logged yet';
+  const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer talking to your client. Be direct, warm, and specific. Use their actual data in your answer. Keep it concise — 2-4 sentences max.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer talking to your client. Be direct, warm, specific. Use their actual data. Keep it 2-4 sentences. Consider the time of day and their eating habits before giving advice.
 
-Client: ${profile.name}, ${profile.age}yo ${profile.sex}, ${profile.weight_kg}kg
-Goal: ${profile.goal}, BMR: ${b}, Daily target: ${t} kcal
-Today so far: eaten ${to.k} kcal, burned ${burnedCals}, ${stepsCount} steps
-Food today: ${foodSummary}
-Protein: ${Math.round(to.p)}g / ${m.p}g target
+${ctx.contextBlock}
 
 Their question: "${input}"
 
 Reply naturally as their PT. No JSON, just plain text.`}]})});
-    const d=await resp.json();const reply=d.content?.map(c=>c.text||'').join('')||'Sorry, I couldn\'t process that.';
+    const d=await resp.json();const reply=d.content?.map(c=>c.text||'').join('')||'Sorry, couldn\'t process that.';
     const loadEl=$('chatLoading');
     if(loadEl)loadEl.outerHTML=`<div class="chat-bubble chat-ai">${reply}</div>`;
   }catch(e){
