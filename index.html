@@ -102,13 +102,22 @@ textarea.inp{resize:none;line-height:1.5}
 .dish-macro-cell{background:var(--s3);border-radius:10px;padding:10px;text-align:center}
 .dish-macro-val{font-size:20px;font-weight:700}
 .dish-macro-lbl{font-size:9px;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
+.cal-strip{display:flex;gap:4px;padding:6px 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:4px}
+.cal-strip::-webkit-scrollbar{display:none}
+.cal-day{min-width:44px;padding:8px 4px;text-align:center;border-radius:12px;cursor:pointer;transition:all .2s;flex-shrink:0;background:var(--s2);border:1px solid var(--bd)}
+.cal-day.today{border-color:var(--grn)}
+.cal-day.sel{background:var(--grn);border-color:var(--grn)}
+.cal-day-num{font-size:16px;font-weight:700;color:var(--tx)}.cal-day.sel .cal-day-num{color:#080b09}
+.cal-day-label{font-size:8px;font-weight:600;color:var(--tx3);letter-spacing:.3px;margin-top:1px;text-transform:uppercase}.cal-day.sel .cal-day-label{color:rgba(8,11,9,.6)}
+.cal-day-dot{width:4px;height:4px;border-radius:2px;background:var(--grn);margin:3px auto 0;opacity:0}
+.cal-day.has-data .cal-day-dot{opacity:1}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s1);border:1px solid var(--bd);color:var(--tx);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.5)}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="screen active" id="authScreen"><div class="auth"><div><div class="auth-logo">vitlo</div><div class="auth-tag">Know what you eat. Hit your goals.</div></div><div><div class="auth-title" id="authTitle">Welcome back</div><input class="inp" type="email" id="aE" placeholder="Email" autocomplete="email"><input class="inp" type="password" id="aP" placeholder="Password" autocomplete="current-password"><button class="btn btn-g" id="aB" onclick="doAuth()">Sign In</button><button class="sw" id="aSw" onclick="flipAuth()">No account? <b>Sign up free</b></button></div></div></div>
 <div class="screen" id="obScreen"><div class="ob"><div class="ob-bar"><div class="ob-fill" id="obBar"></div></div><div class="ob-sl" id="obLbl">STEP 1 OF 3</div><div id="obC"></div><button class="btn btn-g" style="margin-top:auto" id="obBtn" onclick="obNext()">Continue</button></div></div>
-<div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div></div><div class="pill" id="hPill">—</div></div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--blu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--blu)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--blu)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
+<div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div></div><div class="pill" id="hPill">—</div></div><div class="cal-strip" id="calStrip"></div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--blu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--blu)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--blu)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
 <div class="screen" id="exScreen"><div class="exh"><div class="exh-t">Exercise</div><div class="exh-s">Track calories burned today</div></div>
 <!-- Activity Score -->
 <div style="display:flex;justify-content:center;padding:10px 0 16px"><div style="position:relative;width:120px;height:120px"><svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--blu)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" id="scoreRing" style="transition:stroke-dashoffset 1s ease"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1" id="scoreNum">0</div><div style="font-size:8px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin-top:2px">/ 10</div></div></div></div>
@@ -170,6 +179,18 @@ textarea.inp{resize:none;line-height:1.5}
   <div style="font-size:10px;color:var(--tx3);margin:-6px 0 14px;line-height:1.4">If you know your exact BMR from a body scan, enter it here. Otherwise we calculate using your weight, height, age and sex.</div>
 
   <button class="btn btn-g" onclick="saveSettings()">Save Stats</button>
+
+  <!-- Macro targets -->
+  <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
+    <div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:10px">DAILY MACRO TARGETS</div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:10px;line-height:1.5">Override the auto-calculated targets. Leave blank to use defaults.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+      <div><label class="lbl">Protein g</label><input class="inp" type="number" id="setMacP" inputmode="numeric" placeholder="auto"></div>
+      <div><label class="lbl">Carbs g</label><input class="inp" type="number" id="setMacC" inputmode="numeric" placeholder="auto"></div>
+      <div><label class="lbl">Fat g</label><input class="inp" type="number" id="setMacF" inputmode="numeric" placeholder="auto"></div>
+    </div>
+    <button class="btn btn-s" onclick="saveMacroTargets()">Save Macro Targets</button>
+  </div>
 
   <!-- AI Coach button -->
   <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd)">
@@ -235,10 +256,16 @@ function tgt(){
   return tdee;
 }
 function macs(t){
-  const w=+(profile?.weight_kg||ob.weight)||75,ln=Math.round(w*.75),g=profile?.goal||ob.goal;
-  const p=Math.round(ln*(g==='muscle'?2.4:g==='fat_loss'?2.2:1.8));
-  const f=Math.max(30,Math.round((t*.25)/9)),c=Math.max(50,Math.round((t-p*4-f*9)/4));
-  return{p,c,f};
+  const overrides=JSON.parse(localStorage.getItem('vitlo_macros')||'{}');
+  const w=+(profile?.weight_kg||ob.weight)||75,g=profile?.goal||ob.goal;
+  // Use bodyweight for protein (not lean mass) — 2g/kg for muscle, 1.8 for fat loss
+  const autoP=Math.round(w*(g==='muscle'?2.2:g==='fat_loss'?1.8:1.6));
+  const autoF=Math.max(35,Math.round((t*.25)/9));
+  const autoC=Math.max(50,Math.round((t-(autoP*4)-(autoF*9))/4));
+  const p=+(overrides.p)||autoP;
+  const f=+(overrides.f)||autoF;
+  const cc=+(overrides.c)||autoC;
+  return{p,c:cc,f};
 }
 function tots(){return foodLogs.reduce((a,x)=>({k:a.k+(+x.calories||0),p:a.p+(+x.protein_g||0),c:a.c+(+x.carbs_g||0),f:a.f+(+x.fat_g||0)}),{k:0,p:0,c:0,f:0})}
 function flipAuth(){authMode=authMode==='signin'?'signup':'signin';$('authTitle').textContent=authMode==='signin'?'Welcome back':'Create your account';$('aB').textContent=authMode==='signin'?'Sign In':'Create Account';$('aSw').innerHTML=authMode==='signin'?'No account? <b>Sign up free</b>':'Have an account? <b>Sign in</b>'}
@@ -350,10 +377,13 @@ Return JSON only:
   }
 }
 async function loadProfile(){const{data}=await sb.from('profiles').select('*').eq('id',user.id).single();profile=data}
-async function loadFood(){const{data}=await sb.from('food_logs').select('*').eq('user_id',user.id).eq('date',td()).order('created_at',{ascending:false});foodLogs=data||[]}
-async function loadEx(){const{data}=await sb.from('workouts').select('*').eq('user_id',user.id).eq('date',td()).maybeSingle();burnedCals=data?.calories_burned||0;stepsCount=data?.steps||0;console.log('Exercise loaded:',data)}
+let viewDate=null;
+function getViewDate(){return viewDate||td()}
+async function loadFood(date){const d=date||getViewDate();const{data}=await sb.from('food_logs').select('*').eq('user_id',user.id).eq('date',d).order('created_at',{ascending:false});foodLogs=data||[]}
+async function loadEx(date){const d=date||getViewDate();const{data}=await sb.from('workouts').select('*').eq('user_id',user.id).eq('date',d).maybeSingle();burnedCals=data?.calories_burned||0;stepsCount=data?.steps||0;console.log('Exercise loaded:',data)}
 function renderHome(){
-  if(!profile)return;const h=new Date().getHours();
+  if(!profile)return;const h=new Date().getHours();renderCalendar();
+  const isViewingPast=viewDate&&viewDate!==td();
   $('hHi').textContent=h<12?'Good morning':h<18?'Good afternoon':'Good evening';
   $('hNm').textContent=profile.name;$('hPill').textContent=profile.goal==='fat_loss'?'Fat Loss':profile.goal==='muscle'?'Muscle Gain':'Maintain';
   const t=tgt(),to=tots(),m=macs(t),rem=t-to.k,over=rem<0;
@@ -438,6 +468,12 @@ function openSettings(){
   $('setTargetPreview').textContent=tgt();
   const b=bmr(),g=profile.goal;
   const tdee=Math.round(b*1.3);$('setTargetFormula').textContent=`BMR ${b} × 1.3 = ${tdee}${g==='fat_loss'?' − 500':g==='muscle'?' + 250':''} = ${tgt()} kcal`;
+  // Populate macro overrides
+  const macOverrides=JSON.parse(localStorage.getItem('vitlo_macros')||'{}');
+  const autoM=macs(tgt());
+  $('setMacP').value=macOverrides.p||'';$('setMacP').placeholder=autoM.p+' (auto)';
+  $('setMacC').value=macOverrides.c||'';$('setMacC').placeholder=autoM.c+' (auto)';
+  $('setMacF').value=macOverrides.f||'';$('setMacF').placeholder=autoM.f+' (auto)';
   openModal('settingsModal');
 }
 function setField(f,v){
@@ -604,7 +640,7 @@ function showDish(idx){
 function backToTimeline(){
   $('dishDetail').style.display='none';$('timeline').style.display='block';
 }
-async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('tC').classList.toggle('on',t==='coach');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';$('coachScreen').style.display=t==='coach'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}if(t==='coach'){loadCoachBrief()}}
+async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('tC').classList.toggle('on',t==='coach');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';$('coachScreen').style.display=t==='coach'?'block':'none';if(t==='home'){await loadFood(getViewDate());await loadEx(getViewDate());renderHome()}if(t==='ex'){await loadEx();renderEx()}if(t==='coach'){loadCoachBrief()}}
 // ── Coach ──
 let briefLoaded=false;
 async function getCoachContext(){
@@ -703,6 +739,49 @@ Reply naturally. Be specific to their situation. If they ask about food timing, 
     if(loadEl)loadEl.outerHTML=`<div class="chat-bubble chat-ai">Connection issue. Try again.</div>`;
   }
   msgs.scrollTop=msgs.scrollHeight;
+}
+
+
+// ── Calendar ──
+async function renderCalendar(){
+  const strip=$('calStrip');if(!strip)return;
+  const dates=[];
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);dates.push(d)}
+  // Check which dates have data
+  const weekAgo=new Date();weekAgo.setDate(weekAgo.getDate()-7);
+  let datesWithData={};
+  try{
+    const{data}=await sb.from('food_logs').select('date').eq('user_id',user.id).gte('date',weekAgo.toISOString().split('T')[0]);
+    if(data)data.forEach(r=>datesWithData[r.date]=true);
+  }catch(e){}
+  const todayStr=td();const viewStr=getViewDate();
+  const dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  strip.innerHTML=dates.map(d=>{
+    const ds=d.toISOString().split('T')[0];
+    const isToday=ds===todayStr;
+    const isSel=ds===viewStr;
+    const hasData=datesWithData[ds];
+    return `<div class="cal-day ${isToday?'today':''} ${isSel?'sel':''} ${hasData?'has-data':''}" onclick="selectDate('${ds}')"><div class="cal-day-num">${d.getDate()}</div><div class="cal-day-label">${isToday?'Today':dayNames[d.getDay()]}</div><div class="cal-day-dot"></div></div>`;
+  }).join('');
+  // Scroll to end (today)
+  strip.scrollLeft=strip.scrollWidth;
+}
+async function selectDate(dateStr){
+  viewDate=dateStr===td()?null:dateStr;
+  await Promise.all([loadFood(dateStr),loadEx(dateStr)]);
+  renderCalendar();renderHome();
+}
+
+// ── Macro targets ──
+function saveMacroTargets(){
+  const p=$('setMacP').value,cc=$('setMacC').value,f=$('setMacF').value;
+  const overrides={};
+  if(p&&+p>0)overrides.p=+p;
+  if(cc&&+cc>0)overrides.c=+cc;
+  if(f&&+f>0)overrides.f=+f;
+  localStorage.setItem('vitlo_macros',JSON.stringify(overrides));
+  closeModal('settingsModal');renderHome();
+  toast('✓ Macro targets updated');
 }
 
 async function init(){const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
