@@ -626,51 +626,133 @@ function init3dDish(meal){
   const rim=new THREE.Mesh(rimGeo,rimMat);
   rim.rotation.x=Math.PI/2;rim.position.y=0.06;scene.add(rim);
 
-  // Food items — generate based on meal macros
-  const protein=parseFloat(meal.protein_g)||0;
-  const carbs=parseFloat(meal.carbs_g)||0;
-  const fat=parseFloat(meal.fat_g)||0;
-  const totalG=protein+carbs+fat||1;
+  // Parse meal name for food types and render recognisable shapes
+  const name=(meal.meal_name||'').toLowerCase();
+  const foodGroup=new THREE.Group();
 
-  // Protein item — blue sphere cluster (like meat/chicken)
-  if(protein>0){
-    const size=Math.max(0.3,Math.min(0.9,(protein/totalG)*1.8));
-    const geo=new THREE.SphereGeometry(size,16,12);
-    geo.scale(1,0.6,1.1);
-    const mat=new THREE.MeshStandardMaterial({color:0x5ba8ff,roughness:0.6,metalness:0.05});
-    const mesh=new THREE.Mesh(geo,mat);
-    mesh.position.set(-0.5,size*0.35+0.06,0.3);scene.add(mesh);
-    // Second smaller piece
-    const geo2=new THREE.SphereGeometry(size*0.5,12,8);geo2.scale(1,0.5,1);
-    const m2=new THREE.Mesh(geo2,mat);
-    m2.position.set(-0.9,size*0.18+0.06,0.6);scene.add(m2);
+  function addMince(x,z,spread){
+    const mat=new THREE.MeshStandardMaterial({color:0x6b3a2a,roughness:0.85,metalness:0});
+    for(let i=0;i<25;i++){
+      const s=0.06+Math.random()*0.06;
+      const geo=new THREE.SphereGeometry(s,6,4);
+      geo.scale(1,0.6+Math.random()*0.3,1);
+      const m=new THREE.Mesh(geo,mat);
+      const angle=Math.random()*Math.PI*2;
+      const r=Math.random()*spread;
+      m.position.set(x+Math.cos(angle)*r, 0.08+Math.random()*0.12, z+Math.sin(angle)*r);
+      foodGroup.add(m);
+    }
+  }
+  function addRice(x,z,spread){
+    const mat=new THREE.MeshStandardMaterial({color:0xf5f0e0,roughness:0.7,metalness:0});
+    for(let i=0;i<40;i++){
+      const geo=new THREE.SphereGeometry(0.03,4,3);
+      geo.scale(1,0.5,2.2);
+      const m=new THREE.Mesh(geo,mat);
+      const angle=Math.random()*Math.PI*2;
+      const r=Math.random()*spread;
+      m.position.set(x+Math.cos(angle)*r, 0.08+Math.random()*0.15, z+Math.sin(angle)*r);
+      m.rotation.y=Math.random()*Math.PI;
+      m.rotation.z=(Math.random()-0.5)*0.5;
+      foodGroup.add(m);
+    }
+  }
+  function addChicken(x,z){
+    const mat=new THREE.MeshStandardMaterial({color:0xd4a556,roughness:0.65,metalness:0.02});
+    const geo=new THREE.SphereGeometry(0.45,10,8);geo.scale(1.3,0.4,0.9);
+    const m=new THREE.Mesh(geo,mat);m.position.set(x,0.2,z);foodGroup.add(m);
+    const geo2=new THREE.SphereGeometry(0.3,8,6);geo2.scale(1.1,0.35,0.8);
+    const m2=new THREE.Mesh(geo2,mat);m2.position.set(x+0.35,0.16,z+0.2);foodGroup.add(m2);
+  }
+  function addSausages(x,z,count){
+    const mat=new THREE.MeshStandardMaterial({color:0x8b4513,roughness:0.7,metalness:0.02});
+    for(let i=0;i<count;i++){
+      const geo=new THREE.CylinderGeometry(0.08,0.08,0.7,8);
+      const m=new THREE.Mesh(geo,mat);
+      m.rotation.z=Math.PI/2;m.rotation.y=0.2*i-0.2;
+      m.position.set(x,0.14,z+i*0.22-0.2);foodGroup.add(m);
+    }
+  }
+  function addEggs(x,z,count){
+    const whiteMat=new THREE.MeshStandardMaterial({color:0xf8f8f0,roughness:0.4,metalness:0});
+    const yolkMat=new THREE.MeshStandardMaterial({color:0xf5c518,roughness:0.3,metalness:0.05});
+    for(let i=0;i<count;i++){
+      const wGeo=new THREE.SphereGeometry(0.22,10,8);wGeo.scale(1.2,0.25,1.2);
+      const w=new THREE.Mesh(wGeo,whiteMat);w.position.set(x+i*0.35,0.1,z);foodGroup.add(w);
+      const yGeo=new THREE.SphereGeometry(0.1,8,6);yGeo.scale(1,0.5,1);
+      const y=new THREE.Mesh(yGeo,yolkMat);y.position.set(x+i*0.35,0.15,z);foodGroup.add(y);
+    }
+  }
+  function addBread(x,z,count){
+    const mat=new THREE.MeshStandardMaterial({color:0xc8a468,roughness:0.8,metalness:0});
+    for(let i=0;i<count;i++){
+      const geo=new THREE.BoxGeometry(0.6,0.08,0.5);
+      const m=new THREE.Mesh(geo,mat);
+      m.position.set(x,0.1+i*0.09,z);m.rotation.y=0.1*i;foodGroup.add(m);
+    }
+  }
+  function addPasta(x,z){
+    const mat=new THREE.MeshStandardMaterial({color:0xe8d5a0,roughness:0.6,metalness:0});
+    for(let i=0;i<20;i++){
+      const geo=new THREE.TorusGeometry(0.06,0.02,6,8);
+      const m=new THREE.Mesh(geo,mat);
+      const angle=Math.random()*Math.PI*2;const r=Math.random()*0.55;
+      m.position.set(x+Math.cos(angle)*r, 0.1+Math.random()*0.15, z+Math.sin(angle)*r);
+      m.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);
+      foodGroup.add(m);
+    }
+  }
+  function addVeg(x,z){
+    const mat=new THREE.MeshStandardMaterial({color:0x2d8c46,roughness:0.7,metalness:0});
+    for(let i=0;i<6;i++){
+      const geo=new THREE.SphereGeometry(0.1+Math.random()*0.08,6,5);
+      geo.scale(1,0.7,1);
+      const m=new THREE.Mesh(geo,mat);
+      const angle=Math.random()*Math.PI*2;const r=Math.random()*0.4;
+      m.position.set(x+Math.cos(angle)*r, 0.12, z+Math.sin(angle)*r);
+      foodGroup.add(m);
+    }
+  }
+  function addSteak(x,z){
+    const mat=new THREE.MeshStandardMaterial({color:0x5c2018,roughness:0.75,metalness:0.02});
+    const geo=new THREE.SphereGeometry(0.55,10,8);geo.scale(1.2,0.3,0.9);
+    const m=new THREE.Mesh(geo,mat);m.position.set(x,0.18,z);foodGroup.add(m);
+    const fatMat=new THREE.MeshStandardMaterial({color:0xd4c4a8,roughness:0.5});
+    const fGeo=new THREE.SphereGeometry(0.15,6,4);fGeo.scale(2,0.2,0.6);
+    const fm=new THREE.Mesh(fGeo,fatMat);fm.position.set(x+0.3,0.16,z-0.25);foodGroup.add(fm);
+  }
+  function addFish(x,z){
+    const mat=new THREE.MeshStandardMaterial({color:0xe8a88c,roughness:0.5,metalness:0.05});
+    const geo=new THREE.SphereGeometry(0.5,10,8);geo.scale(1.4,0.3,0.7);
+    const m=new THREE.Mesh(geo,mat);m.position.set(x,0.18,z);foodGroup.add(m);
+  }
+  function addDefault(){
+    const colors=[0x6b3a2a,0xd4a556,0xf5f0e0,0x2d8c46];
+    for(let i=0;i<12;i++){
+      const geo=new THREE.SphereGeometry(0.08+Math.random()*0.1,6,5);geo.scale(1,0.6,1);
+      const mat=new THREE.MeshStandardMaterial({color:colors[i%4],roughness:0.7});
+      const m=new THREE.Mesh(geo,mat);
+      const angle=Math.random()*Math.PI*2;const r=0.3+Math.random()*0.7;
+      m.position.set(Math.cos(angle)*r, 0.12+Math.random()*0.1, Math.sin(angle)*r);
+      foodGroup.add(m);
+    }
   }
 
-  // Carbs item — amber pile (like rice/pasta)
-  if(carbs>0){
-    const size=Math.max(0.3,Math.min(1,(carbs/totalG)*1.8));
-    const geo=new THREE.SphereGeometry(size,12,8);
-    geo.scale(1.3,0.45,1.2);
-    const mat=new THREE.MeshStandardMaterial({color:0xf0b429,roughness:0.7,metalness:0});
-    const mesh=new THREE.Mesh(geo,mat);
-    mesh.position.set(0.6,size*0.22+0.06,-0.2);scene.add(mesh);
-  }
+  // Detect foods from name and place them on plate
+  let placed=false;
+  if(name.includes('mince')||name.includes('minced')||name.includes('bolognese')||name.includes('keema')){addMince(-0.5,0.2,0.5);placed=true}
+  if(name.includes('steak')){addSteak(-0.5,0.1);placed=true}
+  if(name.includes('chicken')||name.includes('grilled chicken')){addChicken(-0.5,0.1);placed=true}
+  if(name.includes('fish')||name.includes('salmon')||name.includes('tuna')||name.includes('cod')){addFish(-0.5,0);placed=true}
+  if(name.includes('sausage')){const cnt=parseInt(name.match(/(\d+)\s*sausage/)?.[1])||3;addSausages(-0.4,0,Math.min(cnt,5));placed=true}
+  if(name.includes('egg')){const cnt=parseInt(name.match(/(\d+)\s*egg/)?.[1])||2;addEggs(-0.3,-0.3,Math.min(cnt,4));placed=true}
+  if(name.includes('rice')){addRice(0.6,-0.1,0.5);placed=true}
+  if(name.includes('pasta')||name.includes('spaghetti')||name.includes('penne')){addPasta(0.5,0);placed=true}
+  if(name.includes('bread')||name.includes('toast')){const cnt=parseInt(name.match(/(\d+)\s*(bread|toast|slice)/)?.[1])||2;addBread(0.6,0.3,Math.min(cnt,3));placed=true}
+  if(name.includes('veg')||name.includes('broccoli')||name.includes('salad')||name.includes('spinach')){addVeg(0.2,-0.6);placed=true}
+  if(!placed)addDefault();
 
-  // Fat item — purple blobs (like cheese/oil/avocado)
-  if(fat>0){
-    const size=Math.max(0.2,Math.min(0.7,(fat/totalG)*1.5));
-    const geo=new THREE.SphereGeometry(size,10,8);
-    geo.scale(0.8,0.5,1);
-    const mat=new THREE.MeshStandardMaterial({color:0xa78bfa,roughness:0.5,metalness:0.1});
-    const mesh=new THREE.Mesh(geo,mat);
-    mesh.position.set(0.1,size*0.3+0.06,0.8);scene.add(mesh);
-  }
-
-  // Green garnish
-  const garnGeo=new THREE.SphereGeometry(0.15,8,6);garnGeo.scale(1.5,0.4,1);
-  const garnMat=new THREE.MeshStandardMaterial({color:0x2ecc71,roughness:0.6});
-  const garn=new THREE.Mesh(garnGeo,garnMat);
-  garn.position.set(-0.3,0.15,-.7);scene.add(garn);
+  scene.add(foodGroup);
 
   // Shadow plane
   const shadowGeo=new THREE.PlaneGeometry(6,6);
