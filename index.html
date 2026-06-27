@@ -109,6 +109,25 @@ textarea.inp{resize:none;line-height:1.5}
 .cal-date{font-size:14px;font-weight:600;color:var(--tx);min-width:130px;text-align:center}
 .cal-today-btn{font-size:11px;font-weight:700;color:var(--grn);cursor:pointer;padding:4px 10px;border-radius:8px;background:var(--grn-g);border:none;display:none}
 .cal-today-btn.show{display:block}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:14px}
+.cal-head{text-align:center;font-size:9px;font-weight:700;color:var(--tx3);padding:8px 0;letter-spacing:.5px}
+.cal-cell{text-align:center;padding:10px 0;border-radius:10px;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .15s;position:relative}
+.cal-cell:active{transform:scale(.9)}
+.cal-cell.today{color:var(--grn);font-weight:700}
+.cal-cell.sel{background:var(--grn);color:#080b09;font-weight:700}
+.cal-cell.has-data::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:2px;background:var(--grn)}
+.cal-cell.sel::after{background:#080b09}
+.cal-cell.other{color:var(--tx3);opacity:.3}
+.cal-cell.future{opacity:.15;pointer-events:none}
+.cal-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.cal-month-label{font-size:16px;font-weight:700;color:var(--tx)}
+.cal-month-arr{width:36px;height:36px;border-radius:10px;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.cal-month-arr:active{background:var(--s3)}
+.cal-day-stats{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-top:10px}
+.cal-day-stats-title{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:8px}
+.cal-day-stats-row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
+.cal-day-stats-label{color:var(--tx3)}
+.cal-day-stats-val{font-weight:700;color:var(--tx)}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s1);border:1px solid var(--bd);color:var(--tx);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.5)}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -117,7 +136,7 @@ textarea.inp{resize:none;line-height:1.5}
 <div class="screen" id="obScreen"><div class="ob"><div class="ob-bar"><div class="ob-fill" id="obBar"></div></div><div class="ob-sl" id="obLbl">STEP 1 OF 3</div><div id="obC"></div><button class="btn btn-g" style="margin-top:auto" id="obBtn" onclick="obNext()">Continue</button></div></div>
 <div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div></div><div class="pill" id="hPill">—</div></div><div class="cal-nav">
       <div class="cal-arr" onclick="navDay(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="cal-date" id="calDate">Today</div>
+      <div class="cal-date" id="calDate" onclick="openModal('calModal')" style="cursor:pointer">Today <span style="font-size:10px;color:var(--tx3)">▼</span></div>
       <div class="cal-arr" onclick="navDay(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       <button class="cal-today-btn" id="calTodayBtn" onclick="navToday()">Today</button>
     </div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(91,168,255,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--blu)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--blu)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--blu)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
@@ -227,6 +246,21 @@ textarea.inp{resize:none;line-height:1.5}
   <div id="coachResult" style="display:none"></div>
 
   <button class="btn btn-s" style="margin-top:8px" onclick="closeModal('coachModal')">Close</button>
+</div>
+</div>
+
+<!-- CALENDAR MODAL -->
+<div class="ov" id="calModal" onclick="closeO(event,'calModal')">
+<div class="sh">
+  <div class="sh-h"></div>
+  <div class="cal-month-nav">
+    <div class="cal-month-arr" onclick="calNav(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="cal-month-label" id="calMonthLabel">April 2025</div>
+    <div class="cal-month-arr" onclick="calNav(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div id="calDayPreview"></div>
+  <button class="btn btn-s" style="margin-top:12px" onclick="closeModal('calModal')">Close</button>
 </div>
 </div>
 
@@ -785,6 +819,132 @@ function saveMacroTargets(){
   closeModal('settingsModal');renderHome();
   toast('✓ Macro targets updated');
 }
+
+
+// ── Full Calendar ──
+let calViewMonth=new Date().getMonth(),calViewYear=new Date().getFullYear(),calDataCache={};
+
+async function loadCalData(){
+  const startDate=new Date(calViewYear,calViewMonth,1).toISOString().split('T')[0];
+  const endDate=new Date(calViewYear,calViewMonth+1,0).toISOString().split('T')[0];
+  try{
+    const{data}=await sb.from('food_logs').select('date,calories').eq('user_id',user.id).gte('date',startDate).lte('date',endDate);
+    calDataCache={};
+    if(data)data.forEach(r=>{if(!calDataCache[r.date])calDataCache[r.date]=0;calDataCache[r.date]+=(+r.calories||0)});
+  }catch(e){}
+}
+
+async function renderCal(){
+  await loadCalData();
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  $('calMonthLabel').textContent=months[calViewMonth]+' '+calViewYear;
+
+  const firstDay=new Date(calViewYear,calViewMonth,1).getDay();
+  const daysInMonth=new Date(calViewYear,calViewMonth+1,0).getDate();
+  const daysInPrev=new Date(calViewYear,calViewMonth,0).getDate();
+  const todayStr=td();
+  const selStr=getViewDate();
+  const todayDate=new Date();
+
+  let html='<div class="cal-head">Mon</div><div class="cal-head">Tue</div><div class="cal-head">Wed</div><div class="cal-head">Thu</div><div class="cal-head">Fri</div><div class="cal-head">Sat</div><div class="cal-head">Sun</div>';
+
+  // Adjust firstDay for Monday start (JS Sunday=0)
+  const startOffset=(firstDay===0?6:firstDay-1);
+
+  // Previous month padding
+  for(let i=startOffset-1;i>=0;i--){
+    html+=`<div class="cal-cell other">${daysInPrev-i}</div>`;
+  }
+
+  // Current month days
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${calViewYear}-${String(calViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=ds===todayStr;
+    const isSel=ds===selStr;
+    const hasData=calDataCache[ds]>0;
+    const isFuture=new Date(ds+'T12:00:00')>todayDate;
+    html+=`<div class="cal-cell ${isToday?'today':''} ${isSel?'sel':''} ${hasData?'has-data':''} ${isFuture?'future':''}" onclick="pickCalDay('${ds}')">${d}</div>`;
+  }
+
+  // Next month padding
+  const totalCells=startOffset+daysInMonth;
+  const remaining=totalCells%7===0?0:7-(totalCells%7);
+  for(let i=1;i<=remaining;i++){
+    html+=`<div class="cal-cell other">${i}</div>`;
+  }
+
+  $('calGrid').innerHTML=html;
+
+  // Show preview for selected date
+  showCalDayPreview(selStr);
+}
+
+async function showCalDayPreview(dateStr){
+  const preview=$('calDayPreview');
+  const cals=calDataCache[dateStr]||0;
+  if(!cals){
+    preview.innerHTML=`<div class="cal-day-stats"><div class="cal-day-stats-title">${formatCalDate(dateStr)}</div><div style="font-size:12px;color:var(--tx3);padding:8px 0">No data for this day.</div></div>`;
+    return;
+  }
+  // Load full data for this day
+  try{
+    const{data:meals}=await sb.from('food_logs').select('*').eq('user_id',user.id).eq('date',dateStr).order('created_at');
+    const{data:workout}=await sb.from('workouts').select('calories_burned,steps').eq('user_id',user.id).eq('date',dateStr).maybeSingle();
+    const totalCals=meals?meals.reduce((s,m)=>s+(+m.calories||0),0):0;
+    const totalP=meals?Math.round(meals.reduce((s,m)=>s+(+m.protein_g||0),0)):0;
+    const totalC=meals?Math.round(meals.reduce((s,m)=>s+(+m.carbs_g||0),0)):0;
+    const totalF=meals?Math.round(meals.reduce((s,m)=>s+(+m.fat_g||0),0)):0;
+    const burned=workout?.calories_burned||0;
+    const t=tgt();
+
+    preview.innerHTML=`<div class="cal-day-stats">
+      <div class="cal-day-stats-title">${formatCalDate(dateStr)}</div>
+      <div class="cal-day-stats-row"><span class="cal-day-stats-label">Calories</span><span class="cal-day-stats-val" style="color:${totalCals>t?'var(--red)':'var(--grn)'}">${totalCals} / ${t} kcal</span></div>
+      <div class="cal-day-stats-row"><span class="cal-day-stats-label">Protein</span><span class="cal-day-stats-val" style="color:var(--blu)">${totalP}g</span></div>
+      <div class="cal-day-stats-row"><span class="cal-day-stats-label">Carbs</span><span class="cal-day-stats-val" style="color:var(--amb)">${totalC}g</span></div>
+      <div class="cal-day-stats-row"><span class="cal-day-stats-label">Fat</span><span class="cal-day-stats-val" style="color:var(--pur)">${totalF}g</span></div>
+      ${burned?`<div class="cal-day-stats-row"><span class="cal-day-stats-label">Burned</span><span class="cal-day-stats-val" style="color:var(--blu)">${burned} kcal</span></div>`:''}
+      <div class="cal-day-stats-row"><span class="cal-day-stats-label">Meals</span><span class="cal-day-stats-val">${meals?meals.length:0}</span></div>
+      <button class="btn btn-g" style="height:40px;font-size:12px;margin-top:10px" onclick="jumpToDay('${dateStr}')">View this day</button>
+    </div>`;
+  }catch(e){preview.innerHTML=''}
+}
+
+function formatCalDate(ds){
+  const d=new Date(ds+'T12:00:00');
+  if(ds===td())return'Today';
+  const diff=Math.round((new Date(td()+'T12:00:00')-d)/(1000*60*60*24));
+  if(diff===1)return'Yesterday';
+  return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});
+}
+
+async function pickCalDay(ds){
+  const todayDate=new Date();
+  if(new Date(ds+'T12:00:00')>todayDate)return;
+  viewDate=ds===td()?null:ds;
+  renderCal();
+}
+
+async function jumpToDay(ds){
+  viewDate=ds===td()?null:ds;
+  closeModal('calModal');
+  await Promise.all([loadFood(ds),loadEx(ds)]);
+  updateCalLabel();renderHome();
+}
+
+function calNav(dir){
+  calViewMonth+=dir;
+  if(calViewMonth>11){calViewMonth=0;calViewYear++}
+  if(calViewMonth<0){calViewMonth=11;calViewYear--}
+  renderCal();
+}
+
+// Override openModal for calModal to render calendar
+const _origOpenModal=openModal;
+openModal=function(id){
+  _origOpenModal(id);
+  if(id==='calModal'){calViewMonth=new Date().getMonth();calViewYear=new Date().getFullYear();renderCal()}
+};
 
 async function init(){const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
 async function boot(){await loadProfile();if(!profile?.onboarded){show('obScreen');renderOb();return}await Promise.all([loadFood(),loadEx()]);show('homeScreen');showUI();renderHome();renderEx()}
