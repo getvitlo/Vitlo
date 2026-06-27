@@ -74,6 +74,34 @@ textarea.inp{resize:none;line-height:1.5}
 .brief-icon{font-size:20px;margin-bottom:6px}
 .brief-title{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px}
 .brief-text{font-size:12px;color:var(--tx2);line-height:1.6}
+
+.tl{position:relative;padding-left:28px}
+.tl::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--bd)}
+.tl-item{position:relative;margin-bottom:16px;animation:tlIn .5s ease both}
+.tl-item:nth-child(1){animation-delay:.1s}.tl-item:nth-child(2){animation-delay:.2s}.tl-item:nth-child(3){animation-delay:.3s}.tl-item:nth-child(4){animation-delay:.4s}.tl-item:nth-child(5){animation-delay:.5s}
+@keyframes tlIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+.tl-dot{position:absolute;left:-24px;top:14px;width:12px;height:12px;border-radius:6px;border:2px solid var(--bd);background:var(--bg)}
+.tl-dot.active{background:var(--grn);border-color:var(--grn)}
+.tl-time{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.5px;margin-bottom:4px}
+.tl-card{background:var(--s2);border:1px solid var(--bd);border-radius:14px;padding:14px;cursor:pointer;transition:all .3s ease}
+.tl-card:active{transform:scale(.97)}
+.tl-card-top{display:flex;align-items:center;gap:12px}
+.plate-wrap{width:60px;height:60px;perspective:200px;flex-shrink:0}
+.plate{width:60px;height:60px;border-radius:50%;background:radial-gradient(ellipse at 30% 30%,#2a3530,#1a231e 60%,#131a16);box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 2px rgba(255,255,255,.05);transform:rotateX(25deg) rotateZ(0deg);display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform .6s cubic-bezier(.34,1.2,.64,1);position:relative;overflow:hidden}
+.plate::after{content:'';position:absolute;inset:4px;border-radius:50%;border:1px solid rgba(255,255,255,.03)}
+.plate-lg{width:140px;height:140px;font-size:56px;transform:rotateX(20deg) rotateZ(-5deg);box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 2px 4px rgba(255,255,255,.06)}
+.tl-card-info{flex:1;min-width:0}
+.tl-card-name{font-size:14px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-card-type{font-size:11px;color:var(--tx3);margin-top:1px}
+.tl-card-cals{font-family:'Instrument Serif',serif;font-size:24px;color:var(--grn);flex-shrink:0}
+.tl-macros{display:flex;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--bd)}
+.tl-macro{font-size:11px;color:var(--tx3)}.tl-macro b{color:var(--tx);font-weight:700}
+.dish-detail-inner{animation:dishIn .4s ease}
+@keyframes dishIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.dish-macro-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0}
+.dish-macro-cell{background:var(--s3);border-radius:10px;padding:10px;text-align:center}
+.dish-macro-val{font-size:20px;font-weight:700}
+.dish-macro-lbl{font-size:9px;color:var(--tx3);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s1);border:1px solid var(--bd);color:var(--tx);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.5)}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -99,7 +127,16 @@ textarea.inp{resize:none;line-height:1.5}
 
 <div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Food</div><div class="sh-s">Photo your plate or describe what you ate.</div><div class="tr"><div class="tb on" onclick="fT('photo',this)">📷 Photo</div><div class="tb" onclick="fT('desc',this)">✏️ Describe</div><div class="tb" onclick="fT('man',this)">🔢 Manual</div></div><div id="fp"><div class="pd" id="pD" onclick="document.getElementById('cI').click()"><input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)"><input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)"><div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div></div><div class="pa"><button class="btn btn-s" onclick="document.getElementById('cI').click()">📷 Camera</button><button class="btn btn-s" onclick="document.getElementById('gI').click()">📁 Library</button></div></div><div id="fd" style="display:none"><label class="lbl">What did you eat?</label><textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, 1 hash brown and a toast that's slightly buttered"></textarea><button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">✨ Calculate Calories</button></div><div id="fm" style="display:none"></div><div id="fR" style="display:none"></div><div id="cB" style="display:none"><div class="corr"><div class="corr-h">Something wrong? Tell the AI</div><input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:6px"><button class="btn btn-s" style="height:38px;font-size:11px" onclick="doCorr()">↻ Re-analyse</button></div></div><div id="eA" style="display:none"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">DETAILS</div><label class="lbl">Meal name</label><input class="inp" id="fN"><label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr"></div><div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr"></div><div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt"></div></div><label class="lbl">Weight of food (g, optional)</label><input class="inp" type="number" id="fW" placeholder="e.g. 350" inputmode="numeric"><button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log Meal</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('foodModal');resetF()">Cancel</button></div></div>
 <div class="ov" id="exModal" onclick="closeO(event,'exModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Exercise</div><div class="sh-s">From your Whoop, watch, or enter manually.</div><div class="tr"><div class="tb on" onclick="eT('man',this)">📝 Manual</div><div class="tb" onclick="eT('ss',this)">📸 Screenshot</div></div><div id="eM"><label class="lbl">Calories burned</label><input class="inp" type="number" id="eCIn" placeholder="e.g. 520" inputmode="numeric"><label class="lbl">Steps (optional)</label><input class="inp" type="number" id="eSIn" placeholder="e.g. 8500" inputmode="numeric"><button class="btn btn-g" onclick="saveEx()">Save</button></div><div id="eSS" style="display:none"><div class="pd" id="eSSD" onclick="document.getElementById('eSSI').click()"><input type="file" id="eSSI" accept="image/*" style="display:none" onchange="onESS(event)"><div style="font-size:44px;opacity:.25">📸</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Upload workout screenshot</div></div><div id="eSSR" style="display:none"></div><button class="btn btn-g" id="eSSB" style="display:none" onclick="saveESSx()">Save Exercise</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('exModal')">Cancel</button></div></div>
-<div class="ov" id="detailModal" onclick="closeO(event,'detailModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Today's Breakdown</div><div id="dB"></div><button class="btn btn-s" style="margin-top:12px" onclick="closeModal('detailModal')">Close</button></div></div>
+<div class="ov" id="detailModal" onclick="closeO(event,'detailModal')"><div class="sh" style="padding-bottom:40px">
+<div class="sh-h"></div>
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+  <div><div class="sh-t" style="margin:0">Today's Journey</div><div style="font-size:11px;color:var(--tx3);margin-top:2px" id="tlSummary">—</div></div>
+  <div style="text-align:right"><div style="font-family:'Instrument Serif',serif;font-size:28px;color:var(--grn)" id="tlTotal">0</div><div style="font-size:9px;color:var(--tx3)">KCAL TOTAL</div></div>
+</div>
+<div id="timeline"></div>
+<div id="dishDetail" style="display:none"></div>
+<button class="btn btn-s" style="margin-top:14px" onclick="closeModal('detailModal')">Close</button>
+</div></div>
 
 <!-- SETTINGS MODAL -->
 <div class="ov" id="settingsModal" onclick="closeO(event,'settingsModal')">
@@ -488,8 +525,77 @@ async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
   await loadProfile();closeModal('coachModal');renderHome();
   toast('✓ Plan applied · '+dailyTarget+' kcal/day');
 }
-function openDetail(){const t=tgt(),to=tots(),b=bmr(),m=macs(t),g=profile.goal,rem=t-to.k,over=rem<0;
-$('dB').innerHTML=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:13px;padding:14px;margin:12px 0"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">BMR</span><span style="font-weight:700">${b} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Daily living (×1.3)</span><span style="font-weight:700">${Math.round(b*1.3)} kcal</span></div>${g!=='maintain'?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">${g==='fat_loss'?'Deficit':'Surplus'}</span><span style="font-weight:700;color:${g==='fat_loss'?'var(--red)':'var(--grn)'}">${g==='fat_loss'?'−500':'+250'}</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:700;font-size:14px">Daily target</span><span style="font-weight:700;font-size:18px;color:var(--grn)">${t} kcal</span></div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Eaten</span><span style="font-weight:700">${to.k} kcal</span></div>${burnedCals?`<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--tx2);font-size:13px">Burned (bonus)</span><span style="font-weight:700;color:var(--blu)">${burnedCals} kcal</span></div>`:''}<div style="height:1px;background:var(--bd);margin:6px 0"></div><div style="display:flex;justify-content:space-between"><span style="font-weight:700;font-size:14px">${over?'Over limit':'Left to eat'}</span><span style="font-weight:700;font-size:22px;color:${over?'var(--red)':'var(--grn)'}">${Math.abs(rem)} kcal</span></div></div>${over?`<div style="background:var(--red-g);border:1px solid rgba(239,83,80,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You're <b style="color:var(--red)">${Math.abs(rem)} kcal over</b>. A ${Math.round(Math.abs(rem)/5)} min walk or ${Math.round(Math.abs(rem)/10)} min jog would balance it out.</div>`:rem>100?`<div style="background:var(--grn-g);border:1px solid rgba(46,204,113,.2);border-radius:12px;padding:12px;font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px">You have <b style="color:var(--grn)">${rem} kcal left</b> to eat today.</div>`:''}<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">MACROS</div>${[{l:'Protein',v:Math.round(to.p),t:m.p,c:'var(--blu)'},{l:'Carbs',v:Math.round(to.c),t:m.c,c:'var(--amb)'},{l:'Fat',v:Math.round(to.f),t:m.f,c:'var(--pur)'}].map(x=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)"><div style="width:8px;height:8px;border-radius:4px;background:${x.c}"></div><div style="flex:1;font-size:13px;color:var(--tx2)">${x.l}</div><div style="width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.min(100,(x.v/x.t)*100)}%;background:${x.c};border-radius:2px"></div></div><div style="font-size:13px;font-weight:700;min-width:65px;text-align:right">${x.v}g / ${x.t}g</div></div>`).join('')}`;openModal('detailModal')}
+function openDetail(){
+  const t=tgt(),to=tots(),m=macs(t),rem=t-to.k,over=rem<0;
+  $('tlTotal').textContent=to.k;$('tlTotal').style.color=over?'var(--red)':'var(--grn)';
+  $('tlSummary').textContent=foodLogs.length+' meal'+(foodLogs.length!==1?'s':'')+' · '+(over?Math.abs(rem)+' kcal over':''+rem+' kcal remaining');
+
+  const mealIcons={Breakfast:'🍳',Lunch:'🥗',Dinner:'🍖',Snack:'🍎',Meal:'🍽️'};
+  const tl=$('timeline');
+  $('dishDetail').style.display='none';
+
+  if(!foodLogs.length){
+    tl.innerHTML='<div class="em" style="padding:40px 0">No meals logged today.<br>Your food timeline will appear here.</div>';
+    openModal('detailModal');return;
+  }
+
+  // Sort by created_at ascending (timeline order)
+  const sorted=[...foodLogs].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+
+  tl.innerHTML='<div class="tl">'+sorted.map((f,i)=>{
+    const time=new Date(f.created_at);
+    const timeStr=time.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    const icon=mealIcons[f.meal_type]||mealIcons.Meal;
+    const isLatest=i===sorted.length-1;
+    return `<div class="tl-item"><div class="tl-dot ${isLatest?'active':''}"></div><div class="tl-time">${timeStr} · ${f.meal_type||'Meal'}</div><div class="tl-card" onclick="showDish(${i})"><div class="tl-card-top"><div class="plate-wrap"><div class="plate">${icon}</div></div><div class="tl-card-info"><div class="tl-card-name">${f.meal_name}</div><div class="tl-card-type">Tap to see nutrition breakdown</div></div><div class="tl-card-cals">${f.calories}</div></div><div class="tl-macros"><div class="tl-macro"><b>${f.protein_g||0}g</b> protein</div><div class="tl-macro"><b>${f.carbs_g||0}g</b> carbs</div><div class="tl-macro"><b>${f.fat_g||0}g</b> fat</div></div></div></div>`;
+  }).join('')+'</div>';
+
+  // Store sorted for dish detail
+  window._tlMeals=sorted;
+  openModal('detailModal');
+}
+
+function showDish(idx){
+  const f=window._tlMeals[idx];if(!f)return;
+  const mealIcons={Breakfast:'🍳',Lunch:'🥗',Dinner:'🍖',Snack:'🍎',Meal:'🍽️'};
+  const icon=mealIcons[f.meal_type]||mealIcons.Meal;
+  const time=new Date(f.created_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const totalMacroKcal=(f.protein_g||0)*4+(f.carbs_g||0)*4+(f.fat_g||0)*9;
+  const pPct=totalMacroKcal>0?Math.round((f.protein_g||0)*4/totalMacroKcal*100):0;
+  const cPct=totalMacroKcal>0?Math.round((f.carbs_g||0)*4/totalMacroKcal*100):0;
+  const fPct=totalMacroKcal>0?Math.round((f.fat_g||0)*9/totalMacroKcal*100):0;
+
+  $('timeline').style.display='none';
+  const dd=$('dishDetail');dd.style.display='block';
+  dd.innerHTML=`<div class="dish-detail-inner">
+    <button onclick="backToTimeline()" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px 0 12px;display:flex;align-items:center;gap:4px">← Back to timeline</button>
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px">
+      <div style="perspective:300px"><div class="plate plate-lg">${icon}</div></div>
+      <div style="margin-top:14px;text-align:center">
+        <div style="font-size:18px;font-weight:700;color:var(--tx)">${f.meal_name}</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px">${f.meal_type||'Meal'} · ${time}</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-family:'Instrument Serif',serif;font-size:48px;color:var(--grn);line-height:1">${f.calories}</div>
+      <div style="font-size:10px;color:var(--tx3);font-weight:600;letter-spacing:1px;margin-top:2px">KCAL</div>
+    </div>
+    <div class="dish-macro-grid">
+      <div class="dish-macro-cell"><div class="dish-macro-val" style="color:var(--blu)">${f.protein_g||0}g</div><div class="dish-macro-lbl">Protein</div><div style="font-size:10px;color:var(--tx3);margin-top:2px">${pPct}% of cals</div></div>
+      <div class="dish-macro-cell"><div class="dish-macro-val" style="color:var(--amb)">${f.carbs_g||0}g</div><div class="dish-macro-lbl">Carbs</div><div style="font-size:10px;color:var(--tx3);margin-top:2px">${cPct}% of cals</div></div>
+      <div class="dish-macro-cell"><div class="dish-macro-val" style="color:var(--pur)">${f.fat_g||0}g</div><div class="dish-macro-lbl">Fat</div><div style="font-size:10px;color:var(--tx3);margin-top:2px">${fPct}% of cals</div></div>
+    </div>
+    <div style="height:6px;display:flex;border-radius:3px;overflow:hidden;margin-bottom:16px">
+      <div style="width:${pPct}%;background:var(--blu)"></div>
+      <div style="width:${cPct}%;background:var(--amb)"></div>
+      <div style="width:${fPct}%;background:var(--pur)"></div>
+    </div>
+  </div>`;
+}
+
+function backToTimeline(){
+  $('dishDetail').style.display='none';$('timeline').style.display='block';
+}
 async function goTab(t){$('tH').classList.toggle('on',t==='home');$('tE').classList.toggle('on',t==='ex');$('tC').classList.toggle('on',t==='coach');$('homeScreen').style.display=t==='home'?'block':'none';$('exScreen').style.display=t==='ex'?'block':'none';$('coachScreen').style.display=t==='coach'?'block':'none';if(t==='home'){await loadFood();await loadEx();renderHome()}if(t==='ex'){await loadEx();renderEx()}if(t==='coach'){loadCoachBrief()}}
 // ── Coach ──
 let briefLoaded=false;
@@ -530,7 +636,15 @@ Today so far: eaten ${to.k} kcal (${Math.round(to.k/t*100)}% of target), burned 
 Protein: ${Math.round(to.p)}g / ${m.p}g target
 Food today: ${foodLogs.length>0?foodLogs.map(f=>f.meal_name+'('+f.calories+'kcal)').join(', '):'Nothing logged yet'}
 Eating habits: ${habitSummary}
-Important: Consider what time of day it is. If it's early and they haven't eaten much, that's NORMAL — they have hours left. Don't say they're under-eating at 9am. Only flag concern if it's late evening AND they're severely under target.`
+
+CRITICAL RULES FOR YOUR TONE:
+- NEVER say "severely under" or "dangerously low" or "you need to eat urgently". You are a calm, confident PT not an alarm system.
+- Before 6pm, low intake is COMPLETELY NORMAL. Most people eat their biggest meals in the evening. Just plan ahead.
+- Even after 6pm, frame it positively: "You've got room for a solid dinner" not "You haven't eaten enough".
+- Focus on WHAT TO DO NEXT, not what they haven't done.
+- Meal timing doesn't matter for fat loss — total daily intake does. Don't lecture about when to eat.
+- If they've eaten very little, suggest specific meals that would hit their remaining target. Be practical not preachy.
+- Keep it brief. 1-2 sentences max per point. Talk like a mate who knows nutrition, not a medical warning label.`
   };
 }
 
@@ -539,12 +653,12 @@ async function loadCoachBrief(){
   const el=$('coachBrief');
   const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a personal trainer giving a daily brief. Be direct, specific, use their actual numbers. Factor in the time of day — don't panic about low intake if the day is young.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a chill, knowledgeable personal trainer giving a daily brief. Sound like a mate who knows their stuff, not a medical textbook. Never be alarmist about food intake. Focus on practical next steps.
 
 ${ctx.contextBlock}
 
 Return JSON only:
-{"focus":{"title":"short title","text":"1-2 sentences. Factor in time of day and their eating patterns. If early in the day and low intake, reassure and plan ahead. If late and under, flag it constructively."},"workout":{"title":"suggested workout","text":"specific recommendation with duration and estimated burn. Consider time of day — don't suggest a heavy session at 10pm."},"steps":{"target":number,"text":"one sentence step goal considering how much of the day is left"}}`}]})});
+{"focus":{"title":"max 4 words","text":"1-2 sentences. Be practical and forward-looking. If they haven't eaten much yet, suggest what to eat — don't scold. If they're on track, give a specific tip for the rest of the day."},"workout":{"title":"workout name","text":"specific suggestion with duration and estimated burn. Match it to time of day — light evening walk at 9pm, not a HIIT session."},"steps":{"target":number,"text":"one sentence. Realistic for the time remaining."}}`}]})});
     const d=await resp.json();const t2=d.content?.map(c=>c.text||'').join('')||'';
     const mt=t2.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;
     const brief=JSON.parse(mt[0]);
@@ -566,13 +680,13 @@ async function sendChat(){
   msgs.scrollTop=msgs.scrollHeight;
   const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer talking to your client. Be direct, warm, specific. Use their actual data. Keep it 2-4 sentences. Consider the time of day and their eating habits before giving advice.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer chatting with your client. Sound like a knowledgeable mate — direct, warm, zero waffle. Use their data but don't lecture. 2-3 sentences max.
 
 ${ctx.contextBlock}
 
 Their question: "${input}"
 
-Reply naturally as their PT. No JSON, just plain text.`}]})});
+Reply naturally. Be specific to their situation. If they ask about food timing, be honest that total daily intake matters more than timing. Never be preachy or alarmist.`}]})});
     const d=await resp.json();const reply=d.content?.map(c=>c.text||'').join('')||'Sorry, couldn\'t process that.';
     const loadEl=$('chatLoading');
     if(loadEl)loadEl.outerHTML=`<div class="chat-bubble chat-ai">${reply}</div>`;
