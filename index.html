@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#080b09;--s1:#0d1210;--s2:#131a16;--s3:#1a231e;--s4:#222d27;--tx:#e4ebe6;--tx2:#9faa9f;--tx3:#586158;--bd:#1a231e;--bd2:#253029;--grn:#2ecc71;--grn2:#27ae60;--grn-g:rgba(46,204,113,.1);--blu:#5ba8ff;--blu-g:rgba(91,168,255,.1);--pur:#a78bfa;--pur-g:rgba(167,139,250,.1);--red:#ef5350;--red-g:rgba(239,83,80,.1);--amb:#f0b429;--amb-g:rgba(240,180,41,.1)}
@@ -90,9 +89,6 @@ textarea.inp{resize:none;line-height:1.5}
 .plate-wrap{width:60px;height:60px;perspective:200px;flex-shrink:0}
 .plate{width:60px;height:60px;border-radius:50%;background:radial-gradient(ellipse at 30% 30%,#2a3530,#1a231e 60%,#131a16);box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 2px rgba(255,255,255,.05);transform:rotateX(25deg) rotateZ(0deg);display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform .6s cubic-bezier(.34,1.2,.64,1);position:relative;overflow:hidden}
 .plate::after{content:'';position:absolute;inset:4px;border-radius:50%;border:1px solid rgba(255,255,255,.03)}
-.dish-3d-wrap{width:100%;height:220px;border-radius:16px;overflow:hidden;background:var(--s2);margin-bottom:14px;touch-action:none;position:relative}
-.dish-3d-wrap canvas{width:100%!important;height:100%!important;display:block}
-.dish-3d-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--tx3);pointer-events:none;opacity:.6}
 .plate-lg{width:140px;height:140px;font-size:56px;transform:rotateX(20deg) rotateZ(-5deg);box-shadow:0 12px 40px rgba(0,0,0,.6),inset 0 2px 4px rgba(255,255,255,.06)}
 .tl-card-info{flex:1;min-width:0}
 .tl-card-name{font-size:14px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -532,7 +528,7 @@ async function applyCoachPlan(goalType,dailyTarget,deficitAmt){
 function openDetail(){
   const t=tgt(),to=tots(),m=macs(t),rem=t-to.k,over=rem<0;
   $('tlTotal').textContent=to.k;$('tlTotal').style.color=over?'var(--red)':'var(--grn)';
-  $('tlSummary').textContent=foodLogs.length+' meal'+(foodLogs.length!==1?'s':'')+' · '+(over?Math.abs(rem)+' kcal over':''+rem+' kcal remaining');
+  $('tlSummary').textContent=foodLogs.length+' meal'+(foodLogs.length!==1?'s':'')+(burnedCals?' · '+burnedCals+' burned':'')+' · '+(over?Math.abs(rem)+' kcal over':rem+' kcal remaining');
 
   const mealIcons={Breakfast:'🍳',Lunch:'🥗',Dinner:'🍖',Snack:'🍎',Meal:'🍽️'};
   const tl=$('timeline');
@@ -544,14 +540,22 @@ function openDetail(){
   }
 
   // Sort by created_at ascending (timeline order)
-  const sorted=[...foodLogs].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
+  // Merge meals and exercise into one timeline
+  const meals=[...foodLogs].map(f=>({...f,_type:'meal'}));
+  const exEntries=burnedCals>0?[{_type:'exercise',meal_name:'Exercise',calories:burnedCals,created_at:new Date().toISOString(),steps:stepsCount}]:[];
+  const sorted=[...meals,...exEntries].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
 
   tl.innerHTML='<div class="tl">'+sorted.map((f,i)=>{
     const time=new Date(f.created_at);
     const timeStr=time.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-    const icon=mealIcons[f.meal_type]||mealIcons.Meal;
     const isLatest=i===sorted.length-1;
-    return `<div class="tl-item"><div class="tl-dot ${isLatest?'active':''}"></div><div class="tl-time">${timeStr} · ${f.meal_type||'Meal'}</div><div class="tl-card" onclick="showDish(${i})"><div class="tl-card-top"><div class="plate-wrap"><div class="plate">${icon}</div></div><div class="tl-card-info"><div class="tl-card-name">${f.meal_name}</div><div class="tl-card-type">Tap to see nutrition breakdown</div></div><div class="tl-card-cals">${f.calories}</div></div><div class="tl-macros"><div class="tl-macro"><b>${f.protein_g||0}g</b> protein</div><div class="tl-macro"><b>${f.carbs_g||0}g</b> carbs</div><div class="tl-macro"><b>${f.fat_g||0}g</b> fat</div></div></div></div>`;
+
+    if(f._type==='exercise'){
+      return `<div class="tl-item"><div class="tl-dot" style="background:var(--blu);border-color:var(--blu)"></div><div class="tl-time">${timeStr} · Exercise</div><div class="tl-card" style="border-color:rgba(91,168,255,.2)"><div class="tl-card-top"><div class="plate-wrap"><div class="plate" style="background:radial-gradient(ellipse at 30% 30%,rgba(91,168,255,.2),var(--s2) 70%)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--blu)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div></div><div class="tl-card-info"><div class="tl-card-name">Workout</div><div class="tl-card-type" style="color:var(--blu)">${f.steps?f.steps.toLocaleString()+' steps · ':''}Bonus deficit</div></div><div class="tl-card-cals" style="color:var(--blu)">-${f.calories}</div></div></div></div>`;
+    }
+
+    const icon=mealIcons[f.meal_type]||mealIcons.Meal;
+    return `<div class="tl-item"><div class="tl-dot ${isLatest&&f._type==='meal'?'active':''}"></div><div class="tl-time">${timeStr} · ${f.meal_type||'Meal'}</div><div class="tl-card" onclick="showDish(${i})"><div class="tl-card-top"><div class="plate-wrap"><div class="plate">${icon}</div></div><div class="tl-card-info"><div class="tl-card-name">${f.meal_name}</div><div class="tl-card-type">Tap to see nutrition breakdown</div></div><div class="tl-card-cals">${f.calories}</div></div><div class="tl-macros"><div class="tl-macro"><b>${f.protein_g||0}g</b> protein</div><div class="tl-macro"><b>${f.carbs_g||0}g</b> carbs</div><div class="tl-macro"><b>${f.fat_g||0}g</b> fat</div></div></div></div>`;
   }).join('')+'</div>';
 
   // Store sorted for dish detail
@@ -571,10 +575,14 @@ function showDish(idx){
   const dd=$('dishDetail');dd.style.display='block';
   dd.innerHTML=`<div class="dish-detail-inner">
     <button onclick="backToTimeline()" style="background:none;border:none;color:var(--tx2);font-size:14px;cursor:pointer;padding:4px 0 12px;display:flex;align-items:center;gap:4px">← Back to timeline</button>
-    <div class="dish-3d-wrap" id="dish3d"><div class="dish-3d-hint">↔ Drag to rotate</div></div>
-    <div style="text-align:center;margin-bottom:14px">
-      <div style="font-size:18px;font-weight:700;color:var(--tx)">${f.meal_name}</div>
-      <div style="font-size:12px;color:var(--tx3);margin-top:2px">${f.meal_type||'Meal'} · ${time}</div>
+    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:16px">
+      <div style="width:120px;height:120px;border-radius:50%;background:radial-gradient(ellipse at 35% 35%,var(--s4),var(--s2) 70%);box-shadow:0 6px 24px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;position:relative">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.7"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>
+      </div>
+      <div style="margin-top:14px;text-align:center">
+        <div style="font-size:18px;font-weight:700;color:var(--tx)">${f.meal_name}</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:2px">${f.meal_type||'Meal'} · ${time}</div>
+      </div>
     </div>
     <div style="text-align:center;margin-bottom:14px">
       <div style="font-family:'Instrument Serif',serif;font-size:48px;color:var(--grn);line-height:1">${f.calories}</div>
@@ -591,222 +599,6 @@ function showDish(idx){
       <div style="width:${fPct}%;background:var(--pur)"></div>
     </div>
   </div>`;
-
-  // Build 3D scene
-  init3dDish(f);
-}
-
-function init3dDish(meal){
-  const container=$('dish3d');if(!container||typeof THREE==='undefined')return;
-  const w=container.clientWidth,h=220;
-
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(40,w/h,0.1,100);
-  camera.position.set(0,3.5,5);camera.lookAt(0,0.3,0);
-
-  const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-  renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.setClearColor(0x000000,0);
-  container.insertBefore(renderer.domElement,container.firstChild);
-
-  // Lighting
-  const ambLight=new THREE.AmbientLight(0xffffff,0.4);scene.add(ambLight);
-  const dirLight=new THREE.DirectionalLight(0xffffff,0.8);dirLight.position.set(3,5,4);scene.add(dirLight);
-  const rimLight=new THREE.DirectionalLight(0x5ba8ff,0.3);rimLight.position.set(-3,2,-2);scene.add(rimLight);
-
-  // Plate — white ceramic look
-  const plateGeo=new THREE.CylinderGeometry(2,2.1,0.12,48);
-  const plateMat=new THREE.MeshStandardMaterial({color:0xd4d8d6,roughness:0.3,metalness:0.05});
-  const plate=new THREE.Mesh(plateGeo,plateMat);
-  plate.position.y=0;scene.add(plate);
-
-  // Plate rim
-  const rimGeo=new THREE.TorusGeometry(2.05,0.04,8,48);
-  const rimMat=new THREE.MeshStandardMaterial({color:0xe8ece8,roughness:0.2,metalness:0.1});
-  const rim=new THREE.Mesh(rimGeo,rimMat);
-  rim.rotation.x=Math.PI/2;rim.position.y=0.06;scene.add(rim);
-
-  // Parse meal name for food types and render recognisable shapes
-  const name=(meal.meal_name||'').toLowerCase();
-  const foodGroup=new THREE.Group();
-
-  // Scale factor from calories — more calories = more food on plate
-  const mealCals=parseInt(meal.calories)||400;
-  const portionScale=Math.max(0.6,Math.min(1.6,mealCals/500));
-
-  function addMince(x,z,spread){
-    const mat=new THREE.MeshStandardMaterial({color:0x6b3a2a,roughness:0.85,metalness:0});
-    const mat2=new THREE.MeshStandardMaterial({color:0x7a4432,roughness:0.8,metalness:0});
-    const count=Math.round(70*portionScale);const sp=spread*portionScale;
-    // Base mound shape
-    for(let i=0;i<count;i++){
-      const s=0.05+Math.random()*0.07;
-      const geo=new THREE.SphereGeometry(s,5,4);
-      geo.scale(0.8+Math.random()*0.4,0.4+Math.random()*0.4,0.8+Math.random()*0.4);
-      const m=new THREE.Mesh(geo,Math.random()>0.5?mat:mat2);
-      const angle=Math.random()*Math.PI*2;
-      const r=Math.random()*sp;
-      const heightFalloff=1-r/sp;
-      m.position.set(x+Math.cos(angle)*r, 0.08+Math.random()*0.18*heightFalloff*portionScale, z+Math.sin(angle)*r);
-      m.rotation.set(Math.random(),Math.random(),Math.random());
-      foodGroup.add(m);
-    }
-  }
-  function addRice(x,z,spread){
-    const mat=new THREE.MeshStandardMaterial({color:0xf5f0e0,roughness:0.65,metalness:0});
-    const mat2=new THREE.MeshStandardMaterial({color:0xeee8d0,roughness:0.7,metalness:0});
-    const count=Math.round(120*portionScale);const sp=spread*portionScale;
-    for(let i=0;i<count;i++){
-      const geo=new THREE.SphereGeometry(0.025+Math.random()*0.01,4,3);
-      geo.scale(1,0.4,2);
-      const m=new THREE.Mesh(geo,Math.random()>0.3?mat:mat2);
-      const angle=Math.random()*Math.PI*2;
-      const r=Math.random()*sp;
-      const heightFalloff=1-r/sp;
-      m.position.set(x+Math.cos(angle)*r, 0.08+Math.random()*0.2*heightFalloff*portionScale, z+Math.sin(angle)*r);
-      m.rotation.y=Math.random()*Math.PI;
-      m.rotation.z=(Math.random()-0.5)*0.4;
-      foodGroup.add(m);
-    }
-  }
-  function addChicken(x,z){
-    const mat=new THREE.MeshStandardMaterial({color:0xd4a556,roughness:0.65,metalness:0.02});
-    const charMat=new THREE.MeshStandardMaterial({color:0xb8863a,roughness:0.7,metalness:0.02});
-    const s=0.45*portionScale;
-    const geo=new THREE.SphereGeometry(s,10,8);geo.scale(1.4,0.35,1);
-    const m=new THREE.Mesh(geo,mat);m.position.set(x,s*0.35+0.06,z);foodGroup.add(m);
-    // Char marks
-    const geo2=new THREE.SphereGeometry(s*0.7,8,6);geo2.scale(1.2,0.3,0.9);
-    const m2=new THREE.Mesh(geo2,charMat);m2.position.set(x+s*0.6,s*0.25+0.06,z+0.15);foodGroup.add(m2);
-    if(portionScale>1){const geo3=new THREE.SphereGeometry(s*0.5,8,6);geo3.scale(1,0.3,0.8);const m3=new THREE.Mesh(geo3,mat);m3.position.set(x-s*0.4,s*0.2+0.06,z-0.2);foodGroup.add(m3)}
-  }
-  function addSausages(x,z,count){
-    const mat=new THREE.MeshStandardMaterial({color:0x8b4513,roughness:0.7,metalness:0.02});
-    const mat2=new THREE.MeshStandardMaterial({color:0x6d3410,roughness:0.75,metalness:0.02});
-    const sLen=0.65*portionScale,sRad=0.07*portionScale;
-    for(let i=0;i<count;i++){
-      const geo=new THREE.CylinderGeometry(sRad,sRad*0.95,sLen,10);
-      // Round the ends
-      const capGeo=new THREE.SphereGeometry(sRad,8,6);
-      const m=new THREE.Mesh(geo,i%2?mat:mat2);
-      m.rotation.z=Math.PI/2;m.rotation.y=0.15*i-0.15;
-      m.position.set(x+Math.sin(i*0.3)*0.1,sRad+0.07,z+i*0.2-count*0.1);
-      foodGroup.add(m);
-      // End caps
-      const c1=new THREE.Mesh(capGeo,i%2?mat:mat2);c1.position.copy(m.position);c1.position.x-=sLen/2;foodGroup.add(c1);
-      const c2=new THREE.Mesh(capGeo.clone(),i%2?mat:mat2);c2.position.copy(m.position);c2.position.x+=sLen/2;foodGroup.add(c2);
-    }
-  }
-  function addEggs(x,z,count){
-    const whiteMat=new THREE.MeshStandardMaterial({color:0xf8f8f0,roughness:0.4,metalness:0});
-    const yolkMat=new THREE.MeshStandardMaterial({color:0xf5c518,roughness:0.3,metalness:0.05});
-    for(let i=0;i<count;i++){
-      const wGeo=new THREE.SphereGeometry(0.22,10,8);wGeo.scale(1.2,0.25,1.2);
-      const w=new THREE.Mesh(wGeo,whiteMat);w.position.set(x+i*0.35,0.1,z);foodGroup.add(w);
-      const yGeo=new THREE.SphereGeometry(0.1,8,6);yGeo.scale(1,0.5,1);
-      const y=new THREE.Mesh(yGeo,yolkMat);y.position.set(x+i*0.35,0.15,z);foodGroup.add(y);
-    }
-  }
-  function addBread(x,z,count){
-    const mat=new THREE.MeshStandardMaterial({color:0xc8a468,roughness:0.8,metalness:0});
-    for(let i=0;i<count;i++){
-      const geo=new THREE.BoxGeometry(0.6,0.08,0.5);
-      const m=new THREE.Mesh(geo,mat);
-      m.position.set(x,0.1+i*0.09,z);m.rotation.y=0.1*i;foodGroup.add(m);
-    }
-  }
-  function addPasta(x,z){
-    const mat=new THREE.MeshStandardMaterial({color:0xe8d5a0,roughness:0.6,metalness:0});
-    for(let i=0;i<20;i++){
-      const geo=new THREE.TorusGeometry(0.06,0.02,6,8);
-      const m=new THREE.Mesh(geo,mat);
-      const angle=Math.random()*Math.PI*2;const r=Math.random()*0.55;
-      m.position.set(x+Math.cos(angle)*r, 0.1+Math.random()*0.15, z+Math.sin(angle)*r);
-      m.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);
-      foodGroup.add(m);
-    }
-  }
-  function addVeg(x,z){
-    const mat=new THREE.MeshStandardMaterial({color:0x2d8c46,roughness:0.7,metalness:0});
-    for(let i=0;i<6;i++){
-      const geo=new THREE.SphereGeometry(0.1+Math.random()*0.08,6,5);
-      geo.scale(1,0.7,1);
-      const m=new THREE.Mesh(geo,mat);
-      const angle=Math.random()*Math.PI*2;const r=Math.random()*0.4;
-      m.position.set(x+Math.cos(angle)*r, 0.12, z+Math.sin(angle)*r);
-      foodGroup.add(m);
-    }
-  }
-  function addSteak(x,z){
-    const s=0.55*portionScale;
-    const mat=new THREE.MeshStandardMaterial({color:0x5c2018,roughness:0.75,metalness:0.02});
-    const geo=new THREE.SphereGeometry(s,12,8);geo.scale(1.3,0.35,1);
-    const m=new THREE.Mesh(geo,mat);m.position.set(x,s*0.35+0.06,z);foodGroup.add(m);
-    // Grill marks
-    const grillMat=new THREE.MeshStandardMaterial({color:0x3a1008,roughness:0.9});
-    for(let i=0;i<4;i++){const gGeo=new THREE.BoxGeometry(s*2,0.01,0.02);const gm=new THREE.Mesh(gGeo,grillMat);gm.position.set(x,s*0.36+0.06,z-s*0.4+i*s*0.25);foodGroup.add(gm)}
-    const fatMat=new THREE.MeshStandardMaterial({color:0xd4c4a8,roughness:0.5});
-    const fGeo=new THREE.SphereGeometry(s*0.3,6,4);fGeo.scale(2,0.2,0.7);
-    const fm=new THREE.Mesh(fGeo,fatMat);fm.position.set(x+s*0.5,s*0.3+0.06,z-s*0.4);foodGroup.add(fm);
-  }
-  function addFish(x,z){
-    const mat=new THREE.MeshStandardMaterial({color:0xe8a88c,roughness:0.5,metalness:0.05});
-    const geo=new THREE.SphereGeometry(0.5,10,8);geo.scale(1.4,0.3,0.7);
-    const m=new THREE.Mesh(geo,mat);m.position.set(x,0.18,z);foodGroup.add(m);
-  }
-  function addDefault(){
-    const colors=[0x6b3a2a,0xd4a556,0xf5f0e0,0x2d8c46];
-    for(let i=0;i<12;i++){
-      const geo=new THREE.SphereGeometry(0.08+Math.random()*0.1,6,5);geo.scale(1,0.6,1);
-      const mat=new THREE.MeshStandardMaterial({color:colors[i%4],roughness:0.7});
-      const m=new THREE.Mesh(geo,mat);
-      const angle=Math.random()*Math.PI*2;const r=0.3+Math.random()*0.7;
-      m.position.set(Math.cos(angle)*r, 0.12+Math.random()*0.1, Math.sin(angle)*r);
-      foodGroup.add(m);
-    }
-  }
-
-  // Detect foods from name and place them on plate
-  let placed=false;
-  // Detect foods and place — use wider positions to fill plate
-  if(name.includes('mince')||name.includes('minced')||name.includes('bolognese')||name.includes('keema')){addMince(-0.4,0.1,0.7);placed=true}
-  if(name.includes('steak')){addSteak(-0.3,0);placed=true}
-  if(name.includes('chicken')||name.includes('grilled chicken')){addChicken(-0.3,0);placed=true}
-  if(name.includes('fish')||name.includes('salmon')||name.includes('tuna')||name.includes('cod')){addFish(-0.3,0);placed=true}
-  if(name.includes('sausage')){const cnt=parseInt(name.match(/(\d+)\s*sausage/)?.[1])||3;addSausages(-0.3,0,Math.min(cnt,6));placed=true}
-  if(name.includes('egg')){const cnt=parseInt(name.match(/(\d+)\s*egg/)?.[1])||2;addEggs(-0.4,-0.2,Math.min(cnt,4));placed=true}
-  if(name.includes('rice')){addRice(0.5,0,0.65);placed=true}
-  if(name.includes('pasta')||name.includes('spaghetti')||name.includes('penne')){addPasta(0.4,0);placed=true}
-  if(name.includes('bread')||name.includes('toast')){const cnt=parseInt(name.match(/(\d+)\s*(bread|toast|slice)/)?.[1])||2;addBread(0.5,0.2,Math.min(cnt,3));placed=true}
-  if(name.includes('veg')||name.includes('broccoli')||name.includes('salad')||name.includes('spinach')){addVeg(0.3,-0.5);placed=true}
-  if(!placed)addDefault();
-
-  scene.add(foodGroup);
-
-  // Shadow plane
-  const shadowGeo=new THREE.PlaneGeometry(6,6);
-  const shadowMat=new THREE.ShadowMaterial({opacity:0.2});
-  const shadowPlane=new THREE.Mesh(shadowGeo,shadowMat);
-  shadowPlane.rotation.x=-Math.PI/2;shadowPlane.position.y=-0.1;scene.add(shadowPlane);
-
-  // Drag rotation
-  let isDragging=false,prevX=0,rotY=0,targetRotY=0,autoRotate=true;
-
-  container.addEventListener('pointerdown',(e)=>{isDragging=true;prevX=e.clientX;autoRotate=false;e.preventDefault()});
-  container.addEventListener('pointermove',(e)=>{if(!isDragging)return;const dx=e.clientX-prevX;targetRotY+=dx*0.01;prevX=e.clientX;e.preventDefault()});
-  container.addEventListener('pointerup',()=>{isDragging=false});
-  container.addEventListener('pointerleave',()=>{isDragging=false});
-
-  // Animate
-  function animate(){
-    if(!$('dish3d'))return;
-    requestAnimationFrame(animate);
-    if(autoRotate)targetRotY+=0.005;
-    rotY+=(targetRotY-rotY)*0.08;
-    scene.rotation.y=rotY;
-    renderer.render(scene,camera);
-  }
-  animate();
 }
 
 function backToTimeline(){
