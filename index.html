@@ -162,7 +162,7 @@ textarea.inp{resize:none;line-height:1.5}
 .goal-o-d{font-size:11.5px;color:var(--tx3);margin-top:2px;line-height:1.4}
 
 /* ══ HOME ══ */
-.hd{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) var(--gut) 6px}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(14px + env(safe-area-inset-top)) var(--gut) 10px}
 .ring-wrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 8px;cursor:pointer}
 .ring{position:relative;width:224px;height:224px}
 .ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
@@ -339,18 +339,18 @@ textarea.inp{resize:none;line-height:1.5}
 .hist-k{font-family:'Instrument Serif',serif;font-size:18px;color:var(--grn);flex-shrink:0}
 
 /* ══ CALENDAR ══ */
-.cal-head{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}
-.cal-head div{text-align:center;font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.5px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.cal-cell{aspect-ratio:1;border-radius:var(--r-sm);background:var(--s2);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .16s;position:relative}
+.cal-head{text-align:center;font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.6px;padding-bottom:6px}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:100%}
+.cal-cell{aspect-ratio:1;border-radius:11px;background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .16s;position:relative;min-width:0}
 .cal-cell:active{transform:scale(.92)}
 .cal-cell.other{opacity:.22;pointer-events:none}
 .cal-cell.today{border-color:var(--grn)}
 .cal-cell.sel{background:var(--grn);border-color:var(--grn)}
 .cal-cell.sel .cal-n{color:#07110b;font-weight:800}
-.cal-cell.has::after{content:'';position:absolute;bottom:5px;width:4px;height:4px;border-radius:2px;background:var(--grn)}
-.cal-cell.sel.has::after{background:#07110b}
-.cal-n{font-size:13px;font-weight:600}
+
+
+.cal-n{font-size:14px;font-weight:600;line-height:1;margin-bottom:2px}
 .cal-day-stats{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-md);padding:14px}
 .cal-day-stats-title{font-size:13px;font-weight:700;margin-bottom:10px}
 .cal-day-stats-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)}
@@ -390,11 +390,11 @@ textarea.inp{resize:none;line-height:1.5}
 .hero-n{font-size:11.5px;color:var(--tx3);margin-top:6px}
 .lnk{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--bd);font-size:14px;color:var(--tx2);text-decoration:none;cursor:pointer}
 .lnk:last-of-type{border-bottom:none}
-.todaybtn{display:flex;align-items:center;justify-content:center;gap:9px;margin:2px var(--gut) 0;padding:11px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-full);cursor:pointer;transition:all .18s}
-.todaybtn:active{transform:scale(.97);border-color:var(--bd2)}
-.todaybtn-t{font-size:13.5px;font-weight:700}
-.todaybtn-s{font-size:12px;color:var(--tx3)}
-.cal-dot{position:absolute;bottom:5px;width:5px;height:5px;border-radius:3px}
+.daysel{display:flex;align-items:center;gap:5px;padding:8px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-full);cursor:pointer;transition:all .16s}
+.daysel:active{transform:scale(.94);border-color:var(--bd2)}
+.daysel-t{font-size:13px;font-weight:700;letter-spacing:-.1px}
+
+.cal-dot{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:3px}
 .cal-legend{display:flex;justify-content:center;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)}
 .cal-lg{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--tx3)}
 .cal-lg-d{width:6px;height:6px;border-radius:3px}
@@ -438,15 +438,13 @@ textarea.inp{resize:none;line-height:1.5}
     <button class="ib" onclick="openPage('menuScreen')" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></svg>
     </button>
+    <div class="daysel" onclick="openModal('calModal');renderCal()">
+      <span class="daysel-t" id="hDay">Today</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
     <div class="pill" id="hPill" onclick="openPage('goalsScreen')">Set a goal</div>
   </div>
 
-  <div class="todaybtn" onclick="openModal('calModal');renderCal()">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    <span class="todaybtn-t" id="hDay">Today</span>
-    <span class="todaybtn-s" id="hDate"></span>
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-  </div>
   <div class="ring-wrap" onclick="goTab('food')">
     <div class="ring">
       <svg width="224" height="224" viewBox="0 0 230 230">
@@ -990,8 +988,7 @@ function renderHome(){
 
   $('hPill').textContent=goalLabel(profile?.goal||'fat_loss');
   const _d=new Date(getViewDate()+'T00:00:00');
-  $('hDay').textContent=isToday()?'Today':_d.toLocaleDateString('en-GB',{weekday:'long'});
-  $('hDate').textContent=_d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  $('hDay').textContent=isToday()?'Today':_d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   animNum($('rN'),Math.abs(rem));
   $('rN').style.color=over?'var(--red)':'var(--grn)';
   $('rL').textContent=over?'kcal over':'kcal left';
@@ -1766,7 +1763,27 @@ function editMeal(id){
   const saveBtn=$('eA').querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Save Changes';
   openPage('logScreen');
 }
-function fT(t,el){updateScanBadge();document.querySelectorAll('#logSeg .seg-b').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('fp').style.display=t==='photo'?'block':'none';$('fd').style.display=t==='desc'?'block':'none';$('fm').style.display=t==='man'?'block':'none';if(t==='man'){$('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none';renderMealHistory()}}
+function fT(t,el){
+  updateScanBadge();
+  document.querySelectorAll('#logSeg .seg-b').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  $('fp').style.display=t==='photo'?'block':'none';
+  $('fd').style.display=t==='desc'?'block':'none';
+  $('fm').style.display=t==='man'?'block':'none';
+  if(t==='man'){
+    $('eA').style.display='block';
+    $('fR').style.display='none';
+    $('cB').style.display='none';
+    $('quickLog').style.display='none';
+    renderMealHistory();
+  }else if(!aiRes){
+    // no analysis yet — keep the page clean
+    $('eA').style.display='none';
+    $('fR').style.display='none';
+    $('cB').style.display='none';
+    $('quickLog').style.display='none';
+  }
+}
 
 function showFR(r){
   // Fill inline edit fields (behind the card, for Adjust flow)
