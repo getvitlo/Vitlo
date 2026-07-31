@@ -138,18 +138,87 @@ textarea.inp{resize:none;line-height:1.5}
 .tx-i,.tl-item{animation:rowIn .3s ease both}
 @keyframes rowIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 ::selection{background:rgba(46,204,113,.3)}
+
+.nc-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:150;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:24px}
+.nc-ov.open{display:flex;animation:fo .2s}
+.nc{background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd2);border-radius:24px;width:100%;max-width:360px;max-height:82vh;overflow-y:auto;animation:ncPop .45s cubic-bezier(.34,1.3,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.6)}
+@keyframes ncPop{from{opacity:0;transform:scale(.85) translateY(24px)}to{opacity:1;transform:none}}
+.nc-top{padding:24px 22px 16px;text-align:center;border-bottom:1px solid var(--bd)}
+.nc-name{font-size:17px;font-weight:700;color:var(--tx);line-height:1.3}
+.nc-kcal{font-family:'Instrument Serif',serif;font-size:64px;color:var(--grn);line-height:1;margin-top:10px;letter-spacing:-2px}
+.nc-ku{font-size:11px;color:var(--tx3);font-weight:600;letter-spacing:1px;margin-top:2px}
+.nc-macros{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--bd)}
+.nc-m{padding:16px 8px;text-align:center}
+.nc-m+.nc-m{border-left:1px solid var(--bd)}
+.nc-mv{font-size:24px;font-weight:800}
+.nc-ml{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.6px;margin-top:3px;text-transform:uppercase}
+.nc-mb{height:3px;border-radius:2px;margin:8px auto 0;width:60%}
+.nc-sub{display:flex;justify-content:center;gap:22px;padding:12px;border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx3)}
+.nc-sub b{color:var(--tx2)}
+.nc-bd{padding:14px 20px;font-size:12px;color:var(--tx2);line-height:1.7;white-space:pre-line;border-bottom:1px solid var(--bd)}
+.nc-bd-lbl{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:6px}
+.nc-btns{padding:14px 18px 18px;display:flex;flex-direction:column;gap:8px}
+.hist-item{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.hist-item:active{transform:scale(.97);background:var(--s3)}
+.hist-item-info{flex:1;min-width:0}
+.hist-item-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-item-meta{font-size:10px;color:var(--tx3);margin-top:1px}
+.hist-item-kcal{font-family:'Instrument Serif',serif;font-size:18px;color:var(--grn);flex-shrink:0}
+
+.scan-wrap{position:relative;border-radius:16px;overflow:hidden;margin-bottom:10px}
+.scan-wrap img{width:100%;display:block;border-radius:16px}
+.scan-line{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--grn) 20%,#7dffb0 50%,var(--grn) 80%,transparent);box-shadow:0 0 20px var(--grn),0 0 40px rgba(46,204,113,.5);animation:scanSweep 1.8s ease-in-out infinite}
+@keyframes scanSweep{0%{top:0}50%{top:calc(100% - 3px)}100%{top:0}}
+.scan-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(46,204,113,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(46,204,113,.06) 1px,transparent 1px);background-size:24px 24px;animation:gridPulse 2s ease-in-out infinite}
+@keyframes gridPulse{0%,100%{opacity:.4}50%{opacity:1}}
+.scan-corner{position:absolute;width:28px;height:28px;border:2.5px solid var(--grn)}
+.scan-corner.tl{top:10px;left:10px;border-right:none;border-bottom:none;border-radius:6px 0 0 0}
+.scan-corner.tr{top:10px;right:10px;border-left:none;border-bottom:none;border-radius:0 6px 0 0}
+.scan-corner.bl{bottom:10px;left:10px;border-right:none;border-top:none;border-radius:0 0 0 6px}
+.scan-corner.br{bottom:10px;right:10px;border-left:none;border-top:none;border-radius:0 0 6px 0}
+.scan-particle{position:absolute;width:4px;height:4px;border-radius:2px;background:var(--grn);opacity:0;animation:particleFloat 1.5s ease-out infinite}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(0) scale(1)}20%{opacity:1}100%{opacity:0;transform:translateY(-30px) scale(.3)}}
+.scan-status{text-align:center;padding:10px 0 4px;font-size:12px;color:var(--grn);font-weight:600;letter-spacing:.3px}
+.scan-status .sp{display:inline-block;vertical-align:middle;width:14px;height:14px;border-width:2px;margin-right:8px}
+.hs-badge{display:inline-flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:16px;font-size:24px;font-weight:800;flex-shrink:0}
+.hs-row{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--bd)}
+.hs-info{flex:1}
+.hs-title{font-size:12px;font-weight:700;color:var(--tx)}
+.hs-desc{font-size:11px;color:var(--tx3);margin-top:1px;line-height:1.4}
+
+.pw-ov{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:180;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:22px}
+.pw-ov.open{display:flex;animation:fo .2s}
+.pw{background:linear-gradient(180deg,#101814,var(--s1));border:1px solid rgba(46,204,113,.18);border-radius:26px;width:100%;max-width:360px;max-height:88vh;overflow-y:auto;animation:ncPop .45s cubic-bezier(.34,1.3,.64,1);box-shadow:0 24px 70px rgba(0,0,0,.7)}
+.pw-top{padding:26px 24px 18px;text-align:center}
+.pw-badge{display:inline-block;padding:5px 14px;border-radius:100px;background:var(--grn-g);border:1px solid rgba(46,204,113,.25);color:var(--grn);font-size:10px;font-weight:800;letter-spacing:1px}
+.pw-h{font-family:'Instrument Serif',serif;font-size:32px;line-height:1.1;margin-top:14px;color:var(--tx)}
+.pw-sub{font-size:13px;color:var(--tx3);margin-top:8px;line-height:1.5}
+.pw-feats{padding:4px 24px 18px}
+.pw-f{display:flex;align-items:flex-start;gap:11px;padding:9px 0}
+.pw-f-ic{width:22px;height:22px;border-radius:11px;background:var(--grn-g);color:var(--grn);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px}
+.pw-f-t{font-size:13px;font-weight:600;color:var(--tx)}
+.pw-f-d{font-size:11px;color:var(--tx3);margin-top:1px;line-height:1.4}
+.pw-price{text-align:center;padding:0 24px 6px}
+.pw-price-n{font-family:'Instrument Serif',serif;font-size:38px;color:var(--grn);line-height:1}
+.pw-price-s{font-size:11px;color:var(--tx3);margin-top:3px}
+.pw-btns{padding:12px 22px 22px}
+.pw-restore{text-align:center;font-size:11px;color:var(--tx3);margin-top:12px}
+.pw-restore span{color:var(--tx2);text-decoration:underline;cursor:pointer}
+.scan-badge{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px;border-radius:11px;background:var(--s2);border:1px solid var(--bd);font-size:11px;font-weight:600;color:var(--tx3);margin-bottom:12px}
+.scan-badge b{color:var(--grn)}
+.scan-badge.out{border-color:rgba(240,180,41,.25);color:var(--amb)}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--s1);border:1px solid var(--bd);color:var(--tx);padding:10px 18px;border-radius:100px;font-size:13px;font-weight:600;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1);box-shadow:0 8px 24px rgba(0,0,0,.5)}.toast.show{transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="screen active" id="authScreen"><div class="auth"><div><div class="auth-logo">vitlo</div><div class="auth-tag">Know what you eat. Hit your goals.</div></div><div><div class="auth-title" id="authTitle">Welcome back</div><input class="inp" type="email" id="aE" placeholder="Email" autocomplete="email"><input class="inp" type="password" id="aP" placeholder="Password" autocomplete="current-password"><button class="btn btn-g" id="aB" onclick="doAuth()">Sign In</button><button class="sw" id="aSw" onclick="flipAuth()">No account? <b>Sign up free</b></button></div></div></div>
 <div class="screen" id="obScreen"><div class="ob"><div class="ob-bar"><div class="ob-fill" id="obBar"></div></div><div class="ob-sl" id="obLbl">STEP 1 OF 3</div><div id="obC"></div><button class="btn btn-g" style="margin-top:auto" id="obBtn" onclick="obNext()">Continue</button></div></div>
-<div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">—</div></div></div><div class="pill" id="hPill">—</div></div><div class="cal-nav">
+<div class="screen" id="homeScreen"><div class="ht"><div style="display:flex;align-items:center;gap:12px"><button style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="openSettings()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><div><div class="h-hi" id="hHi">Good morning</div><div class="h-nm" id="hNm">Hi there</div></div></div><div class="pill" id="hPill">—</div></div><div class="cal-nav">
       <div class="cal-arr" onclick="navDay(-1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></div>
       <div class="cal-date" id="calDate" onclick="openModal('calModal')" style="cursor:pointer">Today <span style="font-size:10px;color:var(--tx3)">▼</span></div>
       <div class="cal-arr" onclick="navDay(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       <button class="cal-today-btn" id="calTodayBtn" onclick="navToday()">Today</button>
-    </div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(61,220,151,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="#3ddc97" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">—</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:#3ddc97"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--grn)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
+    </div><div class="ra" onclick="openDetail()"><div class="rb"><svg width="230" height="230" viewBox="0 0 230 230"><circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="14"/><circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="r1" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1),stroke .3s"/><circle cx="115" cy="115" r="82" fill="none" stroke="rgba(239,83,80,.1)" stroke-width="12"/><circle cx="115" cy="115" r="82" fill="none" stroke="var(--red)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="r2" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .12s"/><circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.1)" stroke-width="10"/><circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="r3" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1) .24s"/></svg><div class="rc"><div class="rn" id="rN">0</div><div class="rl" id="rL">kcal left</div></div></div><div class="rleg"><div class="rleg-i"><div class="rleg-d" style="background:var(--grn)"></div><div class="rleg-t">Eaten</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--red)"></div><div class="rleg-t">Burned</div></div><div class="rleg-i"><div class="rleg-d" style="background:var(--pur)"></div><div class="rleg-t">Protein</div></div></div></div><div class="ss"><div class="sc"><div class="sv" id="sE">0</div><div class="sl">Eaten</div></div><div class="sc"><div class="sv" id="sT">0</div><div class="sl">Target</div></div><div class="sc"><div class="sv" id="sB" style="color:var(--grn)">—</div><div class="sl">Burned</div></div></div><div class="ms" id="mR"></div><div class="cd" onclick="openModal('exModal')"><div class="cd-h"><span class="cd-t">Calories Burned</span><span class="cd-l">+ Log</span></div><div id="exCB" style="font-size:11px;color:var(--tx3);margin-top:4px">No exercise logged today.</div></div><div style="display:flex;align-items:center;justify-content:space-between;padding:10px 20px 6px"><span style="font-size:13px;font-weight:700">Today's Meals</span><span style="font-size:11px;font-weight:600;color:var(--grn);cursor:pointer" onclick="openModal('foodModal')">+ Add</span></div><div id="mL"><div class="em">No food logged yet. Tap + to start.</div></div><div style="height:110px"></div></div>
 <div class="screen" id="exScreen"><div class="exh"><div class="exh-t">Exercise</div><div class="exh-s">Track calories burned today</div></div>
 <!-- Activity Score -->
 <div style="display:flex;justify-content:center;padding:10px 0 16px"><div style="position:relative;width:120px;height:120px"><svg width="120" height="120" viewBox="0 0 120 120" style="transform:rotate(-90deg)"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(46,204,113,.1)" stroke-width="10"/><circle cx="60" cy="60" r="50" fill="none" stroke="var(--grn)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" id="scoreRing" style="transition:stroke-dashoffset 1s ease"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center"><div style="font-family:'Instrument Serif',serif;font-size:36px;line-height:1" id="scoreNum">0</div><div style="font-size:8px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin-top:2px">/ 10</div></div></div></div>
@@ -166,7 +235,7 @@ textarea.inp{resize:none;line-height:1.5}
   <div style="height:60px"></div>
 </div>
 
-<div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Food</div><div class="sh-s">Photo your plate or describe what you ate.</div><div class="tr"><div class="tb on" onclick="fT('photo',this)">📷 Photo</div><div class="tb" onclick="fT('desc',this)">✏️ Describe</div><div class="tb" onclick="fT('man',this)">🔢 Manual</div></div><div id="fp"><div class="pd" id="pD" onclick="document.getElementById('cI').click()"><input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)"><input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)"><div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div></div><div class="pa"><button class="btn btn-s" onclick="document.getElementById('cI').click()">📷 Camera</button><button class="btn btn-s" onclick="document.getElementById('gI').click()">📁 Library</button></div></div><div id="fd" style="display:none"><label class="lbl">What did you eat?</label><textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, 1 hash brown and a toast that's slightly buttered"></textarea><button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">✨ Calculate Calories</button></div><div id="fm" style="display:none"></div><div id="fR" style="display:none"></div><div id="cB" style="display:none"><div class="corr"><div class="corr-h">Something wrong? Tell the AI</div><input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:6px"><button class="btn btn-s" style="height:38px;font-size:11px" onclick="doCorr()">↻ Re-analyse</button></div></div><div id="eA" style="display:none"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">DETAILS</div><label class="lbl">Meal name</label><input class="inp" id="fN"><label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr"></div><div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr"></div><div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt"></div></div><label class="lbl">Weight of food (g, optional)</label><input class="inp" type="number" id="fW" placeholder="e.g. 350" inputmode="numeric"><button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log Meal</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('foodModal');resetF()">Cancel</button></div></div>
+<div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Food</div><div class="sh-s">Photo your plate or describe what you ate.</div><div class="scan-badge" id="scanBadge"></div><div class="tr"><div class="tb on" onclick="fT('photo',this)">📷 Photo</div><div class="tb" onclick="fT('desc',this)">✏️ Describe</div><div class="tb" onclick="fT('man',this)">🔢 Manual</div></div><div id="fp"><input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)"><input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)"><div class="pd" id="pD" onclick="document.getElementById('cI').click()"><div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div></div><div class="pa"><button class="btn btn-s" onclick="event.stopPropagation();document.getElementById('cI').click()">📷 Camera</button><button class="btn btn-s" onclick="event.stopPropagation();document.getElementById('gI').click()">📁 Library</button></div></div><div id="fd" style="display:none"><label class="lbl">What did you eat?</label><textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, 1 hash brown and a toast that's slightly buttered"></textarea><button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">✨ Calculate Calories</button></div><div id="fm" style="display:none"><div id="mealHistory"></div><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin:12px 0 8px">OR ENTER MANUALLY</div></div><div id="fR" style="display:none"></div><div id="quickLog" style="display:none"><button class="btn btn-g" style="margin-bottom:8px" onclick="saveMeal()">✓ Log This Meal</button></div><div id="cB" style="display:none"><div class="corr"><div class="corr-h">Something wrong? Tell the AI</div><input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:6px"><button class="btn btn-s" style="height:38px;font-size:11px" onclick="doCorr()">↻ Re-analyse</button></div></div><div id="eA" style="display:none"><div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">DETAILS</div><label class="lbl">Meal name</label><input class="inp" id="fN"><label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px"><div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr"></div><div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr"></div><div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt"></div></div><label class="lbl">Weight of food (g, optional)</label><input class="inp" type="number" id="fW" placeholder="e.g. 350" inputmode="numeric"><button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log Meal</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('foodModal');resetF()">Cancel</button></div></div>
 <div class="ov" id="exModal" onclick="closeO(event,'exModal')"><div class="sh"><div class="sh-h"></div><div class="sh-t">Log Exercise</div><div class="sh-s">From your Whoop, watch, or enter manually.</div><div class="tr"><div class="tb on" onclick="eT('man',this)">📝 Manual</div><div class="tb" onclick="eT('ss',this)">📸 Screenshot</div></div><div id="eM"><label class="lbl">Calories burned</label><input class="inp" type="number" id="eCIn" placeholder="e.g. 520" inputmode="numeric"><label class="lbl">Steps (optional)</label><input class="inp" type="number" id="eSIn" placeholder="e.g. 8500" inputmode="numeric"><button class="btn btn-g" onclick="saveEx()">Save</button></div><div id="eSS" style="display:none"><div class="pd" id="eSSD" onclick="document.getElementById('eSSI').click()"><input type="file" id="eSSI" accept="image/*" style="display:none" onchange="onESS(event)"><div style="font-size:44px;opacity:.25">📸</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Upload workout screenshot</div></div><div id="eSSR" style="display:none"></div><button class="btn btn-g" id="eSSB" style="display:none" onclick="saveESSx()">Save Exercise</button></div><button class="btn btn-s" style="margin-top:8px" onclick="closeModal('exModal')">Cancel</button></div></div>
 <div class="ov" id="detailModal" onclick="closeO(event,'detailModal')"><div class="sh" style="padding-bottom:40px">
 <div class="sh-h"></div>
@@ -236,6 +305,14 @@ textarea.inp{resize:none;line-height:1.5}
   <!-- Sign out -->
   <button style="display:block;margin:20px auto 0;background:none;border:none;color:var(--red);font-size:13px;font-weight:600;cursor:pointer;padding:10px" onclick="signOut()">Sign Out</button>
   <button class="btn btn-s" style="margin-top:8px" onclick="closeModal('settingsModal')">Close</button>
+  <div style="margin-top:18px;padding-top:16px;border-top:1px solid var(--bd);text-align:center">
+    <div style="display:flex;justify-content:center;gap:16px;margin-bottom:14px">
+      <a href="https://getvitlo.github.io/Vitlo/support.html" target="_blank" style="font-size:11px;color:var(--tx3);text-decoration:none">Privacy Policy</a>
+      <a href="https://getvitlo.github.io/Vitlo/support.html" target="_blank" style="font-size:11px;color:var(--tx3);text-decoration:none">Terms of Use</a>
+      <a href="https://getvitlo.github.io/Vitlo/support.html" target="_blank" style="font-size:11px;color:var(--tx3);text-decoration:none">Support</a>
+    </div>
+    <button style="background:none;border:none;color:var(--tx3);font-size:11px;text-decoration:underline;cursor:pointer;padding:4px" onclick="deleteAccount()">Delete my account</button>
+  </div>
 </div>
 </div>
 
@@ -276,6 +353,44 @@ textarea.inp{resize:none;line-height:1.5}
 
 <div class="tabs" id="tabs"><button class="ti on" id="tH" onclick="goTab('home')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span class="ti-l">Home</span></button><button class="ti" id="tE" onclick="goTab('ex')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span class="ti-l">Exercise</span></button><button class="ti" id="tC" onclick="goTab('coach')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="3"/><path d="M8 22v-5a4 4 0 0 1 8 0v5"/><path d="M19 10c0 0-1.5-1-2-1.5"/><circle cx="19" cy="7" r="1.5"/><path d="M20.5 7h2"/></svg><span class="ti-l">Coach</span></button></div>
 <div class="fab" id="fab" onclick="openModal('foodModal')"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+<div class="nc-ov" id="ncOv" onclick="if(event.target.id==='ncOv')closeNC()">
+<div class="nc">
+  <div class="nc-top"><div class="nc-name" id="ncName">—</div><div class="nc-kcal" id="ncKcal">0</div><div class="nc-ku">KCAL</div></div>
+  <div class="nc-macros">
+    <div class="nc-m"><div class="nc-mv" style="color:var(--blu)" id="ncP">0g</div><div class="nc-ml">Protein</div><div class="nc-mb" style="background:var(--blu)"></div></div>
+    <div class="nc-m"><div class="nc-mv" style="color:var(--amb)" id="ncC">0g</div><div class="nc-ml">Carbs</div><div class="nc-mb" style="background:var(--amb)"></div></div>
+    <div class="nc-m"><div class="nc-mv" style="color:var(--pur)" id="ncF">0g</div><div class="nc-ml">Fat</div><div class="nc-mb" style="background:var(--pur)"></div></div>
+  </div>
+  <div class="nc-sub" id="ncSub"></div>
+  <div id="ncConf"></div>
+  <div class="nc-btns" style="border-bottom:1px solid var(--bd)">
+    <button class="btn btn-g" onclick="closeNC();saveMeal()">✓ Log This Meal</button>
+    <button class="btn btn-s" style="height:42px;font-size:12px" onclick="closeNC()">Adjust or Correct</button>
+  </div>
+  <div class="nc-bd" style="border-bottom:none"><div class="nc-bd-lbl">WHAT'S ON THE PLATE</div><div id="ncBd">—</div></div>
+</div>
+</div>
+<div class="pw-ov" id="pwOv" onclick="if(event.target.id==='pwOv')closeModal('pwOv')">
+<div class="pw">
+  <div class="pw-top">
+    <div class="pw-badge">VITLO PRO</div>
+    <div class="pw-h">Unlimited scans,<br>unlimited coaching</div>
+    <div class="pw-sub" id="pwSub">You've used your 3 free scans today.</div>
+  </div>
+  <div class="pw-feats">
+    <div class="pw-f"><div class="pw-f-ic">✓</div><div><div class="pw-f-t">Unlimited AI food scans</div><div class="pw-f-d">Photo or describe — as many meals as you like</div></div></div>
+    <div class="pw-f"><div class="pw-f-ic">✓</div><div><div class="pw-f-t">Full AI Coach chat</div><div class="pw-f-d">Ask anything — it knows your data, goals and habits</div></div></div>
+    <div class="pw-f"><div class="pw-f-ic">✓</div><div><div class="pw-f-t">Health scores &amp; breakdowns</div><div class="pw-f-d">Item-by-item nutrition on every meal</div></div></div>
+    <div class="pw-f"><div class="pw-f-ic">✓</div><div><div class="pw-f-t">Full history</div><div class="pw-f-d">Every day, every meal, always yours</div></div></div>
+  </div>
+  <div class="pw-price"><div class="pw-price-n" id="pwPrice">£6.99</div><div class="pw-price-s" id="pwPriceSub">per month · cancel anytime</div></div>
+  <div class="pw-btns">
+    <button class="btn btn-g" id="pwCta" onclick="pwAction()">Start Free Trial</button>
+    <button class="btn btn-s" style="margin-top:8px;height:42px;font-size:12px" onclick="closeModal('pwOv')">Maybe later</button>
+    <div class="pw-restore" id="pwRestore">Already subscribed? <span onclick="restorePurchases()">Restore purchases</span></div>
+  </div>
+</div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
 const SB='https://tvhkxsnmfcnwaxeadxeg.supabase.co',SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio',PX='https://vitlo-proxy.vercel.app/api/claude';
@@ -385,7 +500,7 @@ async function obNext(){
     const btn=$('obBtn');btn.disabled=true;btn.textContent='🤖 Analysing...';
     const b=bmr();
     try{
-      const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A new user just signed up and described their goals.
+      const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A new user just signed up and described their goals.
 
 Their stats: ${ob.name}, ${ob.age}yo ${ob.sex}, ${ob.weight}kg, ${ob.height}cm, BMR ${b} kcal, TDEE ~${Math.round(b*1.3)} kcal.
 
@@ -481,41 +596,148 @@ function editMeal(id){
   const saveBtn=$('eA').querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Save Changes';
   openModal('foodModal');
 }
-function fT(t,el){document.querySelectorAll('#foodModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('fp').style.display=t==='photo'?'block':'none';$('fd').style.display=t==='desc'?'block':'none';$('fm').style.display=t==='man'?'block':'none';if(t==='man'){$('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none'}}
-async function onFP(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{photoB64=ev.target.result.split(',')[1];$('pD').innerHTML=`<img src="${ev.target.result}">`;const weightVal=$('fW')?.value;await aiF([{type:'image',source:{type:'base64',media_type:f.type,data:photoB64}},{type:'text',text:`You are an expert nutritionist analysing a food photo. Work step by step:
+function fT(t,el){updateScanBadge();document.querySelectorAll('#foodModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('fp').style.display=t==='photo'?'block':'none';$('fd').style.display=t==='desc'?'block':'none';$('fm').style.display=t==='man'?'block':'none';if(t==='man'){$('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none';renderMealHistory()}}
 
-1. IDENTIFY every distinct food item visible. Count individual pieces (e.g. "4 sausages" not "sausages"). Note cooking method — fried, grilled, roasted, boiled — as it changes calories significantly.
-2. ESTIMATE portion sizes using visual references: plate diameter (~26cm dinner plate), cutlery for scale, food depth/thickness. Estimate weight in grams per item.${weightVal?' The user says total food weight is '+weightVal+'g — distribute this across items proportionally and use it to anchor your estimates.':''}
-3. ACCOUNT for hidden calories: cooking oil (fried items +10-15%), butter on bread/veg, dressings, sauces, cheese melted into dishes.
-4. USE UK portion norms and UK food brands where recognisable (e.g. Heinz beans, Warburtons bread, supermarket meal deals).
-5. CALCULATE macros per item, then sum. Be precise — use standard nutritional values per 100g and multiply by your weight estimates.
-
-Common reference values per 100g: chicken breast 165kcal/31p, sausage 300kcal/12p, white rice cooked 130kcal/2.7p, pasta cooked 160kcal/5.8p, bread slice(40g) 100kcal/3.5p, egg(50g) 72kcal/6.3p, cheddar 416kcal/25p, chips 270kcal/3.3p, beans 84kcal/4.7p.
-
-Return JSON only, no other text:
-{"meal_name":"concise name","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"confidence":"high/medium/low","breakdown":"item-by-item: name, estimated weight, kcal each — one line per item"}`}])};r.readAsDataURL(f)}
-async function anDesc(){const t=$('dI').value.trim();if(!t)return toast('Describe what you ate');const weightVal=$('fW')?.value;await aiF([{type:'text',text:`You are an expert nutritionist. The user describes their meal: "${t}"${weightVal?' (total weight: '+weightVal+'g)':''}
-
-Work step by step:
-1. Parse every item and quantity mentioned. If quantity is ambiguous, assume typical UK portions.
-2. Account for cooking methods mentioned (fried adds oil calories, buttered adds ~35kcal per slice).
-3. Use UK brands and portion norms where relevant.
-4. Calculate macros per item then sum.
-
-Reference per 100g: chicken breast 165kcal/31p, sausage 300kcal/12p, cooked rice 130kcal/2.7p, cooked pasta 160kcal/5.8p, bread slice(40g) 100kcal/3.5p, egg 72kcal/6.3p each, cheddar 416kcal/25p, chips 270kcal/3.3p.
-
-Return JSON only:
-{"meal_name":"concise name","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"confidence":"high/medium/low","breakdown":"item-by-item with estimated kcal each"}`}])}
-async function doCorr(){const c=$('cIn').value.trim();if(!c||!aiRes)return;await aiF([{type:'text',text:`Original: "${aiRes.meal_name}" (${aiRes.calories} kcal). Correction: "${c}". Recalculate. JSON only:\n{"meal_name":"name","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"breakdown":"updated breakdown"}`}]);$('cIn').value=''}
-async function aiF(content){$('fR').style.display='block';$('fR').innerHTML='<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:12px" id="aiStage">Identifying food…</span></div>';
-  let stageI=0;const stages=['Identifying food…','Estimating portions…','Calculating macros…'];
-  const stageTimer=setInterval(()=>{stageI=(stageI+1)%stages.length;const el=$('aiStage');if(el)el.textContent=stages[stageI];else clearInterval(stageTimer)},1800);$('eA').style.display='none';$('cB').style.display='none';try{const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content}]})});const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;clearInterval(stageTimer);aiRes=JSON.parse(mt[0]);showFR(aiRes)}catch(e){clearInterval(stageTimer);$('fR').innerHTML='<div style="padding:16px;text-align:center;color:var(--tx3);font-size:12px">Failed. Try again or enter manually.</div>';$('eA').style.display='block'}}
-function showFR(r){$('fR').innerHTML=`<div class="fr"><div class="fr-hd"><div class="fr-nm">${r.meal_name}</div><div class="fr-kc">${r.calories} <span class="fr-ku">kcal</span></div></div><div class="fr-ms"><div class="fr-m"><div class="fr-mv" style="color:var(--blu)">${r.protein_g||0}g</div><div class="fr-ml">Protein</div></div><div class="fr-m"><div class="fr-mv" style="color:var(--amb)">${r.carbs_g||0}g</div><div class="fr-ml">Carbs</div></div><div class="fr-m"><div class="fr-mv" style="color:var(--pur)">${r.fat_g||0}g</div><div class="fr-ml">Fat</div></div></div>${r.fibre_g||r.sugar_g?`<div class="fr-ms"><div class="fr-m"><div class="fr-mv">${r.fibre_g||0}g</div><div class="fr-ml">Fibre</div></div><div class="fr-m"><div class="fr-mv">${r.sugar_g||0}g</div><div class="fr-ml">Sugar</div></div><div class="fr-m"><div class="fr-mv">—</div><div class="fr-ml"></div></div></div>`:''}<div class="fr-bd">${r.breakdown||''}</div>${r.confidence&&r.confidence!=='high'?`<div style="font-size:10px;color:var(--amb);padding:6px 12px 10px;display:flex;align-items:center;gap:4px">⚠ ${r.confidence==='low'?'Low':'Medium'} confidence — check the numbers or add a correction below</div>`:''}</div>`;$('fN').value=r.meal_name||'';$('fK').value=r.calories||'';$('fPr').value=r.protein_g||'';$('fCr').value=r.carbs_g||'';$('fFt').value=r.fat_g||'';$('eA').style.display='block';$('cB').style.display='block'}
-async function saveMeal(){const n=$('fN').value.trim(),k=+$('fK').value;if(!n)return toast('Name your meal');if(!k||k<1)return toast('Enter calories');const payload={user_id:user.id,date:td(),meal_name:n,calories:k,protein_g:+$('fPr').value||0,carbs_g:+$('fCr').value||0,fat_g:+$('fFt').value||0,meal_type:'Meal'};if(editingMealId){await sb.from('food_logs').update(payload).eq('id',editingMealId);toast('✓ Meal updated')}else{await sb.from('food_logs').insert(payload);toast('✓ Meal logged')}closeModal('foodModal');resetF();await loadFood();renderHome()}
-function resetF(){$('fR').style.display='none';$('eA').style.display='none';$('cB').style.display='none';$('pD').innerHTML='<div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>';if($('dI'))$('dI').value='';['fN','fK','fPr','fCr','fFt','fW'].forEach(id=>{if($(id))$(id).value=''});aiRes=null;photoB64=null;editingMealId=null;$('fp').style.display='block';const saveBtn=$('eA')?.querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Log Meal'}
+function compressImg(file,maxW=1200,quality=0.7){return new Promise((resolve)=>{
+  const img=new Image();const url=URL.createObjectURL(file);
+  img.onload=()=>{
+    URL.revokeObjectURL(url);
+    let w=img.width,h=img.height;
+    if(w>maxW){h=Math.round(h*(maxW/w));w=maxW}
+    const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+    const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,w,h);
+    const b64=canvas.toDataURL('image/jpeg',quality).split(',')[1];
+    resolve(b64);
+  };
+  img.onerror=()=>resolve(null);
+  img.src=url;
+})}
+async function onFP(e){const f=e.target.files[0];if(!f)return;
+  // Show preview immediately
+  const previewURL=URL.createObjectURL(f);$('pD').innerHTML=`<img src="${previewURL}">`;
+  // Compress for API (1200px wide, 70% quality JPEG)
+  photoB64=await compressImg(f);
+  if(!photoB64){toast('Could not process image');return}const weightVal=$('fW')?.value;await aiF([{type:'image',source:{type:'base64',media_type:'image/jpeg',data:photoB64}},{type:'text',text:'You are an expert nutritionist analysing a food photo. Work step by step: 1) IDENTIFY every distinct food item visible. Count individual pieces. Note cooking method. 2) ESTIMATE portion sizes using plate diameter (~26cm) and cutlery for scale.'+(weightVal?' Total food weight: '+weightVal+'g — distribute across items.':'')+' 3) ACCOUNT for hidden calories: cooking oil, butter, dressings, sauces, melted cheese. 4) USE UK portion norms and brands. 5) CALCULATE macros per item then sum. Reference per 100g: chicken breast 165kcal/31p, sausage 300kcal/12p, rice cooked 130kcal/2.7p, pasta cooked 160kcal/5.8p, bread slice(40g) 100kcal/3.5p, egg(50g) 72kcal/6.3p, cheddar 416kcal/25p, chips 270kcal/3.3p, beans 84kcal/4.7p. Return JSON only: {"meal_name":"concise name","health_score":number 1-10 (10=nutritionally excellent whole food, 1=pure junk; judge protein density, processing level, sugar, fibre),"score_comment":"one punchy sentence verdict on this meal","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"confidence":"high/medium/low","breakdown":"item-by-item: name, estimated weight, kcal each"}'}])}
+async function anDesc(){const t=$('dI').value.trim();if(!t)return toast('Describe what you ate');const weightVal=$('fW')?.value;await aiF([{type:'text',text:'You are an expert nutritionist. The user describes their meal: "'+t+'"'+(weightVal?' (total weight: '+weightVal+'g)':'')+'. Work step by step: 1) Parse every item and quantity. If ambiguous, assume typical UK portions. 2) Account for cooking methods (fried adds oil, buttered adds ~35kcal/slice). 3) Use UK brands and norms. 4) Calculate macros per item then sum. Reference per 100g: chicken breast 165kcal/31p, sausage 300kcal/12p, rice cooked 130kcal/2.7p, pasta cooked 160kcal/5.8p, bread slice(40g) 100kcal/3.5p, egg(50g) 72kcal/6.3p, cheddar 416kcal/25p, chips 270kcal/3.3p. Return JSON only: {"meal_name":"concise name","health_score":number 1-10 (10=nutritionally excellent whole food, 1=pure junk; judge protein density, processing level, sugar, fibre),"score_comment":"one punchy sentence verdict on this meal","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"confidence":"high/medium/low","breakdown":"item-by-item with estimated kcal each"}'}])}
+async function doCorr(){const c=$('cIn').value.trim();if(!c||!aiRes)return;await aiF([{type:'text',text:`Original: "${aiRes.meal_name}" (${aiRes.calories} kcal). Correction: "${c}". Recalculate. JSON only:\n{"meal_name":"name","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"breakdown":"updated breakdown"}`}],true);$('cIn').value=''}
+async function aiF(content,isCorrection){
+  if(!isCorrection&&!canScan()){closeModal('foodModal');openPaywall('scans');return}
+  lastAIContent=content;$('fR').style.display='block';
+  // Scanning animation — if a photo is in the preview, overlay the scan effect on it
+  const hasPhoto=content.some(x=>x.type==='image');
+  const previewImg=$('pD')?.querySelector('img');
+  if(hasPhoto&&previewImg){
+    const particles=Array.from({length:8},(_,i)=>`<div class="scan-particle" style="left:${10+Math.random()*80}%;top:${20+Math.random()*60}%;animation-delay:${(i*0.2).toFixed(1)}s"></div>`).join('');
+    $('fR').innerHTML=`<div class="scan-wrap"><img src="${previewImg.src}"><div class="scan-grid"></div><div class="scan-line"></div><div class="scan-corner tl"></div><div class="scan-corner tr"></div><div class="scan-corner bl"></div><div class="scan-corner br"></div>${particles}</div><div class="scan-status"><span class="sp"></span><span id="aiStage">Identifying food…</span></div>`;
+  }else{
+    $('fR').innerHTML='<div style="padding:20px 0"><div class="scan-status"><span class="sp"></span><span id="aiStage">Identifying food…</span></div></div>';
+  }
+  let stageI=0;const stages=['Identifying food…','Estimating portions…','Analysing macros…','Scoring nutrition…'];
+  const stageTimer=setInterval(()=>{stageI=(stageI+1)%stages.length;const el=$('aiStage');if(el)el.textContent=stages[stageI];else clearInterval(stageTimer)},1600);$('eA').style.display='none';$('cB').style.display='none';
+  try{
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,messages:[{role:'user',content}]})});
+    if(!resp.ok){clearInterval(stageTimer);
+      const errText=await resp.text().catch(()=>'Unknown error');
+      let friendly='AI server error ('+resp.status+')';
+      if(resp.status===413)friendly='Photo too large — try again from a smaller distance';
+      else if(resp.status===429)friendly='Rate limited — wait 30 seconds and retry';
+      else if(resp.status===500)friendly='Proxy server error — check Vercel deployment';
+      else if(resp.status===401||resp.status===403)friendly='API key invalid — check your proxy config';
+      $('fR').innerHTML=`<div style="padding:14px;text-align:center"><div style="color:var(--red);font-size:12px;font-weight:600">${friendly}</div><div style="color:var(--tx3);font-size:10px;margin-top:4px">${errText.slice(0,100)}</div><button class="btn btn-s" style="height:38px;font-size:12px;margin-top:10px" onclick="retryAI()">↻ Retry</button></div>`;
+      $('eA').style.display='block';return;
+    }
+    const d=await resp.json();
+    clearInterval(stageTimer);
+    // Surface real API errors instead of generic "failed"
+    if(d.error){
+      const msg=d.error.message||JSON.stringify(d.error);
+      let friendly='AI error — try again.';
+      if(/credit|billing/i.test(msg))friendly='API credit issue — top up at console.anthropic.com';
+      else if(/rate/i.test(msg))friendly='Too many requests — wait a moment and retry';
+      else if(/overloaded/i.test(msg))friendly='AI is busy — retry in a few seconds';
+      $('fR').innerHTML=`<div style="padding:14px;text-align:center"><div style="color:var(--red);font-size:12px;font-weight:600">${friendly}</div><div style="color:var(--tx3);font-size:10px;margin-top:4px;word-break:break-word">${msg.slice(0,120)}</div></div>`;
+      $('eA').style.display='block';return;
+    }
+    const t=(d.content||[]).map(x=>x.text||'').join('');
+    const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+    if(!mt)throw new Error('No JSON in response');
+    aiRes=JSON.parse(mt[0]);
+    if(!isCorrection)bumpScan();
+    showFR(aiRes);
+  }catch(e){
+    clearInterval(stageTimer);
+    const errMsg=e.message==='Failed to fetch'?'Cannot reach the AI server — check your connection and that the proxy is running'
+      :e.message==='No JSON in response'?'AI responded but not in expected format — retry'
+      :'Error: '+e.message;
+    $('fR').innerHTML=`<div style="padding:14px;text-align:center"><div style="color:var(--red);font-size:12px;font-weight:600">Scan failed</div><div style="color:var(--tx3);font-size:11px;margin-top:6px;line-height:1.5">${errMsg}</div><button class="btn btn-s" style="height:38px;font-size:12px;margin-top:10px" onclick="retryAI()">↻ Retry</button></div>`;
+    $('eA').style.display='block';
+  }
+}
+let lastAIContent=null;
+function retryAI(){if(lastAIContent)aiF(lastAIContent)}
+function showFR(r){
+  // Fill inline edit fields (behind the card, for Adjust flow)
+  $('fR').innerHTML=`<div class="fr"><div class="fr-hd"><div class="fr-nm">${r.meal_name}</div><div class="fr-kc">${r.calories} <span class="fr-ku">kcal</span></div></div><div class="fr-ms"><div class="fr-m"><div class="fr-mv" style="color:var(--blu)">${r.protein_g||0}g</div><div class="fr-ml">Protein</div></div><div class="fr-m"><div class="fr-mv" style="color:var(--amb)">${r.carbs_g||0}g</div><div class="fr-ml">Carbs</div></div><div class="fr-m"><div class="fr-mv" style="color:var(--pur)">${r.fat_g||0}g</div><div class="fr-ml">Fat</div></div></div><div class="fr-bd">${r.breakdown||''}</div></div>`;
+  $('fN').value=r.meal_name||'';$('fK').value=r.calories||'';$('fPr').value=r.protein_g||'';$('fCr').value=r.carbs_g||'';$('fFt').value=r.fat_g||'';
+  $('eA').style.display='block';$('cB').style.display='block';$('quickLog').style.display='block';
+  // Populate + open the pop-out card
+  $('ncName').textContent=r.meal_name||'Meal';
+  animNum($('ncKcal'),+r.calories||0);
+  $('ncP').textContent=(r.protein_g||0)+'g';$('ncC').textContent=(r.carbs_g||0)+'g';$('ncF').textContent=(r.fat_g||0)+'g';
+  const subs=[];if(r.fibre_g)subs.push('<span><b>'+r.fibre_g+'g</b> fibre</span>');if(r.sugar_g)subs.push('<span><b>'+r.sugar_g+'g</b> sugar</span>');
+  $('ncSub').innerHTML=subs.join('');$('ncSub').style.display=subs.length?'flex':'none';
+  $('ncBd').textContent=r.breakdown||'—';
+  // Health score badge
+  const hs=+r.health_score||0;
+  let hsHtml='';
+  if(hs>0){
+    const hsColor=hs>=8?'var(--grn)':hs>=6?'#3ddc97':hs>=4?'var(--amb)':'var(--red)';
+    const hsBg=hs>=8?'rgba(46,204,113,.12)':hs>=6?'rgba(61,220,151,.12)':hs>=4?'rgba(240,180,41,.12)':'rgba(239,83,80,.12)';
+    const hsLabel=hs>=8?'Excellent':hs>=6?'Good':hs>=4?'Average':'Poor';
+    hsHtml=`<div class="hs-row"><div class="hs-badge" style="background:${hsBg};color:${hsColor}">${hs}</div><div class="hs-info"><div class="hs-title">Health Score · ${hsLabel}</div><div class="hs-desc">${r.score_comment||''}</div></div></div>`;
+  }
+  $('ncConf').innerHTML=hsHtml+(r.confidence&&r.confidence!=='high'?`<div style="padding:10px 20px;font-size:11px;color:var(--amb);border-bottom:1px solid var(--bd)">⚠ ${r.confidence==='low'?'Low':'Medium'} confidence — tap Adjust to correct</div>`:'');
+  $('ncOv').classList.add('open');
+}
+function closeNC(){$('ncOv').classList.remove('open')}
+async function renderMealHistory(){
+  const el=$('mealHistory');if(!el)return;
+  el.innerHTML='<div style="text-align:center;padding:12px;color:var(--tx3);font-size:11px">Loading recent meals…</div>';
+  const seen={};const recent=[];
+  try{
+    const from=new Date();from.setDate(from.getDate()-14);
+    const{data}=await sb.from('food_logs').select('meal_name,calories,protein_g,carbs_g,fat_g,created_at').eq('user_id',user.id).gte('date',from.toISOString().split('T')[0]).order('created_at',{ascending:false}).limit(60);
+    (data||[]).forEach(m=>{if(m.meal_name&&!seen[m.meal_name]){seen[m.meal_name]=1;recent.push(m)}});
+  }catch(e){}
+  const stored=JSON.parse(localStorage.getItem('vitlo_meal_history')||'[]');
+  stored.forEach(m=>{if(m.meal_name&&!seen[m.meal_name]){seen[m.meal_name]=1;recent.push(m)}});
+  if(!recent.length){el.innerHTML='<div style="text-align:center;padding:16px;color:var(--tx3);font-size:12px">Meals you log will appear here for one-tap re-logging.</div>';return}
+  el.innerHTML='<div style="font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.8px;margin-bottom:8px">RECENT MEALS — TAP TO LOG</div>'+recent.slice(0,10).map((m,i)=>{
+    return `<div class="hist-item" onclick="quickLogHist(${i})"><div class="hist-item-info"><div class="hist-item-name">${m.meal_name}</div><div class="hist-item-meta">${Math.round(m.protein_g)||0}p · ${Math.round(m.carbs_g)||0}c · ${Math.round(m.fat_g)||0}f</div></div><div class="hist-item-kcal">${m.calories}</div></div>`
+  }).join('');
+  window._histMeals=recent.slice(0,10);
+}
+function quickLogHist(i){
+  const m=(window._histMeals||[])[i];if(!m)return;
+  quickLogMeal(m.meal_name,+m.calories||0,+m.protein_g||0,+m.carbs_g||0,+m.fat_g||0);
+}
+function quickLogMeal(name,kcal,p,c,f){
+  $('fN').value=name;$('fK').value=kcal;$('fPr').value=p;$('fCr').value=c;$('fFt').value=f;
+  $('eA').style.display='block';$('fm').style.display='block';
+  saveMeal();
+}
+function saveMealHistory(name,kcal,p,c,f){
+  const stored=JSON.parse(localStorage.getItem('vitlo_meal_history')||'[]');
+  if(stored.some(m=>m.meal_name===name))return;
+  stored.unshift({meal_name:name,calories:kcal,protein_g:p,carbs_g:c,fat_g:f});
+  if(stored.length>20)stored.pop();
+  localStorage.setItem('vitlo_meal_history',JSON.stringify(stored));
+}
+async function saveMeal(){const n=$('fN').value.trim(),k=+$('fK').value;if(!n)return toast('Name your meal');if(!k||k<1)return toast('Enter calories');const payload={user_id:user.id,date:td(),meal_name:n,calories:k,protein_g:+$('fPr').value||0,carbs_g:+$('fCr').value||0,fat_g:+$('fFt').value||0,meal_type:'Meal'};if(editingMealId){await sb.from('food_logs').update(payload).eq('id',editingMealId);toast('✓ Meal updated')}else{await sb.from('food_logs').insert(payload);toast('✓ Meal logged');saveMealHistory(n,k,+$('fPr').value||0,+$('fCr').value||0,+$('fFt').value||0)}closeModal('foodModal');resetF();await loadFood();renderHome()}
+function resetF(){$('fR').style.display='none';$('eA').style.display='none';$('cB').style.display='none';$('quickLog').style.display='none';$('pD').innerHTML='<div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>';if($('dI'))$('dI').value='';['fN','fK','fPr','fCr','fFt','fW'].forEach(id=>{if($(id))$(id).value=''});aiRes=null;photoB64=null;editingMealId=null;$('fp').style.display='block';const saveBtn=$('eA')?.querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Log Meal'}
 function eT(t,el){document.querySelectorAll('#exModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('eM').style.display=t==='man'?'block':'none';$('eSS').style.display=t==='ss'?'block':'none'}
 async function saveEx(){const c=+$('eCIn').value,s=+$('eSIn').value||0;if(!c||c<1)return toast('Enter calories burned');const{data:ex}=await sb.from('workouts').select('id').eq('user_id',user.id).eq('date',td()).maybeSingle();const p={user_id:user.id,date:td(),calories_burned:c,workout_type:'Exercise',duration_minutes:0,effort:5};if(s>0)p.steps=s;const{error}=ex?await sb.from('workouts').update(p).eq('id',ex.id):await sb.from('workouts').insert(p);if(error){toast('Error: '+error.message);console.error(error);return}closeModal('exModal');await loadEx();renderHome();renderEx();toast('✓ '+c+' kcal logged')}
-async function onESS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{const b64=ev.target.result.split(',')[1];$('eSSD').innerHTML=`<img src="${ev.target.result}">`;$('eSSR').style.display='block';$('eSSR').innerHTML='<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:12px">Reading screenshot…</span></div>';try{const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:400,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:f.type,data:b64}},{type:'text',text:'Extract calories burned and steps from this fitness screenshot. JSON only: {"calories_burned":number,"steps":number,"summary":"one sentence"}'}]}]})});const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;exSSdata=JSON.parse(mt[0]);$('eSSR').innerHTML=`<div style="background:var(--grn-g);border-radius:11px;padding:12px;margin:10px 0;border:1px solid rgba(46,204,113,.2)"><div style="font-size:12px;font-weight:700;color:var(--grn)">✓ ${exSSdata.calories_burned} kcal${exSSdata.steps?' · '+exSSdata.steps.toLocaleString()+' steps':''}</div><div style="font-size:11px;color:var(--tx2);margin-top:3px">${exSSdata.summary||''}</div></div>`;$('eSSB').style.display='block'}catch(e){$('eSSR').innerHTML='<div style="padding:12px;text-align:center;color:var(--tx3);font-size:12px">Could not read. Enter manually.</div>'}};r.readAsDataURL(f)}
+async function onESS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{const b64=ev.target.result.split(',')[1];$('eSSD').innerHTML=`<img src="${ev.target.result}">`;$('eSSR').style.display='block';$('eSSR').innerHTML='<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:12px">Reading screenshot…</span></div>';try{const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:f.type,data:b64}},{type:'text',text:'Extract calories burned and steps from this fitness screenshot. JSON only: {"calories_burned":number,"steps":number,"summary":"one sentence"}'}]}]})});const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;exSSdata=JSON.parse(mt[0]);$('eSSR').innerHTML=`<div style="background:var(--grn-g);border-radius:11px;padding:12px;margin:10px 0;border:1px solid rgba(46,204,113,.2)"><div style="font-size:12px;font-weight:700;color:var(--grn)">✓ ${exSSdata.calories_burned} kcal${exSSdata.steps?' · '+exSSdata.steps.toLocaleString()+' steps':''}</div><div style="font-size:11px;color:var(--tx2);margin-top:3px">${exSSdata.summary||''}</div></div>`;$('eSSB').style.display='block'}catch(e){$('eSSR').innerHTML='<div style="padding:12px;text-align:center;color:var(--tx3);font-size:12px">Could not read. Enter manually.</div>'}};r.readAsDataURL(f)}
 async function saveESSx(){
   if(!exSSdata)return;
   const c=exSSdata.calories_burned||0,s=exSSdata.steps||0;
@@ -569,6 +791,24 @@ async function signOut(){
   $('tabs').classList.remove('show');$('fab').classList.remove('show');
   show('authScreen');toast('Signed out');
 }
+async function deleteAccount(){
+  if(!confirm('Permanently delete your account and all your data? This cannot be undone.'))return;
+  if(!confirm('Are you absolutely sure? All your meals, stats and history will be erased.'))return;
+  try{
+    const uid=user?.id;
+    if(uid){
+      await sb.from('food_logs').delete().eq('user_id',uid);
+      await sb.from('workouts').delete().eq('user_id',uid);
+      await sb.from('profiles').delete().eq('id',uid);
+    }
+    localStorage.clear();
+    await sb.auth.signOut();
+    user=null;profile=null;foodLogs=[];burnedCals=0;stepsCount=0;
+    $('tabs').classList.remove('show');$('fab').classList.remove('show');
+    show('authScreen');
+    toast('Your account and data have been deleted');
+  }catch(e){toast('Could not delete account — email trustforge.hani@gmail.com')}
+}
 
 // ── AI Coach ──
 async function runCoach(){
@@ -577,7 +817,7 @@ async function runCoach(){
   const btn=$('coachBtn');btn.disabled=true;btn.innerHTML='<div class="sp" style="width:16px;height:16px;border-width:2px"></div> Thinking...';
   const b=bmr(),w=profile?.weight_kg||'?',h=profile?.height_cm||'?',a=profile?.age||'?',s=profile?.sex||'?',bf=profile?.body_fat_pct||'unknown';
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A user wants help setting their calorie goals.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:800,messages:[{role:'user',content:`You are a nutrition and fitness coach. A user wants help setting their calorie goals.
 
 Their stats: Weight ${w}kg, Height ${h}cm, Age ${a}, Sex ${s}, Body fat ${bf}%, Current BMR ${b} kcal.
 
@@ -768,7 +1008,7 @@ async function loadCoachBrief(){
   const el=$('coachBrief');
   const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a chill, knowledgeable personal trainer giving a daily brief. Sound like a mate who knows their stuff, not a medical textbook. Never be alarmist about food intake. Focus on practical next steps.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:[{role:'user',content:`You are a chill, knowledgeable personal trainer giving a daily brief. Sound like a mate who knows their stuff, not a medical textbook. Never be alarmist about food intake. Focus on practical next steps.
 
 ${ctx.contextBlock}
 
@@ -786,6 +1026,7 @@ Return JSON only:
 }
 
 async function sendChat(){
+  if(!isPro()){openPaywall('coach');return}
   const input=$('chatIn').value.trim();
   if(!input)return;
   $('chatIn').value='';
@@ -795,7 +1036,7 @@ async function sendChat(){
   msgs.scrollTop=msgs.scrollHeight;
   const ctx=await getCoachContext();
   try{
-    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer chatting with your client. Sound like a knowledgeable mate — direct, warm, zero waffle. Use their data but don't lecture. 2-3 sentences max.
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:`You are a personal trainer chatting with your client. Sound like a knowledgeable mate — direct, warm, zero waffle. Use their data but don't lecture. 2-3 sentences max.
 
 ${ctx.contextBlock}
 
@@ -987,7 +1228,114 @@ function animNum(el,target){
   function step(t){const p=Math.min(1,(t-t0)/dur);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*eased);if(p<1)requestAnimationFrame(step)}
   requestAnimationFrame(step);
 }
-async function init(){const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
+
+// Diagnostic — run testProxy() in browser console to check connection
+async function testProxy(){
+  console.log('Testing proxy at',PX,'...');
+  try{
+    const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:50,messages:[{role:'user',content:'Reply with just the word OK'}]})});
+    console.log('Status:',resp.status);
+    const body=await resp.text();
+    console.log('Response:',body.slice(0,300));
+    if(resp.ok){const d=JSON.parse(body);if(d.content)console.log('✅ PROXY WORKS — AI replied:',d.content[0]?.text);else if(d.error)console.log('❌ API ERROR:',d.error.message)}
+    else console.log('❌ HTTP ERROR:',resp.status,body.slice(0,200));
+  }catch(e){console.log('❌ FETCH FAILED:',e.message,'— proxy may be down or CORS issue')}
+}
+
+
+// ── Pro & free-tier limits ──
+const FREE_SCANS=3;
+const APP_STORE_URL='https://apps.apple.com/app/vitlo';
+function isInApp(){try{return !!(window.Capacitor&&typeof window.Capacitor.isNativePlatform==='function'&&window.Capacitor.isNativePlatform())}catch(e){return false}}
+function isPro(){return localStorage.getItem('vitlo_pro')==='1'}
+function setPro(v){localStorage.setItem('vitlo_pro',v?'1':'0');updateScanBadge()}
+function scanData(){try{const d=JSON.parse(localStorage.getItem('vitlo_scans')||'{}');return d.date===td()?d:{date:td(),count:0}}catch(e){return{date:td(),count:0}}}
+function scansLeft(){return Math.max(0,FREE_SCANS-scanData().count)}
+function bumpScan(){const d=scanData();d.count=(d.count||0)+1;d.date=td();localStorage.setItem('vitlo_scans',JSON.stringify(d));updateScanBadge()}
+function canScan(){return isPro()||scansLeft()>0}
+function updateScanBadge(){
+  const el=$('scanBadge');if(!el)return;
+  if(isPro()){el.innerHTML='<b>PRO</b> · unlimited scans';el.classList.remove('out');return}
+  const n=scansLeft();
+  el.classList.toggle('out',n===0);
+  el.innerHTML=n>0?`<b>${n}</b> of ${FREE_SCANS} free scans left today`:'No free scans left today · tap to upgrade';
+  el.onclick=n===0?()=>{closeModal('foodModal');openPaywall('scans')}:null;
+  el.style.cursor=n===0?'pointer':'default';
+}
+function openPaywall(reason){
+  const sub=$('pwSub');
+  if(sub)sub.textContent=reason==='coach'?'AI Coach chat is a Pro feature.':`You've used your ${FREE_SCANS} free scans today.`;
+  const cta=$('pwCta'),restore=$('pwRestore');
+  if(isInApp()){cta.textContent='Start Free Trial';restore.style.display='block'}
+  else{cta.textContent='Get Vitlo on the App Store';restore.style.display='none'}
+  openModal('pwOv');
+}
+function pwAction(){
+  if(!isInApp()){window.open(APP_STORE_URL,'_blank');return}
+  startPurchase();
+}
+// pwPrice / pwPriceSub are placeholders — overwrite with the localised store price once RevenueCat is wired
+// Replaced by RevenueCat once the native build exists
+// ── RevenueCat wiring ──
+const RC_APPLE_KEY='appl_REPLACE_WITH_YOUR_KEY';
+const RC_ENTITLEMENT='pro';
+let rcReady=false,rcOffering=null,Purchases=null;
+
+async function initRC(){
+  if(!isInApp())return;                 // only runs inside the native app
+  try{
+    const mod=await import('@revenuecat/purchases-capacitor');
+    Purchases=mod.Purchases;
+    await Purchases.configure({apiKey:RC_APPLE_KEY});
+    rcReady=true;
+    // Sync current entitlement state
+    const{customerInfo}=await Purchases.getCustomerInfo();
+    applyEntitlement(customerInfo);
+    // Cache the offering + real localised price for the paywall
+    const off=await Purchases.getOfferings();
+    rcOffering=off?.current||null;
+    const pkg=rcOffering?.availablePackages?.[0];
+    if(pkg){
+      const p=pkg.product;
+      const el=$('pwPrice'),sub=$('pwPriceSub');
+      if(el&&p.priceString)el.textContent=p.priceString;
+      if(sub)sub.textContent='per month · cancel anytime';
+    }
+  }catch(e){console.log('RC init error',e)}
+}
+
+function applyEntitlement(info){
+  const active=!!(info&&info.entitlements&&info.entitlements.active&&info.entitlements.active[RC_ENTITLEMENT]);
+  setPro(active);
+}
+
+async function startPurchase(){
+  if(!isInApp()){window.open(APP_STORE_URL,'_blank');return}
+  if(!rcReady||!rcOffering){toast('Loading store… try again in a second');return}
+  const pkg=rcOffering.availablePackages?.[0];
+  if(!pkg){toast('No subscription available right now');return}
+  try{
+    $('pwCta').textContent='Processing…';
+    const{customerInfo}=await Purchases.purchasePackage({aPackage:pkg});
+    applyEntitlement(customerInfo);
+    if(isPro()){closeModal('pwOv');toast('✓ Welcome to Vitlo Pro')}
+  }catch(e){
+    if(!(e&&e.userCancelled))toast('Purchase didn\'t complete — try again');
+  }finally{$('pwCta').textContent='Start Free Trial'}
+}
+
+async function restorePurchases(){
+  if(!isInApp())return;
+  if(!rcReady){toast('Loading store…');return}
+  try{
+    const{customerInfo}=await Purchases.restorePurchases();
+    applyEntitlement(customerInfo);
+    toast(isPro()?'✓ Purchases restored':'No active subscription found');
+    if(isPro())closeModal('pwOv');
+  }catch(e){toast('Could not restore — try again')}
+}
+
+async function init(){initRC();const{data:{session}}=await sb.auth.getSession();if(session?.user){user=session.user;await boot()}sb.auth.onAuthStateChange(async(_,s)=>{if(s?.user){user=s.user;await boot()}})}
 async function boot(){await loadProfile();if(!profile?.onboarded){show('obScreen');renderOb();return}await Promise.all([loadFood(),loadEx()]);show('homeScreen');showUI();renderHome();renderEx()}
 init();
 </script>
