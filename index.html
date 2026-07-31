@@ -183,11 +183,11 @@ textarea.inp{resize:none;line-height:1.5}
 .stat-v{font-family:'Instrument Serif',serif;font-size:24px;line-height:1}
 .stat-l{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.7px;margin-top:4px;text-transform:uppercase}
 .macros{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:0 var(--gut) 10px}
-.mac{background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-md);padding:12px 10px}
-.mac-v{font-size:17px;font-weight:800;letter-spacing:-.3px}
-.mac-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:500}
-.mac-bar{height:3px;background:var(--s3);border-radius:2px;margin-top:8px;overflow:hidden}
-.mac-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+.mac{background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-md);padding:13px 10px;text-align:center}
+.mac-v{font-size:18px;font-weight:800;letter-spacing:-.3px;line-height:1;transition:color .3s}
+.mac-l{font-size:10px;color:var(--tx3);margin-top:4px;font-weight:500}
+.mac-bar{height:3px;background:var(--s3);border-radius:2px;margin-top:9px;overflow:hidden}
+.mac-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1),background .3s}
 .sec-h{display:flex;align-items:center;justify-content:space-between;padding:14px var(--gut) 10px}
 .sec-t{font-size:14px;font-weight:700;letter-spacing:-.2px}
 .sec-a{font-size:12px;font-weight:600;color:var(--grn);cursor:pointer}
@@ -475,7 +475,7 @@ textarea.inp{resize:none;line-height:1.5}
 
   <div class="macros" id="hMac"></div>
 
-  <div class="sec-h"><div class="sec-t">Today's activity</div><div class="sec-a" onclick="openModal('exModal')">+ Log</div></div>
+  <div class="sec-h"><div class="sec-t">Today's activity</div></div>
   <div id="hAct"></div>
 
   <div class="sec-h"><div class="sec-t">Today's meals</div><div class="sec-a" onclick="goTab('food')">View all</div></div>
@@ -1009,11 +1009,14 @@ function renderHome(){
   $('sB').textContent=burnedCals.toLocaleString();
 
   const mac=[
-    {v:Math.round(tt.p),g:m.p,l:'Protein',c:'var(--blu)'},
-    {v:Math.round(tt.c),g:m.c,l:'Carbs',c:'var(--amb)'},
-    {v:Math.round(tt.f),g:m.f,l:'Fat',c:'var(--pur)'}
+    {k:'p',v:Math.round(tt.p),g:m.p,l:'Protein'},
+    {k:'c',v:Math.round(tt.c),g:m.c,l:'Carbs'},
+    {k:'f',v:Math.round(tt.f),g:m.f,l:'Fat'}
   ];
-  $('hMac').innerHTML=mac.map(x=>`<div class="mac"><div class="mac-v" style="color:${x.c}">${x.v}g</div><div class="mac-l">of ${x.g}g ${x.l}</div><div class="mac-bar"><div class="mac-fill" style="width:${Math.min(100,(x.v/Math.max(x.g,1))*100)}%;background:${x.c}"></div></div></div>`).join('');
+  $('hMac').innerHTML=mac.map(x=>{
+    const col=macColor(x.k,x.v,x.g);
+    return `<div class="mac"><div class="mac-v" style="color:${col}">${x.v}g</div><div class="mac-l">of ${x.g}g ${x.l}</div><div class="mac-bar"><div class="mac-fill" style="width:${Math.min(100,(x.v/Math.max(x.g,1))*100)}%;background:${col}"></div></div></div>`;
+  }).join('');
 
   // activity card
   const type=window._exType||'Other';
@@ -1028,6 +1031,16 @@ function renderHome(){
   }else{
     el.innerHTML=foodLogs.slice(0,3).map(f=>mealRow(f)).join('');
   }
+}
+// Macro colour by how far off target you are.
+// Protein: more is fine — amber only when meaningfully short.
+// Carbs/Fat: amber when well under, green around target, red when over.
+function macColor(kind,cur,goal){
+  if(!goal)return 'var(--tx3)';
+  const d=cur-goal;
+  if(kind==='p')return d>=-10?'var(--grn)':'var(--amb)';
+  if(kind==='f')return d>5?'var(--red)':d>=-15?'var(--grn)':'var(--amb)';
+  return d>10?'var(--red)':d>=-20?'var(--grn)':'var(--amb)';
 }
 function mealRow(f){
   const tm=f.created_at?new Date(f.created_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
