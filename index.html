@@ -161,64 +161,36 @@ textarea.inp{resize:none;line-height:1.5}
 .goal-o-t{font-size:14.5px;font-weight:700}
 .goal-o-d{font-size:11.5px;color:var(--tx3);margin-top:2px;line-height:1.4}
 
-/* ══ DRAWER ══ */
-.dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s}
-.dr-ov.open{opacity:1;pointer-events:auto}
-.dr{position:fixed;top:0;left:0;bottom:0;width:min(310px,84vw);background:linear-gradient(160deg,var(--s1),var(--bg));border-right:1px solid var(--bd2);z-index:301;transform:translateX(-100%);transition:transform .34s cubic-bezier(.22,1,.36,1);display:flex;flex-direction:column;overflow:hidden}
-.dr.open{transform:none}
-.dr-pane{position:absolute;inset:0;display:flex;flex-direction:column;padding:calc(24px + env(safe-area-inset-top)) 0 calc(20px + env(safe-area-inset-bottom));overflow-y:auto;background:linear-gradient(160deg,var(--s1),var(--bg));transform:translateX(100%);transition:transform .3s cubic-bezier(.22,1,.36,1);visibility:hidden}
-.dr-pane.on{transform:none;visibility:visible}
-.dr-pane#drMenu{transform:none;visibility:visible}
-.dr-pane#drMenu.pushed{transform:translateX(-24%);visibility:visible}
-.dr-hd{padding:0 20px 20px;border-bottom:1px solid var(--bd);margin-bottom:8px}
-.dr-logo{font-family:'Instrument Serif',serif;font-size:34px;font-style:italic;letter-spacing:-1.5px;line-height:1}
-.dr-mail{font-size:11.5px;color:var(--tx3);margin-top:5px;word-break:break-all}
-.dr-i{display:flex;align-items:center;gap:13px;padding:14px 20px;cursor:pointer;transition:background .18s}
-.dr-i:active{background:var(--s2)}
-.dr-i-ic{width:36px;height:36px;border-radius:var(--r-sm);background:var(--s2);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dr-i-tx{flex:1;min-width:0}
-.dr-i-t{font-size:14.5px;font-weight:600}
-.dr-i-s{font-size:11px;color:var(--tx3);margin-top:1px}
-.dr-back{display:flex;align-items:center;gap:9px;padding:0 20px 16px;cursor:pointer;color:var(--tx2);font-size:14px;font-weight:600}
-.dr-sec{padding:0 20px}
-.dr-sec-t{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin:18px 0 9px}
-.dr-kv{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
-.dr-kv:last-child{border-bottom:none}
-.dr-k{font-size:13px;color:var(--tx3)}
-.dr-v{font-size:14px;font-weight:600}
-.dr-link{display:block;padding:13px 0;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--tx2);text-decoration:none;cursor:pointer}
-.dr-link:last-of-type{border-bottom:none}
-
 /* ══ HOME ══ */
 .hd{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top)) var(--gut) 6px}
-.ring-wrap{display:flex;flex-direction:column;align-items:center;padding:14px 0 6px;cursor:pointer}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;padding:16px 0 8px;cursor:pointer}
 .ring{position:relative;width:224px;height:224px}
 .ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
 .ring::before{content:'';position:absolute;inset:26px;border-radius:50%;background:radial-gradient(circle,rgba(46,204,113,.07),transparent 70%);pointer-events:none}
 .ring-c{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:100%}
 .ring-n{font-family:'Instrument Serif',serif;font-size:58px;letter-spacing:-2.5px;line-height:1;transition:color .4s;text-shadow:0 0 34px rgba(46,204,113,.16)}
 .ring-l{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1.4px;margin-top:5px;text-transform:uppercase}
-.leg{display:flex;gap:18px;margin-top:12px}
+.leg{display:flex;gap:18px;margin-top:14px}
 .leg-i{display:flex;align-items:center;gap:6px}
 .leg-d{width:7px;height:7px;border-radius:4px}
 .leg-t{font-size:10.5px;color:var(--tx3);font-weight:500}
-.stats{display:flex;margin:14px var(--gut) 10px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden}
+.stats{display:flex;margin:16px var(--gut) 10px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-lg);overflow:hidden}
 .stat{flex:1;text-align:center;padding:14px 4px}
 .stat+.stat{border-left:1px solid var(--bd)}
 .stat-v{font-family:'Instrument Serif',serif;font-size:24px;line-height:1}
 .stat-l{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.7px;margin-top:4px;text-transform:uppercase}
-.macros{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin:0 var(--gut) 12px}
+.macros{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:0 var(--gut) 10px}
 .mac{background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-md);padding:12px 10px}
 .mac-v{font-size:17px;font-weight:800;letter-spacing:-.3px}
 .mac-l{font-size:10px;color:var(--tx3);margin-top:2px;font-weight:500}
 .mac-bar{height:3px;background:var(--s3);border-radius:2px;margin-top:8px;overflow:hidden}
 .mac-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.22,1,.36,1)}
-.sec-h{display:flex;align-items:center;justify-content:space-between;padding:6px var(--gut) 10px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;padding:14px var(--gut) 10px}
 .sec-t{font-size:14px;font-weight:700;letter-spacing:-.2px}
 .sec-a{font-size:12px;font-weight:600;color:var(--grn);cursor:pointer}
 
 /* activity card */
-.act{display:flex;align-items:center;gap:13px;margin:0 var(--gut) 10px;padding:15px 16px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-lg);cursor:pointer;transition:border-color .2s}
+.act{display:flex;align-items:center;gap:13px;margin:0 var(--gut) 8px;padding:15px 16px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-lg);cursor:pointer;transition:border-color .2s}
 .act:active{border-color:var(--bd2);transform:scale(.985)}
 .act-ic{width:44px;height:44px;border-radius:var(--r-sm);background:rgba(239,83,80,.1);border:1px solid rgba(239,83,80,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .act-tx{flex:1;min-width:0}
@@ -398,6 +370,35 @@ textarea.inp{resize:none;line-height:1.5}
 .fr-mv{font-size:17px;font-weight:800}
 .fr-ml{font-size:9px;font-weight:700;color:var(--tx3);letter-spacing:.6px;margin-top:3px;text-transform:uppercase}
 .fr-bd{padding:12px 16px;font-size:12px;color:var(--tx2);line-height:1.65;white-space:pre-line}
+
+.ph{display:flex;align-items:center;gap:12px;padding:calc(12px + env(safe-area-inset-top)) var(--gut) 12px;position:sticky;top:0;background:rgba(8,11,9,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:20;border-bottom:1px solid var(--bd)}
+.ph-t{flex:1;font-size:17px;font-weight:700;letter-spacing:-.3px}
+.ph-a{font-size:13.5px;font-weight:600;color:var(--grn);cursor:pointer;padding:6px 2px}
+.pg{padding:18px var(--gut) 48px}
+.pg-sec{margin-bottom:26px}
+.pg-lbl{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:1px;margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid var(--bd);border-radius:var(--r-md);margin-bottom:8px;cursor:pointer;transition:border-color .2s}
+.kv:active{border-color:var(--bd2);transform:scale(.99)}
+.kv-l{display:flex;align-items:center;gap:13px;min-width:0}
+.kv-ic{width:36px;height:36px;border-radius:var(--r-sm);background:var(--s3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kv-t{font-size:14.5px;font-weight:600}
+.kv-s{font-size:11.5px;color:var(--tx3);margin-top:1px}
+.kv-v{font-size:13.5px;font-weight:600}
+.hero{background:linear-gradient(150deg,rgba(46,204,113,.1),var(--s1));border:1px solid rgba(46,204,113,.16);border-radius:var(--r-lg);padding:22px;text-align:center;margin-bottom:22px}
+.hero-v{font-family:'Instrument Serif',serif;font-size:46px;color:var(--grn);line-height:1;margin:8px 0}
+.hero-s{font-size:12.5px;color:var(--tx2)}
+.hero-n{font-size:11.5px;color:var(--tx3);margin-top:6px}
+.lnk{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--bd);font-size:14px;color:var(--tx2);text-decoration:none;cursor:pointer}
+.lnk:last-of-type{border-bottom:none}
+.todaybtn{display:flex;align-items:center;justify-content:center;gap:9px;margin:2px var(--gut) 0;padding:11px;background:var(--s2);border:1px solid var(--bd);border-radius:var(--r-full);cursor:pointer;transition:all .18s}
+.todaybtn:active{transform:scale(.97);border-color:var(--bd2)}
+.todaybtn-t{font-size:13.5px;font-weight:700}
+.todaybtn-s{font-size:12px;color:var(--tx3)}
+.cal-dot{position:absolute;bottom:5px;width:5px;height:5px;border-radius:3px}
+.cal-legend{display:flex;justify-content:center;gap:16px;margin-top:14px;padding-top:14px;border-top:1px solid var(--bd)}
+.cal-lg{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--tx3)}
+.cal-lg-d{width:6px;height:6px;border-radius:3px}
+.lg-hint{font-size:12.5px;color:var(--tx3);line-height:1.55;margin-top:14px}
 ::selection{background:rgba(46,204,113,.28)}
 ::-webkit-scrollbar{width:0;height:0}
 </style>
@@ -434,12 +435,18 @@ textarea.inp{resize:none;line-height:1.5}
 <!-- ════ HOME ════ -->
 <div class="screen" id="homeScreen">
   <div class="hd">
-    <button class="ib" onclick="openDrawer()" aria-label="Menu">
+    <button class="ib" onclick="openPage('menuScreen')" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="15" y2="18"/></svg>
     </button>
-    <div class="pill" id="hPill" onclick="openDrawer('drGoals')">Set a goal</div>
+    <div class="pill" id="hPill" onclick="openPage('goalsScreen')">Set a goal</div>
   </div>
 
+  <div class="todaybtn" onclick="openModal('calModal');renderCal()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span class="todaybtn-t" id="hDay">Today</span>
+    <span class="todaybtn-s" id="hDate"></span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
   <div class="ring-wrap" onclick="goTab('food')">
     <div class="ring">
       <svg width="224" height="224" viewBox="0 0 230 230">
@@ -500,7 +507,7 @@ textarea.inp{resize:none;line-height:1.5}
     <div class="fsum-mac" id="fsMac"></div>
   </div>
 
-  <div class="sec-h"><div class="sec-t" id="fdCount">Meals</div><div class="sec-a" onclick="openModal('foodModal');resetF()">+ Add</div></div>
+  <div class="sec-h"><div class="sec-t" id="fdCount">Meals</div><div class="sec-a" onclick="openPage('logScreen')">+ Add</div></div>
   <div id="fdList"></div>
   <div class="pad-b"></div>
 </div>
@@ -573,207 +580,182 @@ textarea.inp{resize:none;line-height:1.5}
   </div>
 </div>
 
-<button class="fab" id="fab" onclick="openModal('foodModal');resetF()" aria-label="Log food">
+<button class="fab" id="fab" onclick="openPage('logScreen')" aria-label="Log food">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#07110b" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 </button>
-<!-- ════ DRAWER ════ -->
-<div class="dr-ov" id="drOv" onclick="closeDrawer()"></div>
-<div class="dr" id="dr">
-
-  <!-- MENU -->
-  <div class="dr-pane" id="drMenu">
-    <div class="dr-hd">
-      <div class="dr-logo">vitlo</div>
-      <div class="dr-mail" id="drMail">—</div>
+<!-- ════ MENU (full page) ════ -->
+<div class="screen" id="menuScreen">
+  <div class="ph"><button class="ib" onclick="closePage()" aria-label="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="ph-t">Menu</div></div>
+  <div class="pg">
+    <div style="text-align:center;margin-bottom:24px">
+      <div class="serif" style="font-size:46px;font-style:italic;letter-spacing:-2px;line-height:1">vitlo</div>
+      <div style="font-size:12px;color:var(--tx3);margin-top:7px" id="mnMail"></div>
     </div>
-    <div class="dr-i" onclick="drGo('drProfile')">
-      <div class="dr-i-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20v-1a7 7 0 0 1 14 0v1"/></svg></div>
-      <div class="dr-i-tx"><div class="dr-i-t">Profile</div><div class="dr-i-s">Your body stats and BMR</div></div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <div class="kv" onclick="openPage('profileScreen')">
+      <div class="kv-l"><div class="kv-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20v-1a7 7 0 0 1 14 0v1"/></svg></div>
+      <div><div class="kv-t">Profile</div><div class="kv-s">Your body stats and BMR</div></div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    <div class="dr-i" onclick="drGo('drGoals')">
-      <div class="dr-i-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
-      <div class="dr-i-tx"><div class="dr-i-t">Goals</div><div class="dr-i-s">Your plan and daily targets</div></div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <div class="kv" onclick="openPage('goalsScreen')">
+      <div class="kv-l"><div class="kv-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></div>
+      <div><div class="kv-t">Goals</div><div class="kv-s">Your plan and daily targets</div></div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    <div class="dr-i" onclick="drGo('drSettings')">
-      <div class="dr-i-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-      <div class="dr-i-tx"><div class="dr-i-t">Settings</div><div class="dr-i-s">Privacy, account, support</div></div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <div class="kv" onclick="openPage('settingsScreen')">
+      <div class="kv-l"><div class="kv-ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--grn)" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.85 1 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div><div class="kv-t">Settings</div><div class="kv-s">Privacy, account, support</div></div></div><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    <div style="margin-top:auto;padding:20px 20px 0;border-top:1px solid var(--bd)">
-      <div id="drProBox"></div>
-    </div>
+    <div style="margin-top:26px" id="mnProBox"></div>
   </div>
+</div>
 
-  <!-- PROFILE -->
-  <div class="dr-pane" id="drProfile">
-    <div class="dr-back" onclick="drBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Profile</div>
-    <div class="dr-sec">
-      <div style="background:linear-gradient(150deg,rgba(46,204,113,.1),var(--s1));border:1px solid rgba(46,204,113,.16);border-radius:var(--r-lg);padding:18px;text-align:center;margin-bottom:6px">
-        <div class="eyebrow">Your BMR</div>
-        <div class="serif" style="font-size:40px;color:var(--grn);line-height:1;margin:6px 0" id="drBmr">—</div>
-        <div style="font-size:11.5px;color:var(--tx3)" id="drBmrNote">Calories burned at complete rest</div>
-      </div>
-      <div class="dr-sec-t">YOUR DETAILS</div>
+<!-- ════ PROFILE (full page) ════ -->
+<div class="screen" id="profileScreen">
+  <div class="ph"><button class="ib" onclick="openPage('menuScreen')" aria-label="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="ph-t">Profile</div><div class="ph-a" onclick="saveProfile()">Save</div></div>
+  <div class="pg">
+    <div class="hero"><div class="eyebrow">YOUR BMR</div><div class="hero-v" id="pfBmrV">0</div><div class="hero-s">Calories burned at complete rest</div><div class="hero-n" id="pfBmrNote"></div></div>
+    <div class="pg-sec">
+      <div class="pg-lbl">YOUR DETAILS</div>
       <label class="lbl">Name</label><input class="inp" id="pfName" placeholder="Your name">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div><label class="lbl">Weight (kg)</label><input class="inp" type="number" id="pfW" inputmode="decimal"></div>
         <div><label class="lbl">Height (cm)</label><input class="inp" type="number" id="pfH" inputmode="decimal"></div>
         <div><label class="lbl">Age</label><input class="inp" type="number" id="pfA" inputmode="numeric"></div>
         <div><label class="lbl">Body fat %</label><input class="inp" type="number" id="pfBF" inputmode="decimal" placeholder="Optional"></div>
       </div>
       <label class="lbl">Sex</label>
-      <div class="seg" style="margin-bottom:14px">
-        <div class="seg-b" id="pfSexM" onclick="setSex('male')">Male</div>
-        <div class="seg-b" id="pfSexF" onclick="setSex('female')">Female</div>
-      </div>
+      <div class="seg" style="margin-bottom:16px"><div class="seg-b" id="pfSexM" onclick="setSex('male')">Male</div><div class="seg-b" id="pfSexF" onclick="setSex('female')">Female</div></div>
+    </div>
+    <div class="pg-sec">
+      <div class="pg-lbl">ADVANCED</div>
       <label class="lbl">BMR override</label>
       <input class="inp" type="number" id="pfBMR" inputmode="numeric" placeholder="Leave blank to auto-calculate">
-      <div style="font-size:11px;color:var(--tx3);margin:-4px 0 16px;line-height:1.5">Know your exact BMR from a body scan? Enter it here. Otherwise we calculate it from your stats.</div>
-      <button class="btn btn-g" onclick="saveProfile()">Save profile</button>
+      <div style="font-size:11.5px;color:var(--tx3);line-height:1.55">Know your exact BMR from a body scan? Enter it here and we'll use that instead of the estimate.</div>
     </div>
+    <button class="btn btn-g" onclick="saveProfile()">Save profile</button>
   </div>
+</div>
 
-  <!-- GOALS -->
-  <div class="dr-pane" id="drGoals">
-    <div class="dr-back" onclick="drBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Goals</div>
-    <div class="dr-sec">
-      <div style="background:linear-gradient(150deg,rgba(46,204,113,.1),var(--s1));border:1px solid rgba(46,204,113,.16);border-radius:var(--r-lg);padding:18px;text-align:center;margin-bottom:14px">
-        <div class="eyebrow">Daily target</div>
-        <div class="serif" style="font-size:42px;color:var(--grn);line-height:1;margin:6px 0" id="drTarget">—</div>
-        <div style="font-size:11.5px;color:var(--tx2)" id="drGoalName">—</div>
-        <div style="font-size:11px;color:var(--tx3);margin-top:5px" id="drFormula">—</div>
-      </div>
-
-      <div class="dr-sec-t">YOUR GOAL</div>
-      <div class="goal-o" id="gFat" onclick="pickGoal('fat_loss')">
-        <div class="goal-o-ic">📉</div><div><div class="goal-o-t">Fat loss</div><div class="goal-o-d">Eat below maintenance</div></div>
-      </div>
-      <div class="goal-o" id="gMus" onclick="pickGoal('muscle')">
-        <div class="goal-o-ic">💪</div><div><div class="goal-o-t">Build muscle</div><div class="goal-o-d">Slight surplus, high protein</div></div>
-      </div>
-      <div class="goal-o" id="gMai" onclick="pickGoal('maintain')">
-        <div class="goal-o-ic">⚖️</div><div><div class="goal-o-t">Maintain</div><div class="goal-o-d">Stay where you are</div></div>
-      </div>
-
-      <div id="gDefWrap" style="margin-top:6px">
+<!-- ════ GOALS (full page) ════ -->
+<div class="screen" id="goalsScreen">
+  <div class="ph"><button class="ib" onclick="openPage('menuScreen')" aria-label="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="ph-t">Goals</div><div class="ph-a" onclick="saveGoal()">Save</div></div>
+  <div class="pg">
+    <div class="hero"><div class="eyebrow">DAILY TARGET</div><div class="hero-v" id="glTarget">0</div><div class="hero-s" id="glName"></div><div class="hero-n" id="glFormula"></div></div>
+    <div class="pg-sec">
+      <div class="pg-lbl">YOUR GOAL</div>
+      <div class="goal-o" id="gFat" onclick="pickGoal('fat_loss')"><div class="goal-o-ic">&#128201;</div><div><div class="goal-o-t">Fat loss</div><div class="goal-o-d">Eat below maintenance</div></div></div>
+      <div class="goal-o" id="gMus" onclick="pickGoal('muscle')"><div class="goal-o-ic">&#128170;</div><div><div class="goal-o-t">Build muscle</div><div class="goal-o-d">Slight surplus, high protein</div></div></div>
+      <div class="goal-o" id="gMai" onclick="pickGoal('maintain')"><div class="goal-o-ic">&#9878;</div><div><div class="goal-o-t">Maintain</div><div class="goal-o-d">Stay where you are</div></div></div>
+      <div id="gDefWrap" style="margin-top:12px">
         <label class="lbl">Daily deficit / surplus (kcal)</label>
         <input class="inp" type="number" id="gDef" inputmode="numeric" placeholder="500">
-        <div style="font-size:11px;color:var(--tx3);margin:-4px 0 14px;line-height:1.5">500 kcal/day is roughly 0.5kg per week. Gentler is more sustainable.</div>
+        <div style="font-size:11.5px;color:var(--tx3);line-height:1.55">500 kcal a day is roughly 0.5kg a week. Gentler is more sustainable.</div>
       </div>
-      <button class="btn btn-g" onclick="saveGoal()">Save goal</button>
-
-      <div class="dr-sec-t" style="margin-top:24px">MACRO TARGETS</div>
-      <div style="font-size:11.5px;color:var(--tx3);margin-bottom:11px;line-height:1.5">Override the auto-calculated split. Leave blank to use defaults.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+    </div>
+    <div class="pg-sec">
+      <div class="pg-lbl">MACRO TARGETS</div>
+      <div style="font-size:12px;color:var(--tx3);margin-bottom:12px;line-height:1.55">Override the auto-calculated split. Leave blank to use defaults.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px">
         <div><label class="lbl">Protein</label><input class="inp" type="number" id="mcP" inputmode="numeric" placeholder="auto"></div>
         <div><label class="lbl">Carbs</label><input class="inp" type="number" id="mcC" inputmode="numeric" placeholder="auto"></div>
         <div><label class="lbl">Fat</label><input class="inp" type="number" id="mcF" inputmode="numeric" placeholder="auto"></div>
       </div>
       <button class="btn btn-s btn-sm" onclick="saveMacroTargets()">Save macros</button>
-
-      <div class="dr-sec-t" style="margin-top:24px">NOT SURE?</div>
-      <button class="btn btn-s" onclick="closeDrawer();openModal('coachModal')">Build my plan with AI</button>
-      <div style="font-size:11.5px;color:var(--tx3);margin-top:9px;line-height:1.5">Describe your goal in your own words and the AI works out your targets.</div>
-      <div style="height:20px"></div>
     </div>
+    <div class="pg-sec">
+      <div class="pg-lbl">NOT SURE WHERE TO START?</div>
+      <button class="btn btn-s" onclick="openModal('coachModal')">Build my plan with AI</button>
+      <div style="font-size:11.5px;color:var(--tx3);margin-top:10px;line-height:1.55">Describe your goal in your own words and the AI works out your targets from your stats.</div>
+    </div>
+    <button class="btn btn-g" onclick="saveGoal()">Save goal</button>
   </div>
+</div>
 
-  <!-- SETTINGS -->
-  <div class="dr-pane" id="drSettings">
-    <div class="dr-back" onclick="drBack()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Settings</div>
-    <div class="dr-sec">
-      <div class="dr-sec-t">SUBSCRIPTION</div>
-      <div id="drSubBox"></div>
-
-      <div class="dr-sec-t">LEGAL</div>
-      <a class="dr-link" href="https://getvitlo.github.io/Vitlo/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>
-      <a class="dr-link" href="https://getvitlo.github.io/Vitlo/terms.html" target="_blank" rel="noopener">Terms of Use</a>
-      <a class="dr-link" href="https://getvitlo.github.io/Vitlo/support.html" target="_blank" rel="noopener">Help &amp; Support</a>
-      <a class="dr-link" href="mailto:trustforge.hani@gmail.com">Contact us</a>
-
-      <div class="dr-sec-t">ACCOUNT</div>
-      <div class="dr-kv"><div class="dr-k">Signed in as</div><div class="dr-v" style="font-size:12px" id="drMail2">—</div></div>
-      <div style="height:14px"></div>
+<!-- ════ SETTINGS (full page) ════ -->
+<div class="screen" id="settingsScreen">
+  <div class="ph"><button class="ib" onclick="openPage('menuScreen')" aria-label="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button><div class="ph-t">Settings</div></div>
+  <div class="pg">
+    <div class="pg-sec"><div class="pg-lbl">SUBSCRIPTION</div><div id="stSubBox"></div></div>
+    <div class="pg-sec">
+      <div class="pg-lbl">LEGAL</div>
+      <a class="lnk" href="https://getvitlo.github.io/Vitlo/privacy.html" target="_blank" rel="noopener">Privacy Policy <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a class="lnk" href="https://getvitlo.github.io/Vitlo/terms.html" target="_blank" rel="noopener">Terms of Use <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a class="lnk" href="https://getvitlo.github.io/Vitlo/support.html" target="_blank" rel="noopener">Help &amp; Support <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+      <a class="lnk" href="mailto:trustforge.hani@gmail.com">Contact us <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+    <div class="pg-sec">
+      <div class="pg-lbl">ACCOUNT</div>
+      <div class="kv" style="cursor:default"><div class="kv-l"><div><div class="kv-t">Signed in</div><div class="kv-s" id="stMail"></div></div></div></div>
+      <div style="height:8px"></div>
       <button class="btn btn-s btn-sm" onclick="signOut()">Sign out</button>
-      <div style="height:9px"></div>
+      <div style="height:10px"></div>
       <button class="btn btn-danger btn-sm" onclick="deleteAccount()">Delete my account</button>
-      <div style="font-size:11px;color:var(--tx3);margin-top:9px;line-height:1.5">Deleting removes your account and every meal, workout and stat permanently. This cannot be undone.</div>
+      <div style="font-size:11.5px;color:var(--tx3);margin-top:10px;line-height:1.55">Deleting removes your account and every meal, workout and stat permanently. This cannot be undone.</div>
+    </div>
+    <div style="text-align:center;font-size:11.5px;color:var(--tx3)">Vitlo v1.0</div>
+  </div>
+</div>
 
-      <div style="text-align:center;font-size:11px;color:var(--tx3);margin-top:26px">Vitlo v1.0</div>
-      <div style="height:20px"></div>
+<!-- ════ LOG FOOD (full page) ════ -->
+<div class="screen" id="logScreen">
+  <div class="ph">
+    <button class="ib" onclick="closePage()" aria-label="Cancel"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="ph-t">Log food</div>
+    <div id="scanBadge" style="font-size:11.5px;font-weight:600;color:var(--tx3)"></div>
+  </div>
+  <div class="pg">
+    <div class="seg" id="logSeg" style="margin-bottom:18px">
+      <div class="seg-b on" onclick="fT('photo',this)">Photo</div>
+      <div class="seg-b" onclick="fT('desc',this)">Describe</div>
+      <div class="seg-b" onclick="fT('man',this)">Manual</div>
+    </div>
+    <div id="fp">
+      <input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)">
+      <input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)">
+      <div class="pd" id="pD" onclick="document.getElementById('cI').click()">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <div style="font-size:13.5px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>
+      </div>
+      <div class="pa">
+        <button class="btn btn-s btn-sm" style="flex:1" onclick="event.stopPropagation();document.getElementById('cI').click()">Camera</button>
+        <button class="btn btn-s btn-sm" style="flex:1" onclick="event.stopPropagation();document.getElementById('gI').click()">Library</button>
+      </div>
+      <div class="lg-hint">Get the whole plate in frame. Adding the food weight under Details makes the estimate noticeably more accurate.</div>
+    </div>
+    <div id="fd" style="display:none">
+      <label class="lbl">What did you eat?</label>
+      <textarea class="inp" id="dI" rows="4" placeholder="e.g. 3 sausages, a hash brown and two slices of buttered toast" style="min-height:106px"></textarea>
+      <button class="btn btn-g" onclick="anDesc()">Calculate calories</button>
+      <div class="lg-hint">Quantities, cooking method and brand names all improve accuracy.</div>
+    </div>
+    <div id="fm" style="display:none"><div id="mealHistory"></div></div>
+    <div id="fR" style="display:none"></div>
+    <div id="quickLog" style="display:none"><button class="btn btn-g" style="margin-bottom:12px" onclick="saveMeal()">Log this meal</button></div>
+    <div id="cB" style="display:none"><div class="corr">
+      <div class="corr-h">Not quite right? Tell the AI</div>
+      <input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:9px">
+      <button class="btn btn-s btn-sm" onclick="doCorr()">Re-analyse</button>
+    </div></div>
+    <div id="eA" style="display:none">
+      <div class="pg-lbl" style="margin-top:6px">DETAILS</div>
+      <label class="lbl">Meal name</label><input class="inp" id="fN" placeholder="e.g. Chicken and rice">
+      <label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric" placeholder="e.g. 520">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px">
+        <div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr" inputmode="numeric"></div>
+        <div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr" inputmode="numeric"></div>
+        <div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt" inputmode="numeric"></div>
+      </div>
+      <label class="lbl">Food weight (g, optional)</label>
+      <input class="inp" type="number" id="fW" placeholder="Improves accuracy — e.g. 350" inputmode="numeric">
+      <button class="btn btn-g" style="margin-top:6px" onclick="saveMeal()">Log meal</button>
     </div>
   </div>
 </div>
-<!-- ════ FOOD MODAL ════ -->
-<div class="ov" id="foodModal" onclick="closeO(event,'foodModal')"><div class="sheet">
-  <div class="grab"></div>
-  <div class="sheet-t">Log food</div>
-  <div class="sheet-s">Photograph your plate, describe it, or enter it yourself.</div>
-  <div class="sbadge" id="scanBadge"></div>
-  <div class="seg" style="margin-bottom:16px">
-    <div class="seg-b on" onclick="fT('photo',this)">Photo</div>
-    <div class="seg-b" onclick="fT('desc',this)">Describe</div>
-    <div class="seg-b" onclick="fT('man',this)">Manual</div>
-  </div>
-
-  <div id="fp">
-    <input type="file" id="cI" accept="image/*" capture="environment" style="display:none" onchange="onFP(event)">
-    <input type="file" id="gI" accept="image/*" style="display:none" onchange="onFP(event)">
-    <div class="pd" id="pD" onclick="document.getElementById('cI').click()">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>
-    </div>
-    <div class="pa">
-      <button class="btn btn-s btn-sm" style="flex:1" onclick="event.stopPropagation();document.getElementById('cI').click()">Camera</button>
-      <button class="btn btn-s btn-sm" style="flex:1" onclick="event.stopPropagation();document.getElementById('gI').click()">Library</button>
-    </div>
-  </div>
-
-  <div id="fd" style="display:none">
-    <label class="lbl">What did you eat?</label>
-    <textarea class="inp" id="dI" rows="3" placeholder="e.g. 3 sausages, a hash brown and buttered toast"></textarea>
-    <button class="btn btn-s" style="margin-bottom:12px" onclick="anDesc()">Calculate calories</button>
-  </div>
-
-  <div id="fm" style="display:none">
-    <div id="mealHistory"></div>
-    <div class="eyebrow" style="margin:16px 0 9px">OR ENTER MANUALLY</div>
-  </div>
-
-  <div id="fR" style="display:none"></div>
-  <div id="quickLog" style="display:none"><button class="btn btn-g" style="margin-bottom:9px" onclick="saveMeal()">Log this meal</button></div>
-
-  <div id="cB" style="display:none"><div class="corr">
-    <div class="corr-h">Not quite right? Tell the AI</div>
-    <input class="inp" id="cIn" placeholder="e.g. it was 5 sausages not 4" style="margin-bottom:8px">
-    <button class="btn btn-s btn-sm" onclick="doCorr()">Re-analyse</button>
-  </div></div>
-
-  <div id="eA" style="display:none">
-    <div class="eyebrow" style="margin-bottom:10px">DETAILS</div>
-    <label class="lbl">Meal name</label><input class="inp" id="fN" placeholder="e.g. Chicken and rice">
-    <label class="lbl">Calories</label><input class="inp" type="number" id="fK" inputmode="numeric" placeholder="e.g. 520">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-      <div><label class="lbl">Protein g</label><input class="inp" type="number" id="fPr" inputmode="numeric"></div>
-      <div><label class="lbl">Carbs g</label><input class="inp" type="number" id="fCr" inputmode="numeric"></div>
-      <div><label class="lbl">Fat g</label><input class="inp" type="number" id="fFt" inputmode="numeric"></div>
-    </div>
-    <label class="lbl">Food weight (g, optional)</label>
-    <input class="inp" type="number" id="fW" placeholder="Helps accuracy — e.g. 350" inputmode="numeric">
-    <button class="btn btn-g" style="margin-top:4px" onclick="saveMeal()">Log meal</button>
-  </div>
-
-  <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="closeModal('foodModal');resetF()">Cancel</button>
-</div></div>
 
 <!-- ════ EXERCISE MODAL ════ -->
 <div class="ov" id="exModal" onclick="closeO(event,'exModal')"><div class="sheet">
   <div class="grab"></div>
   <div class="sheet-t">Log a workout</div>
   <div class="sheet-s">Enter it manually or upload a screenshot from your watch.</div>
-  <div class="seg" style="margin-bottom:16px">
+  <div class="seg" id="exSeg" style="margin-bottom:16px">
     <div class="seg-b on" onclick="eT('man',this)">Manual</div>
     <div class="seg-b" onclick="eT('ss',this)">Screenshot</div>
   </div>
@@ -827,7 +809,8 @@ textarea.inp{resize:none;line-height:1.5}
     <div class="sheet-t" id="calTitle" style="margin:0">—</div>
     <div class="dnav-b" onclick="calNav(1)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
   </div>
-  <div id="calGrid"></div>
+  <div id="calGrid" class="cal-grid"></div>
+  <div class="cal-legend" id="calLegend"></div>
   <div id="calPreview" style="margin-top:14px"></div>
   <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="closeModal('calModal')">Close</button>
 </div></div>
@@ -883,41 +866,47 @@ const $=id=>document.getElementById(id),td=()=>new Date().toISOString().split('T
 
 function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active')}
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600)}
-function openModal(id){$(id).classList.add('open');if(id==='foodModal')updateScanBadge();if(id==='exModal')renderActPicker()}
+function openModal(id){$(id).classList.add('open');if(id==='exModal')renderActPicker()}
 function closeModal(id){$(id).classList.remove('open')}
 function closeO(e,id){if(e.target.id===id)closeModal(id)}
 function showUI(){$('tabs').classList.add('show');$('fab').classList.add('show')}
 function getViewDate(){return viewDate||td()}
 function isToday(){return getViewDate()===td()}
 
-/* ══ DRAWER ══ */
-function openDrawer(pane){
-  fillDrawer();
-  $('drOv').classList.add('open');
-  $('dr').classList.add('open');
-  if(pane)drGo(pane); else drBack();
+/* ══ FULL-PAGE NAVIGATION ══ */
+let pageStack=[];
+function openPage(id){
+  pageStack.push(id);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+  $('tabs').classList.remove('show');
+  $('fab').classList.remove('show');
+  $('coIn').classList.remove('show');
+  window.scrollTo(0,0);
+  if(id==='menuScreen')fillMenu();
+  if(id==='profileScreen')fillProfile();
+  if(id==='goalsScreen')fillGoals();
+  if(id==='settingsScreen')fillSettings();
+  if(id==='logScreen'){resetF();updateScanBadge()}
 }
-function closeDrawer(){$('drOv').classList.remove('open');$('dr').classList.remove('open');setTimeout(drBack,320)}
-function drGo(id){
-  document.querySelectorAll('.dr-pane').forEach(p=>{if(p.id!=='drMenu')p.classList.remove('on')});
-  $('drMenu').classList.add('pushed');
-  $(id).classList.add('on');
-  if(id==='drProfile')fillProfilePane();
-  if(id==='drGoals')fillGoalsPane();
-  if(id==='drSettings')fillSettingsPane();
+function closePage(){
+  pageStack=[];
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const back=curTab==='food'?'foodScreen':curTab==='ex'?'exScreen':curTab==='coach'?'coachScreen':'homeScreen';
+  $(back).classList.add('active');
+  $('tabs').classList.add('show');
+  $('fab').classList.toggle('show',curTab==='home'||curTab==='food');
+  $('coIn').classList.toggle('show',curTab==='coach');
+  window.scrollTo(0,0);
+  refreshViews();
 }
-function drBack(){
-  document.querySelectorAll('.dr-pane').forEach(p=>{if(p.id!=='drMenu')p.classList.remove('on')});
-  $('drMenu').classList.remove('pushed');
+function fillMenu(){
+  $('mnMail').textContent=user?.email||'';
+  $('mnProBox').innerHTML=isPro()
+    ? '<div class="kv" style="cursor:default"><div class="kv-l"><div class="kv-ic" style="background:var(--grn-g)"><span style="color:var(--grn);font-size:10px;font-weight:800">PRO</span></div><div><div class="kv-t">Vitlo Pro</div><div class="kv-s">Thanks for supporting Vitlo</div></div></div></div>'
+    : '<button class="btn btn-g" onclick="openPaywall(\'menu\')">Upgrade to Pro</button><div style="font-size:11.5px;color:var(--tx3);margin-top:10px;line-height:1.55;text-align:center">Unlimited scans and full coach chat.</div>';
 }
-function fillDrawer(){
-  $('drMail').textContent=user?.email||'';
-  const pro=isPro();
-  $('drProBox').innerHTML=pro
-    ? `<div style="display:flex;align-items:center;gap:9px;padding:12px 0"><div class="pw-badge">PRO</div><div style="font-size:12px;color:var(--tx3)">Thanks for supporting Vitlo</div></div>`
-    : `<button class="btn btn-g btn-sm" onclick="closeDrawer();openPaywall('drawer')">Upgrade to Pro</button><div style="font-size:11px;color:var(--tx3);margin:9px 0 4px;line-height:1.5">Unlimited scans and full coach chat.</div>`;
-}
-function fillProfilePane(){
+function fillProfile(){
   $('pfName').value=profile?.name||'';
   $('pfW').value=profile?.weight_kg||'';
   $('pfH').value=profile?.height_cm||'';
@@ -925,9 +914,8 @@ function fillProfilePane(){
   $('pfBF').value=profile?.body_fat_pct||'';
   $('pfBMR').value=profile?.bmr_override||'';
   setSex(profile?.sex||'male');
-  const b=bmr();
-  $('drBmr').textContent=b.toLocaleString();
-  $('drBmrNote').textContent=profile?.bmr_override?'Using your entered BMR':'Calculated from your stats';
+  $('pfBmrV').textContent=bmr().toLocaleString();
+  $('pfBmrNote').textContent=profile?.bmr_override?'Using the BMR you entered':'Calculated from your stats';
 }
 function setSex(v){
   ob.sex=v;
@@ -935,27 +923,18 @@ function setSex(v){
   $('pfSexF').classList.toggle('on',v==='female');
 }
 async function saveProfile(){
-  const p={
-    name:$('pfName').value.trim()||null,
-    weight_kg:+$('pfW').value||null,
-    height_cm:+$('pfH').value||null,
-    age:+$('pfA').value||null,
-    body_fat_pct:+$('pfBF').value||null,
-    bmr_override:+$('pfBMR').value||null,
-    sex:ob.sex
-  };
+  const p={name:$('pfName').value.trim()||null,weight_kg:+$('pfW').value||null,height_cm:+$('pfH').value||null,
+           age:+$('pfA').value||null,body_fat_pct:+$('pfBF').value||null,bmr_override:+$('pfBMR').value||null,sex:ob.sex};
   const{error}=await sb.from('profiles').update(p).eq('id',user.id);
   if(error)return toast('Could not save — try again');
-  await loadProfile();
-  fillProfilePane();
-  renderHome();
-  toast('Profile saved');
+  await loadProfile();fillProfile();toast('Profile saved');
 }
-function fillGoalsPane(){
+function fillGoals(){
   const g=profile?.goal||'fat_loss',t=tgt(),b=bmr(),tdee=Math.round(b*1.3);
-  $('drTarget').textContent=t.toLocaleString();
-  $('drGoalName').textContent=goalLabel(g);
-  $('drFormula').textContent=`BMR ${b.toLocaleString()} × 1.3 = ${tdee.toLocaleString()} maintenance`;
+  ob.goal=g;
+  $('glTarget').textContent=t.toLocaleString();
+  $('glName').textContent=goalLabel(g);
+  $('glFormula').textContent='BMR '+b.toLocaleString()+' × 1.3 = '+tdee.toLocaleString()+' maintenance';
   ['gFat','gMus','gMai'].forEach(id=>$(id).classList.remove('on'));
   $(g==='fat_loss'?'gFat':g==='muscle'?'gMus':'gMai').classList.add('on');
   $('gDef').value=profile?.deficit||500;
@@ -973,17 +952,13 @@ async function saveGoal(){
   const g=ob.goal||profile?.goal||'fat_loss';
   const{error}=await sb.from('profiles').update({goal:g,deficit:+$('gDef').value||500}).eq('id',user.id);
   if(error)return toast('Could not save — try again');
-  await loadProfile();
-  fillGoalsPane();
-  renderHome();
-  toast('Goal updated');
+  await loadProfile();fillGoals();toast('Goal updated');
 }
-function fillSettingsPane(){
-  $('drMail2').textContent=user?.email||'';
-  const pro=isPro();
-  $('drSubBox').innerHTML=pro
-    ? `<div class="dr-kv"><div class="dr-k">Plan</div><div class="dr-v" style="color:var(--grn)">Vitlo Pro</div></div><div style="height:12px"></div><button class="btn btn-s btn-sm" onclick="restorePurchases()">Restore purchases</button>`
-    : `<div class="dr-kv"><div class="dr-k">Plan</div><div class="dr-v">Free</div></div><div style="height:12px"></div><button class="btn btn-g btn-sm" onclick="closeDrawer();openPaywall('settings')">Upgrade to Pro</button><div style="height:9px"></div><button class="btn btn-s btn-sm" onclick="restorePurchases()">Restore purchases</button>`;
+function fillSettings(){
+  $('stMail').textContent=user?.email||'';
+  $('stSubBox').innerHTML=isPro()
+    ? '<div class="kv" style="cursor:default"><div class="kv-l"><div><div class="kv-t">Vitlo Pro</div><div class="kv-s">Active subscription</div></div></div><div class="kv-v" style="color:var(--grn)">Active</div></div><div style="height:8px"></div><button class="btn btn-s btn-sm" onclick="restorePurchases()">Restore purchases</button>'
+    : '<div class="kv" style="cursor:default"><div class="kv-l"><div><div class="kv-t">Free plan</div><div class="kv-s">3 AI scans a day</div></div></div></div><div style="height:8px"></div><button class="btn btn-g btn-sm" onclick="openPaywall(\'settings\')">Upgrade to Pro</button><div style="height:10px"></div><button class="btn btn-s btn-sm" onclick="restorePurchases()">Restore purchases</button>';
 }
 function goalLabel(g){return g==='fat_loss'?'Fat loss':g==='muscle'?'Build muscle':'Maintain'}
 
@@ -1014,6 +989,9 @@ function renderHome(){
   const t=tgt(),tt=tots(),m=macs(t),eaten=Math.round(tt.k),rem=t-eaten+burnedCals,over=rem<0;
 
   $('hPill').textContent=goalLabel(profile?.goal||'fat_loss');
+  const _d=new Date(getViewDate()+'T00:00:00');
+  $('hDay').textContent=isToday()?'Today':_d.toLocaleDateString('en-GB',{weekday:'long'});
+  $('hDate').textContent=_d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
   animNum($('rN'),Math.abs(rem));
   $('rN').style.color=over?'var(--red)':'var(--grn)';
   $('rL').textContent=over?'kcal over':'kcal left';
@@ -1304,7 +1282,7 @@ async function onFP(e){const f=e.target.files[0];if(!f)return;
 async function anDesc(){const t=$('dI').value.trim();if(!t)return toast('Describe what you ate');const weightVal=$('fW')?.value;await aiF([{type:'text',text:'You are an expert nutritionist. The user describes their meal: "'+t+'"'+(weightVal?' (total weight: '+weightVal+'g)':'')+'. Work step by step: 1) Parse every item and quantity. If ambiguous, assume typical UK portions. 2) Account for cooking methods (fried adds oil, buttered adds ~35kcal/slice). 3) Use UK brands and norms. 4) Calculate macros per item then sum. Reference per 100g: chicken breast 165kcal/31p, sausage 300kcal/12p, rice cooked 130kcal/2.7p, pasta cooked 160kcal/5.8p, bread slice(40g) 100kcal/3.5p, egg(50g) 72kcal/6.3p, cheddar 416kcal/25p, chips 270kcal/3.3p. Return JSON only: {"meal_name":"concise name","health_score":number 1-10 (10=nutritionally excellent whole food, 1=pure junk; judge protein density, processing level, sugar, fibre),"score_comment":"one punchy sentence verdict on this meal","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"confidence":"high/medium/low","breakdown":"item-by-item with estimated kcal each"}'}])}
 async function doCorr(){const c=$('cIn').value.trim();if(!c||!aiRes)return;await aiF([{type:'text',text:`Original: "${aiRes.meal_name}" (${aiRes.calories} kcal). Correction: "${c}". Recalculate. JSON only:\n{"meal_name":"name","calories":number,"protein_g":number,"carbs_g":number,"fat_g":number,"fibre_g":number,"sugar_g":number,"breakdown":"updated breakdown"}`}],true);$('cIn').value=''}
 async function aiF(content,isCorrection){
-  if(!isCorrection&&!canScan()){closeModal('foodModal');openPaywall('scans');return}
+  if(!isCorrection&&!canScan()){closePage();openPaywall('scans');return}
   lastAIContent=content;$('fR').style.display='block';
   // Scanning animation — if a photo is in the preview, overlay the scan effect on it
   const hasPhoto=content.some(x=>x.type==='image');
@@ -1356,6 +1334,7 @@ async function aiF(content,isCorrection){
     $('eA').style.display='block';
   }
 }
+let lastAIContent=null;
 function retryAI(){if(lastAIContent)aiF(lastAIContent)}
 function closeNC(){$('ncOv').classList.remove('open')}
 async function renderMealHistory(){
@@ -1391,9 +1370,12 @@ function saveMealHistory(name,kcal,p,c,f){
   if(stored.length>20)stored.pop();
   localStorage.setItem('vitlo_meal_history',JSON.stringify(stored));
 }
-async function saveMeal(){const n=$('fN').value.trim(),k=+$('fK').value;if(!n)return toast('Name your meal');if(!k||k<1)return toast('Enter calories');const payload={user_id:user.id,date:getViewDate(),meal_name:n,calories:k,protein_g:+$('fPr').value||0,carbs_g:+$('fCr').value||0,fat_g:+$('fFt').value||0,meal_type:'Meal'};if(editingMealId){await sb.from('food_logs').update(payload).eq('id',editingMealId);toast('✓ Meal updated')}else{await sb.from('food_logs').insert(payload);toast('✓ Meal logged');saveMealHistory(n,k,+$('fPr').value||0,+$('fCr').value||0,+$('fFt').value||0)}closeModal('foodModal');resetF();await loadFood(getViewDate());refreshViews()}
-function resetF(){$('fR').style.display='none';$('eA').style.display='none';$('cB').style.display='none';$('quickLog').style.display='none';$('pD').innerHTML='<div style="font-size:44px;opacity:.25">📷</div><div style="font-size:13px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>';if($('dI'))$('dI').value='';['fN','fK','fPr','fCr','fFt','fW'].forEach(id=>{if($(id))$(id).value=''});aiRes=null;photoB64=null;editingMealId=null;$('fp').style.display='block';const saveBtn=$('eA')?.querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Log Meal'}
-function eT(t,el){document.querySelectorAll('#exModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('eM').style.display=t==='man'?'block':'none';$('eSS').style.display=t==='ss'?'block':'none'}
+async function saveMeal(){const n=$('fN').value.trim(),k=+$('fK').value;if(!n)return toast('Name your meal');if(!k||k<1)return toast('Enter calories');const payload={user_id:user.id,date:getViewDate(),meal_name:n,calories:k,protein_g:+$('fPr').value||0,carbs_g:+$('fCr').value||0,fat_g:+$('fFt').value||0,meal_type:'Meal'};if(editingMealId){await sb.from('food_logs').update(payload).eq('id',editingMealId);toast('✓ Meal updated')}else{await sb.from('food_logs').insert(payload);toast('✓ Meal logged');saveMealHistory(n,k,+$('fPr').value||0,+$('fCr').value||0,+$('fFt').value||0)}closePage();await loadFood(getViewDate());refreshViews()}
+function resetF(){$('fR').style.display='none';$('eA').style.display='none';$('cB').style.display='none';$('quickLog').style.display='none';$('pD').innerHTML='<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--tx3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg><div style="font-size:13.5px;font-weight:600;color:var(--tx3)">Tap to photograph your meal</div>';if($('dI'))$('dI').value='';['fN','fK','fPr','fCr','fFt','fW'].forEach(id=>{if($(id))$(id).value=''});aiRes=null;photoB64=null;editingMealId=null;$('fp').style.display='block';$('fd').style.display='none';$('fm').style.display='none';
+  const segs=document.querySelectorAll('#logSeg .seg-b');
+  segs.forEach((b,i)=>b.classList.toggle('on',i===0));
+  const saveBtn=$('eA')?.querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Log Meal'}
+function eT(t,el){document.querySelectorAll('#exSeg .seg-b').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('eM').style.display=t==='man'?'block':'none';$('eSS').style.display=t==='ss'?'block':'none'}
 async function saveEx(){const c=+$('eCIn').value,s=+$('eSIn').value||0;if(!c||c<1)return toast('Enter calories burned');const{data:ex}=await sb.from('workouts').select('id').eq('user_id',user.id).eq('date',td()).maybeSingle();const p={user_id:user.id,date:td(),calories_burned:c,workout_type:pickedAct||'Other',duration_minutes:0,effort:5};if(s>0)p.steps=s;const{error}=ex?await sb.from('workouts').update(p).eq('id',ex.id):await sb.from('workouts').insert(p);if(error){toast('Error: '+error.message);console.error(error);return}closeModal('exModal');$('eCIn').value='';$('eSIn').value='';await loadEx();renderHome();renderEx();toast(pickedAct+' logged · '+c+' kcal')}
 async function onESS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async ev=>{const b64=ev.target.result.split(',')[1];$('eSSD').innerHTML=`<img src="${ev.target.result}">`;$('eSSR').style.display='block';$('eSSR').innerHTML='<div class="lr"><div class="sp"></div><span style="color:var(--tx3);font-size:12px">Reading screenshot…</span></div>';try{const resp=await fetch(PX,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:f.type,data:b64}},{type:'text',text:'Extract calories burned and steps from this fitness screenshot. JSON only: {"calories_burned":number,"steps":number,"summary":"one sentence"}'}]}]})});const d=await resp.json();const t=d.content?.map(c=>c.text||'').join('')||'';const mt=t.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);if(!mt)throw 0;exSSdata=JSON.parse(mt[0]);$('eSSR').innerHTML=`<div style="background:var(--grn-g);border-radius:11px;padding:12px;margin:10px 0;border:1px solid rgba(46,204,113,.2)"><div style="font-size:12px;font-weight:700;color:var(--grn)">✓ ${exSSdata.calories_burned} kcal${exSSdata.steps?' · '+exSSdata.steps.toLocaleString()+' steps':''}</div><div style="font-size:11px;color:var(--tx2);margin-top:3px">${exSSdata.summary||''}</div></div>`;$('eSSB').style.display='block'}catch(e){$('eSSR').innerHTML='<div style="padding:12px;text-align:center;color:var(--tx3);font-size:12px">Could not read. Enter manually.</div>'}};r.readAsDataURL(f)}
 async function saveESSx(){
@@ -1574,6 +1556,7 @@ function saveMacroTargets(){
 }
 
 
+let calViewMonth=new Date().getMonth(),calViewYear=new Date().getFullYear(),calDataCache={},calBurnCache={};
 async function loadCalData(){
   const startDate=new Date(calViewYear,calViewMonth,1).toISOString().split('T')[0];
   const endDate=new Date(calViewYear,calViewMonth+1,0).toISOString().split('T')[0];
@@ -1581,8 +1564,23 @@ async function loadCalData(){
     const{data}=await sb.from('food_logs').select('date,calories').eq('user_id',user.id).gte('date',startDate).lte('date',endDate);
     calDataCache={};
     if(data)data.forEach(r=>{if(!calDataCache[r.date])calDataCache[r.date]=0;calDataCache[r.date]+=(+r.calories||0)});
+    const{data:w}=await sb.from('workouts').select('date,calories_burned').eq('user_id',user.id).gte('date',startDate).lte('date',endDate);
+    calBurnCache={};
+    if(w)w.forEach(r=>{calBurnCache[r.date]=(+r.calories_burned||0)});
   }catch(e){}
 }
+// green = on target · amber = slightly off · red = well off
+function dayStatus(ds){
+  const eaten=calDataCache[ds]||0;
+  if(!eaten)return null;
+  const net=eaten-(calBurnCache[ds]||0);
+  const t=tgt(),g=profile?.goal||'fat_loss';
+  const diff=(net-t)/Math.max(t,1);
+  if(g==='fat_loss')return net<=t?'good':diff<=.10?'ok':'off';
+  if(g==='muscle')return net>=t?'good':diff>=-.10?'ok':'off';
+  return Math.abs(diff)<=.05?'good':Math.abs(diff)<=.12?'ok':'off';
+}
+function statusColor(s){return s==='good'?'var(--grn)':s==='ok'?'var(--amb)':'var(--red)'}
 
 async function renderCal(){
   await loadCalData();
@@ -1613,7 +1611,8 @@ async function renderCal(){
     const isSel=ds===selStr;
     const hasData=calDataCache[ds]>0;
     const isFuture=new Date(ds+'T12:00:00')>todayDate;
-    html+=`<div class="cal-cell ${isToday?'today':''} ${isSel?'sel':''} ${hasData?'has-data':''} ${isFuture?'future':''}" onclick="pickCalDay('${ds}')">${d}</div>`;
+    const st=isFuture?null:dayStatus(ds);
+    html+=`<div class="cal-cell ${isToday?'today':''} ${isSel?'sel':''} ${isFuture?'other':''}" onclick="pickCalDay('${ds}')"><span class="cal-n">${d}</span>${st?`<span class="cal-dot" style="background:${statusColor(st)}"></span>`:''}</div>`;
   }
 
   // Next month padding
@@ -1624,6 +1623,8 @@ async function renderCal(){
   }
 
   $('calGrid').innerHTML=html;
+  const lg=$('calLegend');
+  if(lg)lg.innerHTML='<div class="cal-lg"><div class="cal-lg-d" style="background:var(--grn)"></div>On target</div><div class="cal-lg"><div class="cal-lg-d" style="background:var(--amb)"></div>Slightly off</div><div class="cal-lg"><div class="cal-lg-d" style="background:var(--red)"></div>Well off</div>';
 
   // Show preview for selected date
   showCalDayPreview(selStr);
@@ -1760,12 +1761,12 @@ function editMeal(id){
   if($('fW'))$('fW').value='';
   $('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none';
   $('fp').style.display='none';$('fd').style.display='none';$('fm').style.display='none';
-  document.querySelectorAll('#foodModal .tb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('#logSeg .seg-b').forEach(b=>b.classList.remove('on'));
   // Change button text
   const saveBtn=$('eA').querySelector('.btn-g');if(saveBtn)saveBtn.textContent='Save Changes';
-  openModal('foodModal');
+  openPage('logScreen');
 }
-function fT(t,el){updateScanBadge();document.querySelectorAll('#foodModal .tb').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('fp').style.display=t==='photo'?'block':'none';$('fd').style.display=t==='desc'?'block':'none';$('fm').style.display=t==='man'?'block':'none';if(t==='man'){$('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none';renderMealHistory()}}
+function fT(t,el){updateScanBadge();document.querySelectorAll('#logSeg .seg-b').forEach(b=>b.classList.remove('on'));el.classList.add('on');$('fp').style.display=t==='photo'?'block':'none';$('fd').style.display=t==='desc'?'block':'none';$('fm').style.display=t==='man'?'block':'none';if(t==='man'){$('eA').style.display='block';$('fR').style.display='none';$('cB').style.display='none';renderMealHistory()}}
 
 function showFR(r){
   // Fill inline edit fields (behind the card, for Adjust flow)
@@ -1900,7 +1901,7 @@ function updateScanBadge(){
   const n=scansLeft();
   el.classList.toggle('out',n===0);
   el.innerHTML=n>0?`<b>${n}</b> of ${FREE_SCANS} free scans left today`:'No free scans left today · tap to upgrade';
-  el.onclick=n===0?()=>{closeModal('foodModal');openPaywall('scans')}:null;
+  el.onclick=n===0?()=>{closePage();openPaywall('scans')}:null;
   el.style.cursor=n===0?'pointer':'default';
 }
 function openPaywall(reason){
@@ -1948,7 +1949,7 @@ async function boot(){
 // Close drawer on back gesture / escape
 document.addEventListener('keydown',e=>{
   if(e.key!=='Escape')return;
-  if($('dr').classList.contains('open'))return closeDrawer();
+  if(pageStack.length)return closePage();
   document.querySelectorAll('.ov.open,.nc-ov.open,.pw-ov.open').forEach(o=>o.classList.remove('open'));
 });
 
