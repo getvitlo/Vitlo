@@ -695,6 +695,52 @@ textarea.inp{resize:none;line-height:1.5}
   </div>
 </div>
 
+<!-- ════ DAY VIEW (full page) ════ -->
+<div class="screen" id="dayScreen">
+  <div class="ph">
+    <button class="ib" onclick="closeDayView()" aria-label="Back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--tx2)" stroke-width="2.2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="ph-t" id="dvTitle">Day</div>
+  </div>
+  <div class="pg" style="padding-top:8px">
+    <div class="ring-wrap" style="cursor:default;padding-top:6px">
+      <div class="ring">
+        <svg width="224" height="224" viewBox="0 0 230 230">
+          <circle cx="115" cy="115" r="100" fill="none" stroke="rgba(46,204,113,.09)" stroke-width="14"/>
+          <circle cx="115" cy="115" r="100" fill="none" stroke="var(--grn)" stroke-width="14" stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" id="dvR1" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1),stroke .3s"/>
+          <circle cx="115" cy="115" r="82" fill="none" stroke="rgba(239,83,80,.09)" stroke-width="12"/>
+          <circle cx="115" cy="115" r="82" fill="none" stroke="var(--red)" stroke-width="12" stroke-linecap="round" stroke-dasharray="515" stroke-dashoffset="515" id="dvR2" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1) .1s"/>
+          <circle cx="115" cy="115" r="66" fill="none" stroke="rgba(167,139,250,.09)" stroke-width="10"/>
+          <circle cx="115" cy="115" r="66" fill="none" stroke="var(--pur)" stroke-width="10" stroke-linecap="round" stroke-dasharray="415" stroke-dashoffset="415" id="dvR3" style="transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1) .2s"/>
+        </svg>
+        <div class="ring-c"><div class="ring-n" id="dvRingN">0</div><div class="ring-l" id="dvRingL">kcal eaten</div></div>
+      </div>
+      <div class="leg">
+        <div class="leg-i"><div class="leg-d" style="background:var(--grn)"></div><div class="leg-t">Eaten</div></div>
+        <div class="leg-i"><div class="leg-d" style="background:var(--red)"></div><div class="leg-t">Burned</div></div>
+        <div class="leg-i"><div class="leg-d" style="background:var(--pur)"></div><div class="leg-t">Protein</div></div>
+      </div>
+    </div>
+
+    <div class="stats" style="margin-top:16px">
+      <div class="stat"><div class="stat-v" id="dvEaten">0</div><div class="stat-l">Eaten</div></div>
+      <div class="stat"><div class="stat-v" id="dvTarget">0</div><div class="stat-l">Target</div></div>
+      <div class="stat"><div class="stat-v" id="dvBurned" style="color:var(--red)">0</div><div class="stat-l">Burned</div></div>
+    </div>
+
+    <div class="macros" id="dvMac" style="margin-top:2px"></div>
+
+    <div class="sec-h"><div class="sec-t">Activity</div></div>
+    <div id="dvAct"></div>
+
+    <div class="sec-h"><div class="sec-t" id="dvMealCount">Meals</div></div>
+    <div id="dvMeals"></div>
+
+    <div class="pg-sec" style="margin-top:14px">
+      <button class="btn btn-s" onclick="jumpToDay(dayViewDate)">Open this day in Food</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ LOG FOOD (full page) ════ -->
 <div class="screen" id="logScreen">
   <div class="ph">
@@ -1569,7 +1615,7 @@ function saveMacroTargets(){
 }
 
 
-let calViewMonth=new Date().getMonth(),calViewYear=new Date().getFullYear(),calDataCache={},calBurnCache={};
+let calViewMonth=new Date().getMonth(),calViewYear=new Date().getFullYear(),calDataCache={},calBurnCache={},calSelDate=null;
 async function loadCalData(){
   const startDate=new Date(calViewYear,calViewMonth,1).toISOString().split('T')[0];
   const endDate=new Date(calViewYear,calViewMonth+1,0).toISOString().split('T')[0];
@@ -1604,7 +1650,7 @@ async function renderCal(){
   const daysInMonth=new Date(calViewYear,calViewMonth+1,0).getDate();
   const daysInPrev=new Date(calViewYear,calViewMonth,0).getDate();
   const todayStr=td();
-  const selStr=getViewDate();
+  const selStr=calSelDate||getViewDate();
   const todayDate=new Date();
 
   let html='<div class="cal-head">Mon</div><div class="cal-head">Tue</div><div class="cal-head">Wed</div><div class="cal-head">Thu</div><div class="cal-head">Fri</div><div class="cal-head">Sat</div><div class="cal-head">Sun</div>';
@@ -1640,7 +1686,7 @@ async function renderCal(){
   if(lg)lg.innerHTML='<div class="cal-lg"><div class="cal-lg-d" style="background:var(--grn)"></div>On target</div><div class="cal-lg"><div class="cal-lg-d" style="background:var(--amb)"></div>Slightly off</div><div class="cal-lg"><div class="cal-lg-d" style="background:var(--red)"></div>Well off</div>';
 
   // Show preview for selected date
-  showCalDayPreview(selStr);
+  showCalDayPreview(calSelDate||selStr);
 }
 
 async function showCalDayPreview(dateStr){
@@ -1669,7 +1715,7 @@ async function showCalDayPreview(dateStr){
       <div class="cal-day-stats-row"><span class="cal-day-stats-label">Fat</span><span class="cal-day-stats-val" style="color:var(--pur)">${totalF}g</span></div>
       ${burned?`<div class="cal-day-stats-row"><span class="cal-day-stats-label">Burned</span><span class="cal-day-stats-val" style="color:var(--grn)">${burned} kcal</span></div>`:''}
       <div class="cal-day-stats-row"><span class="cal-day-stats-label">Meals</span><span class="cal-day-stats-val">${meals?meals.length:0}</span></div>
-      <button class="btn btn-g" style="height:40px;font-size:12px;margin-top:10px" onclick="jumpToDay('${dateStr}')">View this day</button>
+      <button class="btn btn-g" style="height:44px;font-size:13px;margin-top:12px" onclick="openDayView('${dateStr}')">View this day</button>
     </div>`;
   }catch(e){preview.innerHTML=''}
 }
@@ -1682,11 +1728,77 @@ function formatCalDate(ds){
   return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});
 }
 
+let dayViewDate=null;
+async function openDayView(ds){
+  dayViewDate=ds;
+  closeModal('calModal');
+  openPage('dayScreen');
+  await renderDayView(ds);
+}
+function closeDayView(){
+  // return to the calendar over the home screen
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const back=curTab==='food'?'foodScreen':curTab==='ex'?'exScreen':curTab==='coach'?'coachScreen':'homeScreen';
+  $(back).classList.add('active');
+  pageStack=[];
+  $('tabs').classList.add('show');
+  $('fab').classList.toggle('show',curTab==='home'||curTab==='food');
+  $('coIn').classList.toggle('show',curTab==='coach');
+  openModal('calModal');
+  renderCal();
+}
+async function renderDayView(ds){
+  const d=new Date(ds+'T12:00:00');
+  $('dvTitle').textContent=ds===td()?'Today':d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  // fetch this day's meals + workout
+  let meals=[],burned=0,steps=0,wtype='Other';
+  try{
+    const{data:mData}=await sb.from('food_logs').select('*').eq('user_id',user.id).eq('date',ds).order('created_at');
+    meals=mData||[];
+    const{data:wData}=await sb.from('workouts').select('calories_burned,steps,workout_type').eq('user_id',user.id).eq('date',ds).maybeSingle();
+    if(wData){burned=+wData.calories_burned||0;steps=+wData.steps||0;wtype=wData.workout_type||'Other'}
+  }catch(e){}
+  const eaten=Math.round(meals.reduce((s,m)=>s+(+m.calories||0),0));
+  const tp=Math.round(meals.reduce((s,m)=>s+(+m.protein_g||0),0));
+  const tc=Math.round(meals.reduce((s,m)=>s+(+m.carbs_g||0),0));
+  const tf=Math.round(meals.reduce((s,m)=>s+(+m.fat_g||0),0));
+  const t=tgt(),mg=macs(t);
+
+  // ring: eaten (green), burned (red), protein (purple)
+  $('dvRingN').textContent=eaten.toLocaleString();
+  $('dvRingL').textContent='kcal eaten';
+  const pE=Math.min(1,eaten/Math.max(t,1));
+  const pB=Math.min(1,burned/Math.max(t*.4,1));
+  const pP=Math.min(1,tp/Math.max(mg.p,1));
+  $('dvR1').style.strokeDashoffset=628*(1-pE);
+  $('dvR1').style.stroke=eaten>t?'var(--red)':'var(--grn)';
+  $('dvR2').style.strokeDashoffset=515*(1-pB);
+  $('dvR3').style.strokeDashoffset=415*(1-pP);
+
+  $('dvEaten').textContent=eaten.toLocaleString();
+  $('dvTarget').textContent=t.toLocaleString();
+  $('dvBurned').textContent=burned.toLocaleString();
+
+  $('dvMac').innerHTML=[
+    {k:'p',v:tp,g:mg.p,l:'Protein'},{k:'c',v:tc,g:mg.c,l:'Carbs'},{k:'f',v:tf,g:mg.f,l:'Fat'}
+  ].map(x=>{const col=macColor(x.k,x.v,x.g);return `<div class="mac"><div class="mac-v" style="color:${col}">${x.v}g</div><div class="mac-l">of ${x.g}g ${x.l}</div><div class="mac-bar"><div class="mac-fill" style="width:${Math.min(100,(x.v/Math.max(x.g,1))*100)}%;background:${col}"></div></div></div>`}).join('');
+
+  $('dvAct').innerHTML=burned>0
+    ? `<div class="act" style="cursor:default"><div class="act-ic">${actIcon(wtype)}</div><div class="act-tx"><div class="act-t">${wtype}</div><div class="act-s">${steps?steps.toLocaleString()+' steps':'Logged'}</div></div><div class="act-v">${burned}</div></div>`
+    : `<div class="empty" style="padding:26px"><div class="empty-s">No workout logged this day.</div></div>`;
+
+  $('dvMealCount').textContent=meals.length?`${meals.length} meal${meals.length>1?'s':''}`:'Meals';
+  $('dvMeals').innerHTML=meals.length
+    ? meals.map(f=>{const tm=f.created_at?new Date(f.created_at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';return `<div class="meal" style="cursor:default"><div class="meal-ic">🍽️</div><div class="meal-tx"><div class="meal-n">${esc(f.meal_name)}</div><div class="meal-m">${tm} · ${Math.round(f.protein_g)||0}p · ${Math.round(f.carbs_g)||0}c · ${Math.round(f.fat_g)||0}f</div></div><div class="meal-k">${f.calories}</div></div>`}).join('')
+    : `<div class="empty" style="padding:26px"><div class="empty-s">Nothing logged this day.</div></div>`;
+}
+
 async function pickCalDay(ds){
   const todayDate=new Date();
   if(new Date(ds+'T12:00:00')>todayDate)return;
-  viewDate=ds===td()?null:ds;
+  calSelDate=ds;
   renderCal();
+  showCalDayPreview(ds);
 }
 
 async function jumpToDay(ds){
