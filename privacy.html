@@ -1,58 +1,76 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<!DOCTYPE html><html lang="en-GB"><head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Privacy Policy — Vitlo</title><link rel="stylesheet" href="_style.css"></head><body><div class="wrap">
-<div class="logo">vitlo</div><div class="tag">Know what you eat. Hit your goals.</div>
-<h1>Privacy Policy</h1><div class="upd">Last updated: 31 July 2026</div>
+<meta name="theme-color" content="#080b09">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_style.css">
+<title>Privacy Policy &mdash; Vitlo</title></head><body><div class="wrap">
+<header><div class="brand"><a href="https://getvitlo.github.io/Vitlo/" class="logo">vitlo</a><nav><a href="privacy.html" aria-current="page">Privacy</a><a href="terms.html">Terms</a><a href="support.html">Support</a></nav></div></header>
+<div class="title">
+  <h1>Privacy Policy</h1>
+  <div class="meta"><span>Last updated 1 August 2026</span><span class="dot"></span><span>UK GDPR</span></div>
+  <p class="lede">This explains exactly what Vitlo collects, why it needs it, and what control you have. It is written to be read, not skipped.</p>
+</div>
 
-<p>This policy explains what Vitlo collects, why, and what control you have over it. It is written to be read, not to be skimmed past.</p>
-
-<h2>Who we are</h2>
-<p>Vitlo is operated by Hani Hasan, based in the United Kingdom. For any privacy question or request, contact <a href="mailto:trustforge.hani@gmail.com">trustforge.hani@gmail.com</a>.</p>
-
-<h2>What we collect</h2>
+<section><h2>The short version</h2>
 <ul>
-<li><strong>Account details</strong> — your email address, used to create and sign in to your account.</li>
-<li><strong>Profile information</strong> — the name, age, sex, height, weight and optional body fat percentage you enter, used to calculate your metabolic rate and calorie targets.</li>
-<li><strong>Food and exercise logs</strong> — the meals you record (name, calories, macronutrients) and workouts you log.</li>
-<li><strong>Goal settings</strong> — your chosen goal and daily targets.</li>
-</ul>
-<p>We do not collect your location, contacts, browsing activity, or advertising identifiers. Vitlo contains no third-party advertising or analytics trackers.</p>
+<li>We collect your email, the body stats you enter, and the meals and workouts you log.</li>
+<li>Food photographs are analysed and then discarded &mdash; we never store them.</li>
+<li>We don't sell your data, show you adverts, or use your information to train AI models.</li>
+<li>You can delete your account and everything in it from inside the app, instantly.</li>
+</ul></section>
 
-<h2>Food photographs</h2>
-<div class="box"><p style="margin:0">When you photograph a meal, the image is sent to Anthropic's Claude API for nutritional analysis and the result is returned to your device. <strong>Vitlo does not store your food photographs.</strong> Only the resulting text (meal name, calories, macros) is saved to your log.</p></div>
+<section><h2>Who we are</h2>
+<p>Vitlo is operated by Hani Hasan, based in the United Kingdom, and is the data controller for the information described here. For any privacy question or request, email <a href="mailto:trustforge.hani@gmail.com">trustforge.hani@gmail.com</a>.</p></section>
 
-<h2>How your data is stored</h2>
-<p>Your account and logs are stored using Supabase, an encrypted cloud database provider. Access is restricted so that each account can only read and write its own records. Data is transmitted over encrypted connections (HTTPS/TLS).</p>
+<section><h2>What we collect and why</h2>
+<div class="rows">
+<div class="row"><div class="row-k">Email address</div><div class="row-v">Creates your account and signs you in. Nothing else.</div></div>
+<div class="row"><div class="row-k">Body stats</div><div class="row-v">Name, age, sex, height, weight and optional body fat percentage &mdash; used to calculate your metabolic rate and daily calorie target.</div></div>
+<div class="row"><div class="row-k">Food logs</div><div class="row-v">Meal names, calories and macronutrients, so your history and totals work.</div></div>
+<div class="row"><div class="row-k">Workouts</div><div class="row-v">Calories burned and step counts you enter, to offset against your daily target.</div></div>
+<div class="row"><div class="row-k">Goal settings</div><div class="row-v">Your chosen goal and targets.</div></div>
+</div>
+<p>We do <strong>not</strong> collect your location, your contacts, your browsing activity, or advertising identifiers. Vitlo contains no third-party advertising or analytics trackers.</p></section>
 
-<h2>Why we process your data</h2>
-<p>We process your information solely to provide the service you signed up for: calculating your targets, storing your logs, and generating personalised coaching responses. Under UK GDPR our lawful basis is <strong>performance of a contract</strong> with you.</p>
+<section><h2>Your food photographs</h2>
+<div class="note"><div class="note-l">WORTH KNOWING</div>
+<p>When you photograph a meal, the image is sent to Anthropic's Claude API for nutritional analysis and the result comes back to your device. <strong>Vitlo does not store your photographs.</strong> Only the resulting text &mdash; meal name, calories, macros &mdash; is saved to your log.</p></div></section>
 
-<h2>What we never do</h2>
+<section><h2>How your data is stored</h2>
+<p>Your account and logs are held in Supabase, an encrypted cloud database. Access rules mean each account can only ever read and write its own records. Everything travels over encrypted connections.</p></section>
+
+<section><h2>Our lawful basis</h2>
+<p>Under UK GDPR we process your information on the basis of <strong>performance of a contract</strong> &mdash; you asked us to track your nutrition, and this is the data required to do that. We do not process your data for any other purpose.</p></section>
+
+<section><h2>What we never do</h2>
 <ul>
-<li>We do not sell your data to anyone.</li>
-<li>We do not share your data with advertisers.</li>
-<li>We do not use your data to train AI models.</li>
-<li>We do not build advertising profiles.</li>
-</ul>
+<li>Sell your data to anyone, ever.</li>
+<li>Share it with advertisers or data brokers.</li>
+<li>Use it to train AI models.</li>
+<li>Build advertising profiles about you.</li>
+</ul></section>
 
-<h2>Subscriptions</h2>
-<p>If you subscribe to Vitlo Pro, the payment is handled entirely by Apple. We never see or store your card details. Subscription status is managed through RevenueCat, which receives an anonymous identifier only.</p>
+<section><h2>Subscriptions</h2>
+<p>If you subscribe to Vitlo Pro, payment is handled entirely by Apple. We never see or store your card details. Subscription status is managed through RevenueCat, which receives an anonymous identifier and nothing more.</p></section>
 
-<h2>Your rights</h2>
-<p>Under UK GDPR you may request access to your data, correction of inaccurate data, deletion of your data, or a copy of your data in a portable format. You can delete your account and all associated data at any time from <strong>Menu → Settings → Delete my account</strong>. This is immediate and permanent. Alternatively, email us and we will action any request within 30 days.</p>
+<section><h2>Your rights</h2>
+<p>Under UK GDPR you can request access to your data, correction of anything inaccurate, deletion of everything, or a portable copy.</p>
+<div class="note"><div class="note-l">DELETE EVERYTHING, ANY TIME</div>
+<p>Open the app, tap the menu, then <strong>Settings &rarr; Delete my account</strong>. Your profile, meals and workouts are erased immediately and permanently. No email required, no waiting period.</p></div>
+<p>You can also email us and we will action any request within 30 days. If you believe we have handled your data improperly, you may complain to the Information Commissioner's Office at <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a>.</p></section>
 
-<h2>Data retention</h2>
-<p>Your data is kept for as long as your account is active. When you delete your account, your profile, food logs and workout records are erased immediately and permanently.</p>
+<section><h2>How long we keep it</h2>
+<p>For as long as your account exists. When you delete your account, your data is erased at the same moment &mdash; we do not keep a copy.</p></section>
 
-<h2>Children</h2>
-<p>Vitlo is not directed at children under 13 and we do not knowingly collect data from them. If you believe a child has created an account, contact us and we will remove it.</p>
+<section><h2>Children</h2>
+<p>Vitlo is not directed at children under 13 and we do not knowingly collect their data. If you believe a child has created an account, contact us and we will remove it.</p></section>
 
-<h2>Health disclaimer</h2>
-<p>Vitlo provides general nutritional information and estimates. It is not medical advice and is not a substitute for a qualified healthcare professional. Calorie and macronutrient figures produced by AI analysis are estimates and may be inaccurate. If you have a medical condition, an eating disorder, or are pregnant, speak to your GP before changing your diet.</p>
+<section><h2>Health information</h2>
+<p>Vitlo provides general nutritional estimates. It is not medical advice and not a substitute for a qualified healthcare professional. Figures produced by AI analysis are estimates and can be inaccurate. If you have a medical condition, a history of disordered eating, or you are pregnant, speak to your GP before changing your diet.</p></section>
 
-<h2>Changes</h2>
-<p>If this policy changes materially we will update the date at the top and, where appropriate, notify you in the app.</p>
-
-<footer>Vitlo · United Kingdom · <a href="mailto:trustforge.hani@gmail.com">trustforge.hani@gmail.com</a><br>
-<a href="terms.html">Terms of Use</a> · <a href="support.html">Support</a></footer>
-</div></body></html>
+<section><h2>Changes to this policy</h2>
+<p>If anything material changes we will update the date at the top and, where it matters, tell you in the app.</p></section>
+<footer><div class="f-links"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms of Use</a><a href="support.html">Support</a><a href="mailto:trustforge.hani@gmail.com">Contact</a></div><div class="f-meta">Vitlo &middot; United Kingdom<br>Questions? <a href="mailto:trustforge.hani@gmail.com">trustforge.hani@gmail.com</a></div></footer></div></body></html>
