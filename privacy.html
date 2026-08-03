@@ -37,7 +37,9 @@
 
 <section><h2>Your food photographs</h2>
 <div class="note"><div class="note-l">WORTH KNOWING</div>
-<p>When you photograph a meal, the image is sent to Anthropic's Claude API for nutritional analysis and the result comes back to your device. <strong>Vitlo does not store your photographs.</strong> Only the resulting text &mdash; meal name, calories, macros &mdash; is saved to your log.</p></div></section>
+<p>When you photograph or describe a meal, that image or text is sent to <strong>Anthropic</strong> (the Claude API) for nutritional analysis, and the result comes back to your device. <strong>Vitlo does not store your photographs.</strong> Only the resulting text &mdash; meal name, calories, macros &mdash; is saved to your log.</p></div>
+<p>Alongside the meal itself, Vitlo sends the body stats you entered (height, weight, age, sex and goal) and, when you use Coach, the meals and workouts you have logged, so the analysis and advice fit you. <strong>Your name and email address are never sent.</strong> Anthropic does not use this data to train its models.</p>
+<p>Vitlo asks your explicit permission in the app before any of this is sent, and nothing is transmitted until you agree. You can withdraw that permission at any time under <strong>Menu &rarr; Settings &rarr; AI analysis</strong>. Manual meal entry continues to work without it.</p></section>
 
 <section><h2>How your data is stored</h2>
 <p>Your account and logs are held in Supabase, an encrypted cloud database. Access rules mean each account can only ever read and write its own records. Everything travels over encrypted connections.</p></section>
