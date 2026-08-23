@@ -1,74 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="x-apple-disable-message-reformatting">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b09">
 <meta name="color-scheme" content="dark">
-<meta name="supported-color-schemes" content="dark">
-<title>Confirm your email</title>
+<title>Vitlo · Confirm your email</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:#080b09}
+  body{font-family:'Outfit',system-ui,sans-serif;color:#e8efe9;min-height:100dvh;
+    display:flex;align-items:center;justify-content:center;position:relative;overflow-x:hidden;
+    padding:24px calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:
+    radial-gradient(150% 80% at 50% -12%, rgba(44,76,124,.185), rgba(36,62,104,.078) 52%, transparent 88%),
+    radial-gradient(118% 64% at 4% 106%, rgba(38,68,112,.10), transparent 84%),
+    radial-gradient(88% 52% at 100% 30%, rgba(46,204,113,.034), transparent 80%);}
+  .card{position:relative;z-index:1;width:100%;max-width:420px;text-align:center}
+  .mark{width:74px;height:74px;border-radius:22px;margin:0 auto 26px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(165deg,rgba(46,204,113,.16),rgba(46,204,113,.04));
+    border:1px solid rgba(46,204,113,.28);box-shadow:0 12px 40px -12px rgba(46,204,113,.5);
+    animation:pop .5s cubic-bezier(.22,1.3,.4,1) both}
+  .mark.bad{background:linear-gradient(165deg,rgba(232,80,58,.16),rgba(232,80,58,.04));
+    border-color:rgba(232,80,58,.3);box-shadow:0 12px 40px -12px rgba(232,80,58,.45)}
+  .mark svg{width:34px;height:34px;fill:none;stroke:#5cff9d;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:44;stroke-dashoffset:44;animation:draw .45s cubic-bezier(.4,0,.2,1) .28s forwards}
+  .mark.bad svg{stroke:#ff8a72}
+  .spin{width:30px;height:30px;border-radius:50%;border:3px solid rgba(255,255,255,.14);
+    border-top-color:#5cff9d;animation:spin .7s linear infinite}
+  h1{font-family:'Instrument Serif',serif;font-size:38px;line-height:1.08;letter-spacing:-.5px;font-weight:400}
+  h1 em{font-style:normal;color:#5cff9d}
+  .sub{font-size:15px;line-height:1.6;color:rgba(232,239,233,.62);margin-top:14px}
+  .btn{display:block;width:100%;margin-top:30px;padding:17px 20px;border:0;cursor:pointer;text-decoration:none;
+    font-family:inherit;font-size:16px;font-weight:700;letter-spacing:-.2px;color:#07110b;border-radius:17px;
+    background:linear-gradient(180deg,#4ee88c,#25b365);
+    box-shadow:0 8px 26px -8px rgba(46,204,113,.6),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .14s}
+  .btn:active{transform:scale(.985)}
+  .note{font-size:12.5px;color:rgba(232,239,233,.4);margin-top:26px;line-height:1.6}
+  .hide{display:none}
+  @keyframes pop{from{transform:scale(.86);opacity:0}to{transform:scale(1);opacity:1}}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){*{animation:none !important}}
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#080b09;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
- border="0" style="background-color:#080b09;">
-<tr>
-<td align="center" style="padding:40px 20px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0"
- border="0" style="max-width:480px;background-color:#0e1512;
- border:1px solid #1e2a24;border-radius:20px;">
-<tr>
-<td align="center" style="padding:44px 34px 8px;">
-<div style="font-family:Georgia,serif;font-size:34px;line-height:1.15;
- color:#ffffff;">Welcome to <span style="color:#5cff9d;">Vitlo</span></div>
-</td>
-</tr>
-<tr>
-<td align="center" style="padding:16px 34px 0;">
-<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.65;
- color:#a9b8ae;">Thanks for signing up. Confirm your email address
-and your account is ready to use.</div>
-</td>
-</tr>
-<tr>
-<td align="center" style="padding:30px 34px 6px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td align="center" bgcolor="#2ecc71" style="border-radius:14px;">
-<a href="https://getvitlo.github.io/Vitlo/confirm.html?token_hash={{ .TokenHash }}&type=signup"
- style="display:inline-block;padding:16px 38px;
- font-family:Arial,sans-serif;font-size:16px;font-weight:bold;
- color:#07110b;text-decoration:none;border-radius:14px;">
-Confirm my email</a>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-<tr>
-<td align="center" style="padding:26px 34px 0;">
-<div style="font-family:Arial,sans-serif;font-size:12.5px;
- line-height:1.6;color:#6d7d73;">This link expires in 24 hours
-and can only be used once.</div>
-</td>
-</tr>
-<tr>
-<td style="padding:26px 34px 0;">
-<div style="height:1px;background-color:#1e2a24;font-size:0;
- line-height:0;">&nbsp;</div>
-</td>
-</tr>
-<tr>
-<td style="padding:20px 34px 40px;">
-<div style="font-family:Arial,sans-serif;font-size:11.5px;
- line-height:1.6;color:#5d6b62;">Didn't sign up for Vitlo?
-Ignore this email and nothing will happen.</div>
-</td>
-</tr>
-</table>
-<div style="font-family:Arial,sans-serif;font-size:11px;
- color:#4a564e;margin-top:22px;">Vitlo</div>
-</td>
-</tr>
-</table>
+<body>
+  <div class="card">
+    <div class="mark" id="mark"><div class="spin" id="spin"></div>
+      <svg id="tick" class="hide" viewBox="0 0 24 24"><polyline points="4 12.5 9.5 18 20 6.5"/></svg>
+    </div>
+    <h1 id="title">One moment</h1>
+    <p class="sub" id="sub">Confirming your email address.</p>
+    <a class="btn hide" id="open" href="vitlo://auth-callback">Open Vitlo</a>
+    <p class="note hide" id="note">You can close this tab once the app is running.</p>
+  </div>
+
+<script>
+/* This page verifies the token itself rather than letting Supabase redirect
+   into the app. Safari refuses to follow a server redirect into a custom URL
+   scheme, which is what made the emailed link fail with "address is invalid".
+   Here the token is exchanged over https, and the deep link is only ever fired
+   from a tap on this page, which iOS does allow. */
+var SB  = 'https://tvhkxsnmfcnwaxeadxeg.supabase.co';
+var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR2aGt4c25tZmNud2F4ZWFkeGVnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4OTgxNTgsImV4cCI6MjA5MTQ3NDE1OH0.eMF915dEpEaCbLrTkwRSlMHMgY77T4ykFJXW2rv2eio';
+
+var qs   = new URLSearchParams(location.search);
+var hash = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+
+function show(ok, title, sub, deepLink){
+  document.getElementById('spin').classList.add('hide');
+  var mark = document.getElementById('mark');
+  var tick = document.getElementById('tick');
+  tick.classList.remove('hide');
+  if (!ok) { mark.classList.add('bad'); tick.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>'; }
+  document.getElementById('title').innerHTML = title;
+  document.getElementById('sub').textContent = sub;
+  if (ok) {
+    var btn = document.getElementById('open');
+    btn.href = deepLink;
+    btn.classList.remove('hide');
+    document.getElementById('note').classList.remove('hide');
+    setTimeout(function(){ try { location.href = deepLink; } catch(e){} }, 500);
+  }
+}
+
+(async function(){
+  var err = qs.get('error_description') || hash.get('error_description');
+  if (err) return show(false, 'Link expired', err.replace(/\+/g,' '), null);
+
+  var tokenHash = qs.get('token_hash') || qs.get('token');
+  var type      = qs.get('type') || 'signup';
+
+  // already carrying a session in the fragment: nothing to verify, pass it on
+  if (hash.get('access_token')) {
+    return show(true, type === 'recovery' ? 'Reset <em>ready</em>.' : "You're <em>in</em>.",
+      type === 'recovery' ? 'Open Vitlo to choose a new password.'
+                          : 'Thanks for signing up. Your account is ready.',
+      'vitlo://auth-callback#' + hash.toString());
+  }
+
+  if (!tokenHash) {
+    return show(false, 'Something is missing', 'This link is incomplete. Try the confirmation email again.', null);
+  }
+
+  try {
+    var client = supabase.createClient(SB, KEY);
+    var res = await client.auth.verifyOtp({ token_hash: tokenHash, type: type });
+    if (res.error) throw res.error;
+    var s = res.data && res.data.session;
+    var link = 'vitlo://auth-callback';
+    if (s) link += '#access_token=' + s.access_token + '&refresh_token=' + s.refresh_token + '&type=' + type;
+    show(true, type === 'recovery' ? 'Reset <em>ready</em>.' : "You're <em>in</em>.",
+      type === 'recovery' ? 'Open Vitlo to choose a new password.'
+                          : 'Thanks for signing up. Your account is ready.', link);
+  } catch (e) {
+    show(false, 'Link expired', (e && e.message) || 'This link has already been used or has run out. Request a new one in the app.', null);
+  }
+})();
+</script>
 </body>
 </html>
