@@ -95,15 +95,25 @@
   // Carry the auth fragment or code straight through to the app, so the deep
   // link arrives with the tokens rather than bare.
   (function(){
+    // Supabase hands the tokens over as a hash fragment (implicit) or a code in
+    // the query string (PKCE). Either way they go straight through to the app.
     var extra = window.location.hash || (window.location.search || '');
     var target = 'vitlo://auth-callback' + extra;
+    var isRecovery = /type=recovery/.test(extra);
+    if (isRecovery) {
+      document.querySelector('h1').innerHTML = 'Reset <em>ready</em>.';
+      document.querySelector('.sub').textContent =
+        'Open Vitlo and you can choose a new password.';
+    }
     var btn = document.getElementById('openBtn');
     var box = document.getElementById('link');
     btn.href = target;
     box.textContent = target.length > 46 ? target.slice(0, 46) + '…' : target;
     box.dataset.full = target;
-    // one automatic attempt, immediately, then leave it to the button
-    setTimeout(function(){ window.location.href = target; }, 350);
+    /* One automatic attempt. iOS blocks scheme navigation that is not tied to a
+       gesture in some contexts, which is exactly why the button below it is not
+       optional decoration. */
+    setTimeout(function(){ try { window.location.href = target; } catch (e) {} }, 400);
   })();
 
   function copyLink(){
