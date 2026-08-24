@@ -56,7 +56,7 @@
     <h1 id="title">One moment</h1>
     <p class="sub" id="sub">Confirming your email address.</p>
     <a class="btn hide" id="open" href="vitlo://auth-callback">Open Vitlo</a>
-    <p class="note hide" id="note">You can close this tab once the app is running.</p>
+    <p class="note hide" id="note">Switch back to the Vitlo app and it will carry on by itself.<br>Nothing else to do here.</p>
   </div>
 
 <script>
@@ -80,11 +80,13 @@ function show(ok, title, sub, deepLink){
   document.getElementById('title').innerHTML = title;
   document.getElementById('sub').textContent = sub;
   if (ok) {
+    /* The deep link is offered, not relied on: a build that predates the URL
+       scheme cannot answer it, and Safari's "address is invalid" is a dead end
+       for someone who has done nothing wrong. The app polls for the
+       confirmation on its own, so switching back is always enough. */
     var btn = document.getElementById('open');
-    btn.href = deepLink;
-    btn.classList.remove('hide');
+    if (deepLink) { btn.href = deepLink; btn.classList.remove('hide'); }
     document.getElementById('note').classList.remove('hide');
-    setTimeout(function(){ try { location.href = deepLink; } catch(e){} }, 500);
   }
 }
 
@@ -99,7 +101,7 @@ function show(ok, title, sub, deepLink){
   if (hash.get('access_token')) {
     return show(true, type === 'recovery' ? 'Reset <em>ready</em>.' : "You're <em>in</em>.",
       type === 'recovery' ? 'Open Vitlo to choose a new password.'
-                          : 'Thanks for signing up. Your account is ready.',
+                          : 'Thanks for signing up. Head back to the Vitlo app to finish setting up.',
       'vitlo://auth-callback#' + hash.toString());
   }
 
