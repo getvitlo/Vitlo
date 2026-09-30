@@ -55,8 +55,7 @@
     </div>
     <h1 id="title">One moment</h1>
     <p class="sub" id="sub">Confirming your email address.</p>
-    <a class="btn hide" id="open" href="vitlo://auth-callback">Open Vitlo</a>
-    <p class="note hide" id="note">Switch back to the Vitlo app and it will carry on by itself.<br>Nothing else to do here.</p>
+    <p class="note hide" id="note">Head back to the Vitlo app. It will pick this up on its own,<br>and you can close this tab.</p>
   </div>
 
 <script>
@@ -71,7 +70,7 @@ var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6
 var qs   = new URLSearchParams(location.search);
 var hash = new URLSearchParams((location.hash || '').replace(/^#/, ''));
 
-function show(ok, title, sub, deepLink){
+function show(ok, title, sub){
   document.getElementById('spin').classList.add('hide');
   var mark = document.getElementById('mark');
   var tick = document.getElementById('tick');
@@ -80,19 +79,18 @@ function show(ok, title, sub, deepLink){
   document.getElementById('title').innerHTML = title;
   document.getElementById('sub').textContent = sub;
   if (ok) {
-    /* The deep link is offered, not relied on: a build that predates the URL
-       scheme cannot answer it, and Safari's "address is invalid" is a dead end
-       for someone who has done nothing wrong. The app polls for the
-       confirmation on its own, so switching back is always enough. */
-    var btn = document.getElementById('open');
-    if (deepLink) { btn.href = deepLink; btn.classList.remove('hide'); }
+    /* No deep link button. A build that predates the vitlo:// scheme cannot
+       answer it, and Safari's "address is invalid" is a dead end for someone who
+       has done nothing wrong. The app polls for the confirmation itself and
+       checks again the moment it returns to the foreground, so switching back is
+       always enough and is the only instruction worth giving. */
     document.getElementById('note').classList.remove('hide');
   }
 }
 
 (async function(){
   var err = qs.get('error_description') || hash.get('error_description');
-  if (err) return show(false, 'Link expired', err.replace(/\+/g,' '), null);
+  if (err) return show(false, 'Link expired', err.replace(/\+/g,' '));
 
   var tokenHash = qs.get('token_hash') || qs.get('token');
   var type      = qs.get('type') || 'signup';
@@ -101,12 +99,11 @@ function show(ok, title, sub, deepLink){
   if (hash.get('access_token')) {
     return show(true, type === 'recovery' ? 'Reset <em>ready</em>.' : "You're <em>in</em>.",
       type === 'recovery' ? 'Open Vitlo to choose a new password.'
-                          : 'Thanks for signing up. Head back to the Vitlo app to finish setting up.',
-      'vitlo://auth-callback#' + hash.toString());
+                          : 'Thanks for signing up. Head back to the Vitlo app to finish setting up.');
   }
 
   if (!tokenHash) {
-    return show(false, 'Something is missing', 'This link is incomplete. Try the confirmation email again.', null);
+    return show(false, 'Something is missing', 'This link is incomplete. Try the confirmation email again.');
   }
 
   try {
@@ -114,13 +111,11 @@ function show(ok, title, sub, deepLink){
     var res = await client.auth.verifyOtp({ token_hash: tokenHash, type: type });
     if (res.error) throw res.error;
     var s = res.data && res.data.session;
-    var link = 'vitlo://auth-callback';
-    if (s) link += '#access_token=' + s.access_token + '&refresh_token=' + s.refresh_token + '&type=' + type;
     show(true, type === 'recovery' ? 'Reset <em>ready</em>.' : "You're <em>in</em>.",
       type === 'recovery' ? 'Open Vitlo to choose a new password.'
-                          : 'Thanks for signing up. Your account is ready.', link);
+                          : 'Thanks for signing up. Your account is ready.');
   } catch (e) {
-    show(false, 'Link expired', (e && e.message) || 'This link has already been used or has run out. Request a new one in the app.', null);
+    show(false, 'Link expired', (e && e.message) || 'This link has already been used or has run out. Request a new one in the app.');
   }
 })();
 </script>
