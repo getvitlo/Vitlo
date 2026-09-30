@@ -1,1 +1,408 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080b09">
+<meta name="color-scheme" content="dark">
+<title>Vitlo — calorie tracking that does the maths for you</title>
+<meta name="description" content="Photograph your meal and Vitlo works out the calories and macros. Targets built from your body, a coach that reads your whole fortnight, and a health score on everything you eat.">
+
+<meta property="og:title" content="Vitlo — calorie tracking that does the maths for you">
+<meta property="og:description" content="Photograph your meal. Vitlo works out the rest.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#080b09;
+    --s1:#0e1512; --s2:#131b17; --bd:#1e2a24; --bd2:#2a3a32;
+    --tx:#e8efe9; --tx2:#a9b8ae; --tx3:#6d7d73;
+    --grn:#2ecc71; --grn-lt:#5cff9d; --grn-dk:#1f9d55;
+    --blu:#63b3f2; --amb:#ffc266;
+    --gut:22px;
+    --r:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Outfit',system-ui,-apple-system,sans-serif;
+    background:var(--bg); color:var(--tx);
+    line-height:1.6; overflow-x:hidden; position:relative;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* the same two light sources the app uses, so the site and the product feel
+     like one thing rather than a product and its brochure */
+  body::before{
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(150% 82% at 50% -12%, rgba(44,102,132,.28), rgba(36,82,108,.13) 52%, transparent 90%),
+      radial-gradient(120% 66% at 2% 104%, rgba(38,92,116,.16), transparent 84%),
+      radial-gradient(96% 58% at 100% 24%, rgba(46,204,113,.085), transparent 78%);
+  }
+  body::after{
+    content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+    background-image:
+      linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 var(--gut)}
+
+  /* ── header ── */
+  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(20px) saturate(1.6);
+    -webkit-backdrop-filter:blur(20px) saturate(1.6);
+    background:rgba(8,11,9,.62);border-bottom:1px solid rgba(255,255,255,.055)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+  .logo{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:800;letter-spacing:-.4px}
+  .logo svg{width:20px;height:20px}
+  .nav-l{display:flex;align-items:center;gap:28px}
+  .nav-l a{color:var(--tx2);text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+  .nav-l a:hover{color:var(--tx)}
+  @media(max-width:720px){.nav-l a:not(.btn){display:none}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+    padding:13px 24px;border-radius:14px;text-decoration:none;font-weight:700;font-size:15px;
+    letter-spacing:-.2px;transition:transform .16s ease,box-shadow .2s ease;white-space:nowrap}
+  .btn:active{transform:scale(.97)}
+  .btn-g{background:linear-gradient(180deg,#34d97c,#1f9d55);color:#06140c;
+    box-shadow:0 6px 22px -6px rgba(46,204,113,.5)}
+  .btn-g:hover{box-shadow:0 10px 30px -8px rgba(46,204,113,.62)}
+  .btn-sm{padding:10px 18px;font-size:14px}
+  .btn-o{background:transparent;color:var(--tx);box-shadow:inset 0 0 0 1px var(--bd2)}
+  .btn-o:hover{box-shadow:inset 0 0 0 1px var(--tx3)}
+
+  /* ── hero ── */
+  .hero{padding:86px 0 64px;text-align:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:100px;
+    background:rgba(46,204,113,.10);border:1px solid rgba(46,204,113,.26);
+    font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--grn-lt)}
+  h1{font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:clamp(42px,7.4vw,74px);line-height:1.04;letter-spacing:-1.6px;margin:26px auto 0;max-width:15ch}
+  h1 em{font-style:normal;color:var(--grn-lt)}
+  .sub{font-size:clamp(16px,2.2vw,19px);color:var(--tx2);max-width:52ch;margin:22px auto 0;line-height:1.65}
+  .cta{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .cta-note{font-size:12.5px;color:var(--tx3);margin-top:16px}
+
+  /* ── the ring ── */
+  .ring-wrap{margin:64px auto 0;width:min(300px,76vw);aspect-ratio:1;position:relative}
+  .ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring-wrap circle{fill:none;stroke-linecap:round}
+  .trk-c{stroke:rgba(46,204,113,.14)} .trk-p{stroke:rgba(99,179,242,.14)} .trk-f{stroke:rgba(255,194,102,.13)}
+  .arc{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);
+    animation:draw 1.5s cubic-bezier(.22,1,.36,1) .25s forwards}
+  .arc-c{stroke:var(--grn);--len:716;filter:drop-shadow(0 0 8px rgba(46,204,113,.4))}
+  .arc-p{stroke:var(--blu);--len:565;filter:drop-shadow(0 0 8px rgba(99,179,242,.34))}
+  .arc-f{stroke:var(--amb);--len:427;filter:drop-shadow(0 0 8px rgba(255,194,102,.3))}
+  @keyframes draw{to{stroke-dashoffset:var(--to)}}
+  .ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-n{font-family:'Instrument Serif',serif;font-size:clamp(40px,9vw,58px);line-height:1;letter-spacing:-1.4px}
+  .ring-l{font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--tx3);margin-top:7px;text-transform:uppercase}
+  .legend{display:flex;gap:20px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--tx2)}
+  .lg i{width:8px;height:8px;border-radius:50%;display:block}
+
+  /* ── sections ── */
+  section{padding:84px 0;position:relative}
+  .sec-h{text-align:center;max-width:44ch;margin:0 auto 52px}
+  h2{font-family:'Instrument Serif',serif;font-weight:400;
+    font-size:clamp(30px,4.6vw,44px);line-height:1.14;letter-spacing:-.9px}
+  h2 em{font-style:normal;color:var(--grn-lt)}
+  .sec-s{font-size:15.5px;color:var(--tx2);margin-top:14px;line-height:1.65}
+  .rule{height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent)}
+
+  /* ── steps ── */
+  .steps{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{padding:30px 26px;border-radius:var(--r);background:var(--s1);border:1px solid var(--bd);
+    transition:border-color .25s ease,transform .25s ease}
+  .step:hover{border-color:rgba(46,204,113,.3);transform:translateY(-3px)}
+  .step-n{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    background:rgba(46,204,113,.12);color:var(--grn-lt);font-size:13px;font-weight:800;margin-bottom:18px}
+  .step h3{font-size:19px;font-weight:700;letter-spacing:-.3px;margin-bottom:9px}
+  .step p{font-size:14.5px;color:var(--tx2);line-height:1.65}
+
+  /* ── features ── */
+  .feats{display:grid;gap:18px;grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.feats{grid-template-columns:1fr}}
+  .feat{padding:28px;border-radius:var(--r);background:var(--s1);border:1px solid var(--bd)}
+  .feat-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:rgba(46,204,113,.1);margin-bottom:17px}
+  .feat-ic svg{width:20px;height:20px;stroke:var(--grn-lt);fill:none;stroke-width:1.8;
+    stroke-linecap:round;stroke-linejoin:round}
+  .feat h3{font-size:17.5px;font-weight:700;letter-spacing:-.25px;margin-bottom:8px}
+  .feat p{font-size:14.5px;color:var(--tx2);line-height:1.65}
+
+  /* ── the maths, the bit competitors skip ── */
+  .maths{background:var(--s1);border:1px solid var(--bd);border-radius:26px;padding:46px 38px}
+  @media(max-width:620px){.maths{padding:34px 24px}}
+  .maths-rows{display:grid;gap:2px;margin-top:30px}
+  .mr{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:17px 0;
+    border-bottom:1px solid var(--bd)}
+  .mr:last-child{border-bottom:0}
+  .mr-l{font-size:14.5px;color:var(--tx2)}
+  .mr-v{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .mr.total .mr-l{color:var(--tx);font-weight:600}
+  .mr.total .mr-v{color:var(--grn-lt);font-size:20px}
+  .maths-note{font-size:13px;color:var(--tx3);line-height:1.65;margin-top:22px;
+    padding-top:20px;border-top:1px solid var(--bd)}
+
+  /* ── pricing ── */
+  .plans{display:grid;gap:18px;grid-template-columns:repeat(2,1fr);max-width:760px;margin:0 auto}
+  @media(max-width:720px){.plans{grid-template-columns:1fr}}
+  .plan{padding:32px 28px;border-radius:var(--r);background:var(--s1);border:1px solid var(--bd);position:relative}
+  .plan.pro{border-color:rgba(46,204,113,.34);
+    background:linear-gradient(170deg,rgba(46,204,113,.07),var(--s1) 60%)}
+  .plan-tag{position:absolute;top:-11px;left:28px;padding:4px 12px;border-radius:100px;
+    background:var(--grn);color:#06140c;font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+  .plan h3{font-size:15px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--tx3)}
+  .plan-p{font-family:'Instrument Serif',serif;font-size:40px;line-height:1;margin:14px 0 4px;letter-spacing:-1px}
+  .plan-p span{font-family:'Outfit',sans-serif;font-size:14px;color:var(--tx3);letter-spacing:0}
+  .plan-s{font-size:13px;color:var(--tx3);margin-bottom:22px}
+  .plan ul{list-style:none;display:grid;gap:11px}
+  .plan li{display:flex;gap:11px;font-size:14.5px;color:var(--tx2);line-height:1.5}
+  .plan li b{color:var(--tx);font-weight:600}
+  .tick{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:2px;
+    background:rgba(46,204,113,.14);color:var(--grn-lt);
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800}
+
+  /* ── closing ── */
+  .close-cta{text-align:center;padding:96px 0}
+  .close-cta h2{max-width:18ch;margin:0 auto}
+
+  footer{border-top:1px solid var(--bd);padding:44px 0 56px}
+  .foot{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .foot-l{display:flex;gap:22px;flex-wrap:wrap}
+  .foot a{color:var(--tx3);text-decoration:none;font-size:13.5px;transition:color .2s}
+  .foot a:hover{color:var(--tx2)}
+  .foot-c{font-size:13px;color:var(--tx3)}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .arc{animation:none;stroke-dashoffset:var(--to)}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 3c-4.5 2-7 5.5-7 9.5A7 7 0 0 0 12 20a7 7 0 0 0 7-7.5c0-4-2.5-7.5-7-9.5z" fill="#2ecc71"/><path d="M12 20V7" stroke="#06140c" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Vitlo
+    </div>
+    <nav class="nav-l">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn btn-g btn-sm" href="https://apps.apple.com/app/id6796824442">Download</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">iPhone · Free to start</div>
+    <h1>Photograph your meal. <em>Vitlo does the rest.</em></h1>
+    <p class="sub">Most calorie apps make you search a database and guess a portion. Vitlo looks at the plate, works out what is on it, and keeps the running total for your day.</p>
+    <div class="cta">
+      <a class="btn btn-g" href="https://apps.apple.com/app/id6796824442">
+        <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+        Download on the App Store
+      </a>
+      <a class="btn btn-o" href="#how">See how it works</a>
+    </div>
+    <p class="cta-note">Free plan included. Pro is £6.99 a month with a 7-day free trial.</p>
+
+    <div class="ring-wrap reveal">
+      <svg viewBox="0 0 260 260" aria-hidden="true">
+        <circle class="trk-c" cx="130" cy="130" r="114" stroke-width="20"/>
+        <circle class="trk-p" cx="130" cy="130" r="90"  stroke-width="18"/>
+        <circle class="trk-f" cx="130" cy="130" r="68"  stroke-width="16"/>
+        <circle class="arc arc-c" cx="130" cy="130" r="114" stroke-width="20" style="--to:186"/>
+        <circle class="arc arc-p" cx="130" cy="130" r="90"  stroke-width="18" style="--to:198"/>
+        <circle class="arc arc-f" cx="130" cy="130" r="68"  stroke-width="16" style="--to:175"/>
+      </svg>
+      <div class="ring-c">
+        <div class="ring-n">1,588</div>
+        <div class="ring-l">kcal left</div>
+      </div>
+    </div>
+    <div class="legend reveal">
+      <div class="lg"><i style="background:#2ecc71"></i> Eaten</div>
+      <div class="lg"><i style="background:#63b3f2"></i> Protein</div>
+      <div class="lg"><i style="background:#ffc266"></i> Burned</div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <section id="how">
+    <div class="sec-h reveal">
+      <h2>Three taps, <em>not thirty</em></h2>
+      <p class="sec-s">Logging a meal should take less time than eating it.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-n">1</div>
+        <h3>Point and shoot</h3>
+        <p>Photograph the plate, scan a barcode, or just describe it in a sentence. Vitlo identifies each item, estimates the portion, and itemises the calories and macros.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-n">2</div>
+        <h3>Correct anything</h3>
+        <p>Every estimate is yours to change. Wrong count of wings? Tap the stepper. Different portion? Adjust the servings and every number moves with it.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-n">3</div>
+        <h3>Watch the day</h3>
+        <p>One ring shows what is left. Your protein, carbs and fat track alongside it, and a coach tells you where you landed when the day is done.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section>
+    <div class="sec-h reveal">
+      <h2>Targets built from <em>your body</em></h2>
+      <p class="sec-s">Not a flat 2,000 a day. Vitlo works out what you actually burn, then plans around it.</p>
+    </div>
+    <div class="maths reveal">
+      <div class="maths-rows">
+        <div class="mr"><span class="mr-l">What you burn at complete rest</span><span class="mr-v">1,854</span></div>
+        <div class="mr"><span class="mr-l">Your job, your walking, your day</span><span class="mr-v">× 1.30</span></div>
+        <div class="mr"><span class="mr-l">Movement your plan expects</span><span class="mr-v">+ 300</span></div>
+        <div class="mr"><span class="mr-l">The deficit you chose</span><span class="mr-v">− 500</span></div>
+        <div class="mr total"><span class="mr-l">Your target today</span><span class="mr-v">2,210 kcal</span></div>
+      </div>
+      <p class="maths-note">Most trackers fold exercise into one multiplier and then let you add workouts on top, which counts the same session twice and quietly closes your deficit. Vitlo separates the two: your activity level covers ordinary living, your burn goal covers training, and logging a workout replaces the assumption rather than stacking on it.</p>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="features">
+    <div class="sec-h reveal">
+      <h2>What you get <em>for the calories</em></h2>
+      <p class="sec-s">A number on its own tells you very little. Vitlo is built around what the number means.</p>
+    </div>
+    <div class="feats">
+      <div class="feat reveal">
+        <div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>A health score on everything</h3>
+        <p>Every meal is scored out of 100 on protein density, processing, added sugar and fibre, with a line on why. Two meals of the same calories are rarely the same meal.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg></div>
+        <h3>A coach that reads the fortnight</h3>
+        <p>It notices what a single day cannot: the meal that comes back three times a week, protein running short five days in seven. Then it says what that costs, in your numbers.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-5 7 5"/><path d="M5 16l7 5 7-5"/></svg></div>
+        <h3>Lighter versions of the same meal</h3>
+        <p>Not "eat less". Drop the mayo, swap the side, ask for it grilled — each with the calories it saves, offered before you log, while the food is still in front of you.</p>
+      </div>
+      <div class="feat reveal">
+        <div class="feat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+        <h3>Barcodes and yesterday</h3>
+        <p>Point at a barcode and it reads on its own. Forgot to log last night? Yesterday stays open, because meals get missed and remembered in the morning.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <section id="pricing">
+    <div class="sec-h reveal">
+      <h2>Start free. <em>Stay free if you like.</em></h2>
+      <p class="sec-s">The free plan is a real plan, not a countdown to a paywall.</p>
+    </div>
+    <div class="plans">
+      <div class="plan reveal">
+        <h3>Free</h3>
+        <div class="plan-p">£0</div>
+        <div class="plan-s">No card, no trial clock</div>
+        <ul>
+          <li><span class="tick">✓</span><span><b>4 AI scans a week</b></span></li>
+          <li><span class="tick">✓</span><span>Unlimited manual and barcode logging</span></li>
+          <li><span class="tick">✓</span><span>Full targets and macro tracking</span></li>
+          <li><span class="tick">✓</span><span>Your daily morning brief</span></li>
+        </ul>
+      </div>
+      <div class="plan pro reveal">
+        <div class="plan-tag">7 days free</div>
+        <h3>Vitlo Pro</h3>
+        <div class="plan-p">£6.99 <span>/ month</span></div>
+        <div class="plan-s">Cancel any time, from your Apple ID</div>
+        <ul>
+          <li><span class="tick">✓</span><span><b>Unlimited scans</b>, photo or described</span></li>
+          <li><span class="tick">✓</span><span>Ask your coach anything, any time</span></li>
+          <li><span class="tick">✓</span><span>Check-ins through the day and an end-of-day wrap</span></li>
+          <li><span class="tick">✓</span><span>Insights across your whole fortnight</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="close-cta">
+    <h2 class="reveal">Log your first meal <em>in about ten seconds</em></h2>
+    <div class="cta reveal">
+      <a class="btn btn-g" href="https://apps.apple.com/app/id6796824442">
+        <svg width="17" height="17" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+        Download on the App Store
+      </a>
+    </div>
+    <p class="cta-note reveal">Requires iPhone. Nutrition figures are estimates, not medical advice.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-c">© <span id="yr">2026</span> Vitlo</div>
+    <div class="foot-l">
+      <a href="https://apps.apple.com/app/id6796824442">App Store</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="mailto:info@vitloapp.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* Reveal on scroll, with the observer disconnecting once everything has been
+     seen so nothing keeps running behind a page that has finished animating. */
+  (function(){
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function(el){ el.classList.add('in'); });
+      return;
+    }
+    var left = items.length;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+        if (--left <= 0) io.disconnect();
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function(el, i){
+      el.style.transitionDelay = (Math.min(i, 4) * 60) + 'ms';
+      io.observe(el);
+    });
+  })();
+</script>
+</body>
+</html>
